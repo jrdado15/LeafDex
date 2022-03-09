@@ -18,4 +18,8 @@
     <string name="already_account">Already have an account?</string>
     <string name="sign_in">Sign in</string>
     <string name="register">Register</string>
+    <string-array name="sex">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 </resources>

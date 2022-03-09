@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_home.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_login.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_register.xml" value="0.264" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/drawable/box.xml" value="0.2703125" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/drawable/rounded_button.xml" value="0.2703125" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/drawable/rounded_forms.xml" value="0.202734375" />

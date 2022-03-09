@@ -144,7 +144,8 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toTopOf="@+id/guideline14" />
+        app:layout_constraintTop_toTopOf="@+id/guideline14"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <EditText
         android:id="@+id/input_password"
@@ -163,7 +164,8 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toBottomOf="@+id/input_emailAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/input_emailAddress"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <EditText
         android:id="@+id/input_confirm_password"
@@ -182,7 +184,8 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toBottomOf="@+id/input_password" />
+        app:layout_constraintTop_toBottomOf="@+id/input_password"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <EditText
         android:id="@+id/input_phone_number"
@@ -201,7 +204,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline12"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toBottomOf="@+id/input_confirm_password" />
+        app:layout_constraintTop_toBottomOf="@+id/input_confirm_password"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <EditText
         android:id="@+id/input_birthDate"
@@ -214,13 +218,15 @@
         android:background="@drawable/rounded_forms"
         android:ems="10"
         android:hint="@string/Birthdate"
+        android:focusable="false"
         android:inputType="date"
         android:paddingStart="15sp"
         android:textColorHint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/guideline13"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintStart_toStartOf="@+id/guideline9"
-        app:layout_constraintTop_toTopOf="@+id/guideline12" />
+        app:layout_constraintTop_toTopOf="@+id/guideline12"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <Spinner
         android:id="@+id/input_Sex"
@@ -232,12 +238,14 @@
         android:layout_marginBottom="24dp"
         android:autofillHints="@string/sex"
         android:background="@drawable/rounded_forms"
+        android:contentDescription="@string/sex"
         android:textColorHint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/guideline13"
         app:layout_constraintEnd_toStartOf="@+id/guideline9"
         app:layout_constraintHorizontal_bias="0.64"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toTopOf="@+id/guideline12" />
+        app:layout_constraintTop_toTopOf="@+id/guideline12"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <Button
         android:id="@+id/btn_register"
@@ -253,7 +261,8 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toBottomOf="@+id/input_birthDate" />
+        app:layout_constraintTop_toBottomOf="@+id/input_birthDate"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <TextView
         android:id="@+id/tv_nav_to_signin"

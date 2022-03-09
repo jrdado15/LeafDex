@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "801796824252",
+    "project_id": "leafdex-8b555",
+    "storage_bucket": "leafdex-8b555.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:801796824252:android:466ad396254fa4c9f284b9",
+        "android_client_info": {
+          "package_name": "com.example.leafdex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "801796824252-jo8o1ll39hhse6afmk7sjlkq987vajbq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBV5s8MOY-yA5sKktwVHS9GyzDmFabp-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "801796824252-jo8o1ll39hhse6afmk7sjlkq987vajbq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
