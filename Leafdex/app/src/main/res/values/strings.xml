@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Leafdex</string>
+    <string name="title_activity_login">Login</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="motto">Connecting plantitos and plantitas</string>
+    <string name="email">Email</string>
+    <string name="pw">Password</string>
+    <string name="fp">Forgot password?</string>
+    <string name="not_registered">Not yet registered?</string>
+    <string name="account_creation">Account Creation</string>
+    <string name="fn">First name</string>
+    <string name="ln">Last name</string>
+    <string name="cp">Confirm Password</string>
+    <string name="contact_no">Contact Number</string>
+    <string name="sex">Sex</string>
+    <string name="Birthdate">Birthdate</string>
+    <string name="already_account">Already have an account?</string>
+    <string name="sign_in">Sign in</string>
+    <string name="register">Register</string>
+</resources>
