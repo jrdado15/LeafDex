@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -13,28 +14,40 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.annotations.Nullable;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 public class Register extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private TextView login;
     private Button register;
+    private ImageView pic;
+    private Uri picUri;
     private EditText fname, lname, email, password, confirm, contact, birthdate;
     private Spinner sex;
     private String choice;
     private DatePickerDialog datePickerDialog;
 
     private FirebaseAuth mAuth;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +55,17 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
         setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         login = (TextView) findViewById(R.id.tv_nav_to_signin);
         login.setOnClickListener(this);
 
         register = (Button) findViewById(R.id.btn_register);
         register.setOnClickListener(this);
+
+        pic = (ImageView) findViewById(R.id.imageView);
+        pic.setOnClickListener(this);
 
         fname = (EditText) findViewById(R.id.input_first_name);
         lname = (EditText) findViewById(R.id.input_last_name);
@@ -98,9 +116,29 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
             case R.id.tv_nav_to_signin:
                 startActivity(new Intent (this, Login.class));
                 break;
+            case R.id.imageView:
+                choosePicture();
+                break;
             case R.id.btn_register:
                 registerUser();
                 break;
+        }
+    }
+
+    private void choosePicture() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            picUri = data.getData();
+            pic.setImageURI(picUri);
         }
     }
 
@@ -163,7 +201,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
         }
 
         if(!sconfirm.equals(spassword)) {
-            confirm.setError("Two passwords didn't match.");
+            confirm.setError("Two passwords don't match.");
             confirm.requestFocus();
             return;
         }
@@ -179,6 +217,8 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
+                            uploadPicture();
+
                             User user = new User(sfname, slname, semail, scontact, ssex, sbirthdate);
 
                             FirebaseDatabase.getInstance().getReference("Users")
@@ -190,13 +230,32 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
                                         Toast.makeText(Register.this, "Registered successfully.", Toast.LENGTH_LONG).show();
                                         startActivity(new Intent (Register.this, Home.class));
                                     } else {
-                                        Toast.makeText(Register.this, "Failed to register.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(Register.this, "Failed to register. Try again.", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
                         } else {
                             Toast.makeText(Register.this, "Failed to register.", Toast.LENGTH_LONG).show();
                         }
+                    }
+                });
+    }
+
+    private void uploadPicture() {
+        final String randomKey = UUID.randomUUID().toString();
+        StorageReference ref = storageReference.child("images/" + randomKey);
+
+        ref.putFile(picUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
                     }
                 });
     }
