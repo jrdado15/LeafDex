@@ -40,6 +40,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
     private Button register;
     private ImageView pic;
     private Uri picUri;
+    private String downloadURL;
     private EditText fname, lname, email, password, confirm, contact, birthdate;
     private Spinner sex;
     private String choice;
@@ -149,7 +150,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
         String spassword = password.getText().toString().trim();
         String sconfirm = confirm.getText().toString().trim();
         String scontact = contact.getText().toString().trim();
-        String ssex = choice;
+        String ssex = choice.trim();
         String sbirthdate = birthdate.getText().toString().trim();
 
         if(sfname.isEmpty()) {
@@ -201,7 +202,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
         }
 
         if(!sconfirm.equals(spassword)) {
-            confirm.setError("Two passwords don't match.");
+            confirm.setError("Two passwords didn't match.");
             confirm.requestFocus();
             return;
         }
@@ -249,7 +250,14 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
+                        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                downloadURL = uri.toString();
+                                // Toast.makeText(Register.this, downloadURL, Toast.LENGTH_LONG).show();
+                                // Nakukuha na rito yung URL kaso di ko mapasok kasabay ng ibang user details sa table.
+                            }
+                        });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -258,5 +266,10 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
 
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 }
