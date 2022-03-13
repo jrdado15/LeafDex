@@ -7,8 +7,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class Welcome extends AppCompatActivity {
     Handler h = new Handler();
+
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,8 +23,18 @@ public class Welcome extends AppCompatActivity {
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(Welcome.this, Login.class);
-                startActivity(i);
+                mAuth = FirebaseAuth.getInstance();
+
+                if (mAuth.getCurrentUser() != null) {
+                    // User is signed in (getCurrentUser() will be null if not signed in)
+                    Intent i = new Intent(Welcome.this, Home.class);
+                    startActivity(i);
+                    finish();
+                } else {
+                    Intent i = new Intent(Welcome.this, Login.class);
+                    startActivity(i);
+                    finish();
+                }
             }
         }, 3000);
 
