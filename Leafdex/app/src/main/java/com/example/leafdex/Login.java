@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView register;
+    private TextView register, fpassword;
     private Button login;
     private EditText email, password;
 
@@ -40,6 +40,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         email = (EditText) findViewById(R.id.login_emailField);
         password = (EditText) findViewById(R.id.login_passwordField);
+
+        fpassword = (TextView) findViewById(R.id.textView4);
+        fpassword.setOnClickListener(this);
     }
 
     @Override
@@ -50,6 +53,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 break;
             case R.id.btn_signin:
                 loginUser();
+                break;
+            case R.id.textView4:
+                startActivity(new Intent (this, FP.class));
                 break;
         }
     }
