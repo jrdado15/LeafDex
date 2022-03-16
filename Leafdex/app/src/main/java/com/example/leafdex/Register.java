@@ -48,7 +48,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
     private String downloadURL;
     private EditText fname, lname, email, password, confirm, contact, birthdate;
     private Spinner sex;
-    private String choice;
+    private String choice, noPic;
     private DatePickerDialog datePickerDialog;
 
     private FirebaseAuth mAuth;
@@ -104,6 +104,8 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
                 datePickerDialog.show();
             }
         });
+
+        noPic = "true";
     }
 
     @Override
@@ -145,6 +147,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
         if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             picUri = data.getData();
             pic.setImageURI(picUri);
+            noPic = "false";
         }
     }
 
@@ -157,7 +160,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
         String scontact = contact.getText().toString().trim();
         String ssex = choice.trim();
         String sbirthdate = birthdate.getText().toString().trim();
-        Toast imageToast = Toast.makeText(Register.this, null, Toast.LENGTH_LONG);
 
         if(sfname.isEmpty()) {
             fname.setError("First name is required!");
@@ -219,87 +221,96 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
             return;
         }
 
-        if (pic.getDrawable().getConstantState() == getResources().getDrawable( R.drawable.ic_profile_picture).getConstantState())
-        {
-            imageToast.setText("A picture is required!");
-            imageToast.show();
-
-            if(imageToast != null){
-                register.setClickable(false);
-            } else {
-                register.setClickable(true);
-            }
-
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    register.setClickable(true);
-                }
-            }, 4000);
-
-            return;
-        }
-
         final String randomKey = UUID.randomUUID().toString();
         StorageReference ref = storageReference.child("images/" + randomKey);
         ProgressDialog mProgressDialog = new ProgressDialog(this);
 
         //Picture upload
-        ref.putFile(picUri)
-            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    mProgressDialog.setMessage("Creating user profile...");
-                    mProgressDialog.show();
-                    mProgressDialog.setCancelable(false);
-                }
-            })
-            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        if(noPic.equals("false")) {
+            ref.putFile(picUri)
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onSuccess(Uri uri) {
-                            downloadURL = uri.toString();
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            mProgressDialog.setMessage("Creating user profile...");
+                            mProgressDialog.show();
+                            mProgressDialog.setCancelable(false);
+                        }
+                    })
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    downloadURL = uri.toString();
 
-                            //If picture is uploaded, upload table
-                            mAuth.createUserWithEmailAndPassword(semail, spassword)
-                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if(task.isSuccessful()) {
-                                            User user = new User(sfname, slname, semail, scontact, ssex, sbirthdate, downloadURL);
-
-                                            FirebaseDatabase.getInstance().getReference("Users")
-                                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    //If picture is uploaded, upload table
+                                    mAuth.createUserWithEmailAndPassword(semail, spassword)
+                                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                                 @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
                                                     if(task.isSuccessful()) {
-                                                        Toast.makeText(Register.this, "Registered successfully.", Toast.LENGTH_LONG).show();
-                                                        startActivity(new Intent (Register.this, Home.class));
-                                                        finish();
+                                                        User user = new User(sfname, slname, semail, scontact, ssex, sbirthdate, downloadURL);
+
+                                                        FirebaseDatabase.getInstance().getReference("Users")
+                                                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                                .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if(task.isSuccessful()) {
+                                                                    Toast.makeText(Register.this, "Registered successfully.", Toast.LENGTH_LONG).show();
+                                                                    startActivity(new Intent (Register.this, Home.class));
+                                                                    finish();
+                                                                } else {
+                                                                    Toast.makeText(Register.this, "Failed to register. Try again.", Toast.LENGTH_LONG).show();
+                                                                }
+                                                            }
+                                                        });
                                                     } else {
-                                                        Toast.makeText(Register.this, "Failed to register. Try again.", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(Register.this, "Failed to register.", Toast.LENGTH_LONG).show();
                                                     }
                                                 }
                                             });
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(Register.this, "Failed to upload picture. Please try again.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+        } else {
+            downloadURL = "https://firebasestorage.googleapis.com/v0/b/leafdex-8b555.appspot.com/o/images%2Fplaceholder.png?alt=media&token=551fa53c-0c07-455f-ac7f-6ec48b0f693f";
+
+            mAuth.createUserWithEmailAndPassword(semail, spassword)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()) {
+                                User user = new User(sfname, slname, semail, scontact, ssex, sbirthdate, downloadURL);
+
+                                FirebaseDatabase.getInstance().getReference("Users")
+                                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                        .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()) {
+                                            Toast.makeText(Register.this, "Registered successfully.", Toast.LENGTH_LONG).show();
+                                            startActivity(new Intent (Register.this, Home.class));
+                                            finish();
                                         } else {
-                                            Toast.makeText(Register.this, "Failed to register.", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(Register.this, "Failed to register. Try again.", Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });
+                            } else {
+                                Toast.makeText(Register.this, "Failed to register.", Toast.LENGTH_LONG).show();
+                            }
                         }
                     });
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(Register.this, "Failed to upload picture. Please try again.", Toast.LENGTH_LONG).show();
-                }
-            });
+        }
     }
 
     @Override
