@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single"
+        android:id="@+id/group1">
+        <item android:id="@+id/nav_edit_profile"
+            android:icon="@drawable/ic_edit_profile"
+            android:title="Edit Profile">
+        </item>
+        <item android:id="@+id/nav_saved_posts"
+            android:icon="@drawable/ic_saved_posts"
+            android:title="Saved Posts">
+        </item>
+
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group2">
+        <item android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_sign_out_green"
+            android:title="Logout">
+        </item>
+    </group>
+</menu>

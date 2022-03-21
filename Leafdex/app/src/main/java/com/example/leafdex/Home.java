@@ -1,70 +1,109 @@
 package com.example.leafdex;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import java.io.InputStream;
-import java.net.URL;
+import com.example.leafdex.databinding.ActivityHomeBinding;
+import com.example.leafdex.fragments.camera;
+import com.example.leafdex.fragments.encyclopedia;
+import com.example.leafdex.fragments.home;
+import com.example.leafdex.fragments.profile;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Objects;
 
 public class Home extends AppCompatActivity implements View.OnClickListener {
-    private Button logoutBtn;
     private FirebaseAuth mAuth;
-    private ImageView pangtest;
+
+    ActivityHomeBinding binding;
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-
+        binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         mAuth = FirebaseAuth.getInstance();
-        logoutBtn = (Button) findViewById(R.id.logoutBtn);
-        logoutBtn.setOnClickListener(this);
-        pangtest = (ImageView) findViewById(R.id.pangtest);
 
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
+        setUpToolbar();
+        navigationView = (NavigationView) findViewById(R.id.navigation_menu);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                mAuth.signOut();
-                startActivity(new Intent(Home.this, Login.class));
-                finish();
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId())
+                {
+                    case  R.id.nav_edit_profile:
+                        replaceFragment(new profile());
+                        Toast.makeText(Home.this, "EDIT PROFILE SELECTED", Toast.LENGTH_LONG).show();
+                        drawerLayout.closeDrawers();
+                        break;
+                    case  R.id.nav_saved_posts:
+                        Toast.makeText(Home.this, "SAVED POSTS SELECTED", Toast.LENGTH_LONG).show();
+                        break;
+                    case  R.id.nav_logout:
+                        mAuth.signOut();
+                        startActivity(new Intent(Home.this, Login.class));
+                        finish();
+                        Toast.makeText(Home.this, "SIGNED OUT", Toast.LENGTH_LONG).show();
+                        break;
+                }
+                return false;
             }
         });
 
-        new LoadImage().execute("https://www.yourUrl.com/image.jpg");
-        if(mAuth != null){
-            DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch(item.getItemId()){
+                case R.id.nav_bar_home:
+                    replaceFragment(new home());
+                    break;
+                case R.id.nav_bar_camera:
+                    replaceFragment(new camera());
+                    break;
+                case R.id.nav_bar_plantEncyclopedia:
+                    replaceFragment(new encyclopedia());
 
-            db.child("Users").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String url = dataSnapshot.child("imageURL").getValue(String.class);
-                    new LoadImage().execute(url);
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {}
-            });
-        }
+                    break;
+            }
+            return true;
+        });
+
+
+
+
+
+    }
+
+    public void setUpToolbar() {
+        drawerLayout = findViewById(R.id.drawerLayout);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+    }
+
+    private void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.nav_bar_framelayout, fragment );
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -77,28 +116,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
     }
 
-    private class LoadImage extends AsyncTask<String, String, Bitmap> {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        protected Bitmap doInBackground(String... args) {
-            Bitmap bitmap = null;
-            if(args.length == 1){
-                Log.i("doInBack 1","length = 1 ");
-                try {
-                    bitmap = BitmapFactory.decodeStream((InputStream)new URL(args[0]).getContent());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return bitmap;
-        }
-        protected void onPostExecute(Bitmap image) {
-            if(image != null){
-                pangtest.setImageBitmap(image);
-            }
-        }
-    }
+
+
 }
