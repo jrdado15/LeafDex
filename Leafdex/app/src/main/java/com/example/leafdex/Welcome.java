@@ -27,7 +27,6 @@ public class Welcome extends AppCompatActivity {
                 mAuth = FirebaseAuth.getInstance();
 
                 if (mAuth.getCurrentUser() != null) {
-                    // User is signed in (getCurrentUser() will be null if not signed in)
                     Intent i = new Intent(Welcome.this, Home.class);
                     startActivity(i);
                     finish();

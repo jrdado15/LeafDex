@@ -6,15 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,13 +19,20 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
 import com.example.leafdex.Home;
 import com.example.leafdex.R;
-import com.example.leafdex.Register;
 import com.example.leafdex.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -62,7 +60,7 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
     private Button cancel;
     private View view;
     private ImageView pic;
-    private Uri picUri;
+    private Uri picUri, newPicUri;
     private String downloadURL;
     private EditText fname, lname, email, password, confirm, contact, birthdate;
     private Spinner sex;
@@ -74,6 +72,8 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
     private DatabaseReference reference;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+
+    private ProgressDialog mProgressDialog;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -87,6 +87,13 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
     public profile() {
         // Required empty public constructor
     }
+
+    public profile(Home home) {
+        mProgressDialog = new ProgressDialog(home);
+        mProgressDialog.setMessage("Updating user profile...");
+        mProgressDialog.setCancelable(false);
+    }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -270,18 +277,82 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
             return;
         }
 
-        // BURAHIN KUNG OK NA GALLERY INTENT
-        HashMap hashMap = new HashMap();
-        hashMap.put("fname", sfname);
-        hashMap.put("lname", slname);
-        hashMap.put("contact", scontact);
-        hashMap.put("sex", ssex);
-        hashMap.put("birthdate", sbirthdate);
+        final String randomKey = UUID.randomUUID().toString();
+        StorageReference ref = storageReference.child("images/" + randomKey);
+        StorageReference ref2 = storageReference.child("images/" + randomKey);
+        mProgressDialog.show();
 
-        reference.child(userID).updateChildren(hashMap)
+        if(samePic.equals("false")) {
+            ref.putFile(newPicUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                StorageReference ref = FirebaseStorage.getInstance().getReferenceFromUrl(uimageURL);
+                                ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        downloadURL = uri.toString();
+
+                                        HashMap hashMap = new HashMap();
+                                        hashMap.put("imageURL", downloadURL);
+                                        hashMap.put("fname", sfname);
+                                        hashMap.put("lname", slname);
+                                        hashMap.put("contact", scontact);
+                                        hashMap.put("sex", ssex);
+                                        hashMap.put("birthdate", sbirthdate);
+
+                                        reference.child(userID).updateChildren(hashMap)
+                                            .addOnSuccessListener(new OnSuccessListener() {
+                                                @Override
+                                                public void onSuccess(Object o) {
+                                                    mProgressDialog.dismiss();
+                                                    Toast.makeText(getActivity(), "Updated successfully.", Toast.LENGTH_LONG).show();
+                                                    Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
+                                                    getActivity().startActivity(intent);
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    mProgressDialog.dismiss();
+                                                    Toast.makeText(getActivity(), "Failed to update.", Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        mProgressDialog.dismiss();
+                                        Toast.makeText(getActivity(), "Failed to remove old picture. Please try again.", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mProgressDialog.dismiss();
+                        Toast.makeText(getActivity(), "Failed to upload picture. Please try again.", Toast.LENGTH_LONG).show();
+                    }
+                });
+        } else {
+            HashMap hashMap = new HashMap();
+            hashMap.put("fname", sfname);
+            hashMap.put("lname", slname);
+            hashMap.put("contact", scontact);
+            hashMap.put("sex", ssex);
+            hashMap.put("birthdate", sbirthdate);
+
+            reference.child(userID).updateChildren(hashMap)
                 .addOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {
+                        mProgressDialog.dismiss();
                         Toast.makeText(getActivity(), "Updated successfully.", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
                         getActivity().startActivity(intent);
@@ -290,10 +361,11 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        mProgressDialog.dismiss();
                         Toast.makeText(getActivity(), "Failed to update.", Toast.LENGTH_LONG).show();
                     }
                 });
-        // HANGGANG DITO
+        }
 
         /* ITO IPALIT SA BINURA SA TAAS
         final String randomKey = UUID.randomUUID().toString();
@@ -389,7 +461,10 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, 1);
-        */
+        //*/
+
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        activityResultLauncher.launch(intent);
     }
 
     /* DEPRECATED NA RAW KAYA AYAW GUMANA
@@ -403,5 +478,20 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
             samePic = "false"; // NEED ISAMA TO KUNG GAGAWA KA NG BAGO
         }
     }
-    */
+    //*/
+
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    newPicUri = data.getData();
+                    pic.setImageURI(newPicUri);
+                    samePic = "false";
+                }
+            }
+        }
+    );
 }

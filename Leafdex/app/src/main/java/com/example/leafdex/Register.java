@@ -1,8 +1,13 @@
 package com.example.leafdex;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -134,22 +139,24 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
     }
 
     private void choosePicture() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        activityResultLauncher.launch(intent);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            picUri = data.getData();
-            pic.setImageURI(picUri);
-            noPic = "false";
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    picUri = data.getData();
+                    pic.setImageURI(picUri);
+                    noPic = "false";
+                }
+            }
         }
-    }
+    );
 
     private void registerUser() {
         String sfname = fname.getText().toString().trim();
@@ -224,92 +231,92 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
         final String randomKey = UUID.randomUUID().toString();
         StorageReference ref = storageReference.child("images/" + randomKey);
         ProgressDialog mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("Creating user profile...");
+        mProgressDialog.show();
+        mProgressDialog.setCancelable(false);
 
         //Picture upload
         if(noPic.equals("false")) {
             ref.putFile(picUri)
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            mProgressDialog.setMessage("Creating user profile...");
-                            mProgressDialog.show();
-                            mProgressDialog.setCancelable(false);
-                        }
-                    })
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    downloadURL = uri.toString();
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                downloadURL = uri.toString();
 
-                                    //If picture is uploaded, upload table
-                                    mAuth.createUserWithEmailAndPassword(semail, spassword)
-                                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                //If picture is uploaded, upload table
+                                mAuth.createUserWithEmailAndPassword(semail, spassword)
+                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if(task.isSuccessful()) {
+                                            User user = new User(sfname, slname, semail, scontact, ssex, sbirthdate, downloadURL);
+
+                                            FirebaseDatabase.getInstance().getReference("Users")
+                                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                    .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
-                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    mProgressDialog.dismiss();
                                                     if(task.isSuccessful()) {
-                                                        User user = new User(sfname, slname, semail, scontact, ssex, sbirthdate, downloadURL);
-
-                                                        FirebaseDatabase.getInstance().getReference("Users")
-                                                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                                .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                if(task.isSuccessful()) {
-                                                                    Toast.makeText(Register.this, "Registered successfully.", Toast.LENGTH_LONG).show();
-                                                                    startActivity(new Intent (Register.this, Home.class));
-                                                                    finish();
-                                                                } else {
-                                                                    Toast.makeText(Register.this, "Failed to register. Try again.", Toast.LENGTH_LONG).show();
-                                                                }
-                                                            }
-                                                        });
+                                                        Toast.makeText(Register.this, "Registered successfully.", Toast.LENGTH_LONG).show();
+                                                        startActivity(new Intent (Register.this, Home.class));
+                                                        finish();
                                                     } else {
-                                                        Toast.makeText(Register.this, "Failed to register.", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(Register.this, "Failed to register. Try again.", Toast.LENGTH_LONG).show();
                                                     }
                                                 }
                                             });
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(Register.this, "Failed to upload picture. Please try again.", Toast.LENGTH_LONG).show();
-                        }
-                    });
-        } else {
-            downloadURL = "https://firebasestorage.googleapis.com/v0/b/leafdex-8b555.appspot.com/o/images%2Fplaceholder.png?alt=media&token=551fa53c-0c07-455f-ac7f-6ec48b0f693f";
-
-            mAuth.createUserWithEmailAndPassword(semail, spassword)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()) {
-                                User user = new User(sfname, slname, semail, scontact, ssex, sbirthdate, downloadURL);
-
-                                FirebaseDatabase.getInstance().getReference("Users")
-                                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                        .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful()) {
-                                            Toast.makeText(Register.this, "Registered successfully.", Toast.LENGTH_LONG).show();
-                                            startActivity(new Intent (Register.this, Home.class));
-                                            finish();
                                         } else {
-                                            Toast.makeText(Register.this, "Failed to register. Try again.", Toast.LENGTH_LONG).show();
+                                            mProgressDialog.dismiss();
+                                            Toast.makeText(Register.this, "Failed to register.", Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });
-                            } else {
-                                Toast.makeText(Register.this, "Failed to register.", Toast.LENGTH_LONG).show();
                             }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mProgressDialog.dismiss();
+                        Toast.makeText(Register.this, "Failed to upload picture. Please try again.", Toast.LENGTH_LONG).show();
+                    }
+                });
+        } else {
+            downloadURL = "https://firebasestorage.googleapis.com/v0/b/leafdex-8b555.appspot.com/o/images%2Fplaceholder.png?alt=media&token=551fa53c-0c07-455f-ac7f-6ec48b0f693f";
+            
+            mAuth.createUserWithEmailAndPassword(semail, spassword)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()) {
+                            User user = new User(sfname, slname, semail, scontact, ssex, sbirthdate, downloadURL);
+
+                            FirebaseDatabase.getInstance().getReference("Users")
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    mProgressDialog.dismiss();
+                                    if(task.isSuccessful()) {
+                                        Toast.makeText(Register.this, "Registered successfully.", Toast.LENGTH_LONG).show();
+                                        startActivity(new Intent (Register.this, Home.class));
+                                        finish();
+                                    } else {
+                                        Toast.makeText(Register.this, "Failed to register. Try again.", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                        } else {
+                            mProgressDialog.dismiss();
+                            Toast.makeText(Register.this, "Failed to register.", Toast.LENGTH_LONG).show();
                         }
-                    });
+                    }
+                });
         }
     }
 

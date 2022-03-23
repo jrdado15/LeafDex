@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.bumptech.glide.Glide;
 import com.example.leafdex.databinding.ActivityHomeBinding;
 import com.example.leafdex.fragments.camera;
 import com.example.leafdex.fragments.encyclopedia;
@@ -66,12 +65,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 switch (menuItem.getItemId())
                 {
                     case  R.id.nav_edit_profile:
-                        replaceFragment(new profile());
-                        Toast.makeText(Home.this, "EDIT PROFILE SELECTED", Toast.LENGTH_LONG).show();
+                        replaceFragment(new profile(Home.this));
+                        //Toast.makeText(Home.this, "EDIT PROFILE SELECTED", Toast.LENGTH_LONG).show();
                         drawerLayout.closeDrawers();
                         break;
                     case  R.id.nav_saved_posts:
-                        Toast.makeText(Home.this, "SAVED POSTS SELECTED", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(Home.this, "SAVED POSTS SELECTED", Toast.LENGTH_LONG).show();
                         break;
                     case  R.id.nav_logout:
                         mAuth.signOut();

@@ -3,6 +3,7 @@ package com.example.leafdex;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -26,6 +27,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
 
+    private ProgressDialog mProgressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         fpassword = (TextView) findViewById(R.id.textView4);
         fpassword.setOnClickListener(this);
+
+        mProgressDialog = new ProgressDialog(this);
     }
 
     @Override
@@ -77,6 +81,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
+        mProgressDialog.setMessage("Logging in...");
+        mProgressDialog.show();
+        mProgressDialog.setCancelable(false);
+
         mAuth.signInWithEmailAndPassword(semail, spassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -86,6 +94,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 } else {
                     Toast.makeText(Login.this, "Wrong credentials.", Toast.LENGTH_LONG).show();
                 }
+                mProgressDialog.dismiss();
             }
         });
     }
