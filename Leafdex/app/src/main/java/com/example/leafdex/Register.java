@@ -100,7 +100,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
                     public void onDateSet(DatePicker view, int year, int month, int day) {
                         birthdate.setText((month+1) + "/" + day + "/" + year);
                     }
-                }, year, day, month);
+                }, year, month, day);
                 datePickerDialog.show();
             }
         });
@@ -158,8 +158,8 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
         String spassword = password.getText().toString().trim();
         String sconfirm = confirm.getText().toString().trim();
         String scontact = contact.getText().toString().trim();
-        String ssex = choice.trim();
-        String sbirthdate = birthdate.getText().toString().trim();
+        String ssex = choice;
+        String sbirthdate = birthdate.getText().toString();
 
         if(sfname.isEmpty()) {
             fname.setError("First name is required!");
