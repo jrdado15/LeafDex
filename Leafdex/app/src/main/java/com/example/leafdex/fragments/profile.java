@@ -60,7 +60,7 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
     private Button cancel;
     private View view;
     private ImageView pic;
-    private Uri picUri, newPicUri;
+    private Uri newPicUri;
     private String downloadURL;
     private EditText fname, lname, email, password, confirm, contact, birthdate;
     private Spinner sex;
@@ -366,88 +366,6 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
                     }
                 });
         }
-
-        /* ITO IPALIT SA BINURA SA TAAS
-        final String randomKey = UUID.randomUUID().toString();
-        StorageReference ref = storageReference.child("images/" + randomKey);
-        ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
-
-        if(samePic.equals("false")) {
-            ref.putFile(picUri)
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                            mProgressDialog.setMessage("Updating user profile...");
-                            mProgressDialog.show();
-                            mProgressDialog.setCancelable(false);
-                        }
-                    })
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    downloadURL = uri.toString();
-
-                                    HashMap hashMap = new HashMap();
-                                    hashMap.put("imageURL", downloadURL);
-                                    hashMap.put("fname", sfname);
-                                    hashMap.put("lname", slname);
-                                    hashMap.put("contact", scontact);
-                                    hashMap.put("sex", ssex);
-                                    hashMap.put("birthdate", sbirthdate);
-
-                                    reference.child(userID).updateChildren(hashMap)
-                                            .addOnSuccessListener(new OnSuccessListener() {
-                                                @Override
-                                                public void onSuccess(Object o) {
-                                                    Toast.makeText(getActivity(), "Updated successfully.", Toast.LENGTH_LONG).show();
-                                                    Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
-                                                    getActivity().startActivity(intent);
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(getActivity(), "Failed to update.", Toast.LENGTH_LONG).show();
-                                                }
-                                            });
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getActivity(), "Failed to upload picture. Please try again.", Toast.LENGTH_LONG).show();
-                        }
-                    });
-        } else {
-            HashMap hashMap = new HashMap();
-            hashMap.put("fname", sfname);
-            hashMap.put("lname", slname);
-            hashMap.put("contact", scontact);
-            hashMap.put("sex", ssex);
-            hashMap.put("birthdate", sbirthdate);
-
-            reference.child(userID).updateChildren(hashMap)
-                    .addOnSuccessListener(new OnSuccessListener() {
-                        @Override
-                        public void onSuccess(Object o) {
-                            Toast.makeText(getActivity(), "Updated successfully.", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
-                            getActivity().startActivity(intent);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getActivity(), "Failed to update.", Toast.LENGTH_LONG).show();
-                        }
-                    });
-        }
-        HANGGANG DITO */
     }
 
     private void cancelChanges() {
@@ -456,29 +374,9 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
     }
 
     private void choosePicture() {
-        /* ITO YUNG GALLERY INTENT @JOSEPH
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
-        //*/
-
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         activityResultLauncher.launch(intent);
     }
-
-    /* DEPRECATED NA RAW KAYA AYAW GUMANA
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            picUri = data.getData();
-            pic.setImageURI(picUri);
-            samePic = "false"; // NEED ISAMA TO KUNG GAGAWA KA NG BAGO
-        }
-    }
-    //*/
 
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
