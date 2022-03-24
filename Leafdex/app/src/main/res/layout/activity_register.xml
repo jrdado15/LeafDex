@@ -198,7 +198,7 @@
         android:background="@drawable/rounded_forms"
         android:ems="10"
         android:hint="@string/contact_no"
-        android:inputType="phone"
+        android:inputType="number"
         android:paddingStart="15sp"
         android:textColorHint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/guideline12"

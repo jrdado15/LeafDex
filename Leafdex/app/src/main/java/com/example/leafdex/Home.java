@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.example.leafdex.databinding.ActivityHomeBinding;
 import com.example.leafdex.fragments.camera;
 import com.example.leafdex.fragments.encyclopedia;
@@ -55,7 +56,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("Users");
+        userID = user.getUid();
 
         setUpToolbar();
         navigationView = (NavigationView) findViewById(R.id.navigation_menu);
@@ -76,37 +81,16 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                         mAuth.signOut();
                         startActivity(new Intent(Home.this, Login.class));
                         finish();
-                        Toast.makeText(Home.this, "SIGNED OUT", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(Home.this, "SIGNED OUT", Toast.LENGTH_LONG).show();
                         break;
                 }
                 return false;
             }
         });
 
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            switch(item.getItemId()){
-                case R.id.nav_bar_home:
-                    replaceFragment(new home());
-                    break;
-                case R.id.nav_bar_camera:
-                    replaceFragment(new camera());
-                    break;
-                case R.id.nav_bar_plantEncyclopedia:
-                    replaceFragment(new encyclopedia());
-
-                    break;
-            }
-            return true;
-        });
-
-        /* ITO YUNG BACKEND NUNG SIDEBAR @JUSTINE
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("Users");
-        userID = user.getUid();
-
-        email = (ImageView) findViewById(R.id.sidebar_profilePic);
-        fullname = (TextView) findViewById(R.id.sidebar_fullname);
-        email = (TextView) findViewById(R.id.sidebar_email);
+        profilePic = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.sidebar_profilePic);
+        fullname = (TextView) navigationView.getHeaderView(0).findViewById(R.id.sidebar_fullname);
+        email = (TextView) navigationView.getHeaderView(0).findViewById(R.id.sidebar_email);
 
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -130,7 +114,22 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
-        */
+
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch(item.getItemId()){
+                case R.id.nav_bar_home:
+                    replaceFragment(new home());
+                    break;
+                case R.id.nav_bar_camera:
+                    replaceFragment(new camera());
+                    break;
+                case R.id.nav_bar_plantEncyclopedia:
+                    replaceFragment(new encyclopedia());
+
+                    break;
+            }
+            return true;
+        });
     }
 
     public void setUpToolbar() {
@@ -140,7 +139,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
     }
 
     private void replaceFragment(Fragment fragment){
