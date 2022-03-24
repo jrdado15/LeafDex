@@ -1,14 +1,26 @@
 package com.example.leafdex.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.leafdex.Home;
 import com.example.leafdex.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +28,16 @@ import com.example.leafdex.R;
  * create an instance of this fragment.
  */
 public class change_password extends Fragment {
+
+    private Button changePassword;
+    private View view;
+    private EditText oldPassword, password, confirmPassword;
+    private String userEmail;
+
+    private FirebaseUser user;
+    private AuthCredential credential;
+
+    private ProgressDialog mProgressDialog;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +50,12 @@ public class change_password extends Fragment {
 
     public change_password() {
         // Required empty public constructor
+    }
+
+    public change_password(Home home) {
+        mProgressDialog = new ProgressDialog(home);
+        mProgressDialog.setMessage("Updating user profile...");
+        mProgressDialog.setCancelable(false);
     }
 
     /**
@@ -55,12 +83,87 @@ public class change_password extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_change_password, container, false);
+        view = inflater.inflate(R.layout.fragment_change_password, container, false);
+
+        /*
+        changePassword = (Button) view.findViewById(R.id.btn_changePassword);
+        oldPassword = (EditText) view.findViewById(R.id.cp_oldPassword);
+        password = (EditText) view.findViewById(R.id.cp_password);
+        confirmPassword = (EditText) view.findViewById(R.id.cp_confirmPassword);
+
+        changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changePw();
+            }
+        });
+        */
+
+        return view;
+    }
+
+    private void changePw() {
+        /*
+        String soldPassword = oldPassword.getText().toString().trim();
+        String spassword = password.getText().toString().trim();
+        String sconfirmPassword = confirmPassword.getText().toString().trim();
+
+        if(soldPassword.isEmpty()) {
+            oldPassword.setError("Old password is required!");
+            oldPassword.requestFocus();
+            return;
+        }
+
+        if(spassword.isEmpty()) {
+            password.setError("New password is required!");
+            password.requestFocus();
+            return;
+        }
+
+        if(sconfirmPassword.isEmpty()) {
+            confirmPassword.setError("New password is required!");
+            confirmPassword.requestFocus();
+            return;
+        }
+
+        if(!sconfirmPassword.equals(spassword)) {
+            confirmPassword.setError("Two passwords didn't match.");
+            confirmPassword.requestFocus();
+            return;
+        }
+
+        userEmail = user.getEmail();
+        mProgressDialog.show();
+
+        credential = EmailAuthProvider.getCredential(userEmail, soldPassword);
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            user.updatePassword(spassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getActivity(), "Changed password successfully.", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(getActivity(), "Failed to change password.", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                        } else {
+                            Toast.makeText(getActivity(), "Failed to change password. Please try again.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+         */
     }
 }

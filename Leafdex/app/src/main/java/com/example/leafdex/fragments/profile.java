@@ -64,7 +64,7 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
     private String downloadURL;
     private EditText fname, lname, email, password, confirm, contact, birthdate;
     private Spinner sex;
-    private String userID, choice, samePic;
+    private String userID, choice, samePic, noPicBefore;
     private String uimageURL, ufname, ulname, uemail, ucontact, usex, ubirthdate;
     private DatePickerDialog datePickerDialog;
 
@@ -93,7 +93,6 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
         mProgressDialog.setMessage("Updating user profile...");
         mProgressDialog.setCancelable(false);
     }
-
 
     /**
      * Use this factory method to create a new instance of
@@ -226,6 +225,7 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
         });
 
         samePic = "true";
+        noPicBefore = "false";
 
         return view;
     }
@@ -280,9 +280,13 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
         final String randomKey = UUID.randomUUID().toString();
         StorageReference ref = storageReference.child("images/" + randomKey);
         StorageReference ref2 = storageReference.child("images/" + randomKey);
+        String placeholder = "https://firebasestorage.googleapis.com/v0/b/leafdex-8b555.appspot.com/o/images%2Fplaceholder.png?alt=media&token=10295b86-4c49-43ab-a5b5-86e9919726e1";
+        if(uimageURL.equals(placeholder)) {
+            noPicBefore = "true";
+        }
         mProgressDialog.show();
 
-        if(samePic.equals("false")) {
+        if(samePic.equals("false") && noPicBefore.equals("false")) {
             ref.putFile(newPicUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -340,6 +344,52 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
                         Toast.makeText(getActivity(), "Failed to upload picture. Please try again.", Toast.LENGTH_LONG).show();
                     }
                 });
+        } else if(samePic.equals("false") && noPicBefore.equals("true")) {
+            ref.putFile(newPicUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    downloadURL = uri.toString();
+
+                                    HashMap hashMap = new HashMap();
+                                    hashMap.put("imageURL", downloadURL);
+                                    hashMap.put("fname", sfname);
+                                    hashMap.put("lname", slname);
+                                    hashMap.put("contact", scontact);
+                                    hashMap.put("sex", ssex);
+                                    hashMap.put("birthdate", sbirthdate);
+
+                                    reference.child(userID).updateChildren(hashMap)
+                                            .addOnSuccessListener(new OnSuccessListener() {
+                                                @Override
+                                                public void onSuccess(Object o) {
+                                                    mProgressDialog.dismiss();
+                                                    Toast.makeText(getActivity(), "Updated successfully.", Toast.LENGTH_LONG).show();
+                                                    Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
+                                                    getActivity().startActivity(intent);
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    mProgressDialog.dismiss();
+                                                    Toast.makeText(getActivity(), "Failed to update.", Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            mProgressDialog.dismiss();
+                            Toast.makeText(getActivity(), "Failed to upload picture. Please try again.", Toast.LENGTH_LONG).show();
+                        }
+                    });
         } else {
             HashMap hashMap = new HashMap();
             hashMap.put("fname", sfname);

@@ -132,11 +132,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                     break;
                 case R.id.nav_bar_plantEncyclopedia:
                     replaceFragment(new encyclopedia());
-
                     break;
             }
             return true;
         });
+
+        replaceFragment(new home());
     }
 
     public void setUpToolbar() {
