@@ -21,9 +21,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
 import com.example.leafdex.databinding.ActivityHomeBinding;
 import com.example.leafdex.fragments.camera;
+import com.example.leafdex.fragments.change_password;
 import com.example.leafdex.fragments.encyclopedia;
 import com.example.leafdex.fragments.home;
 import com.example.leafdex.fragments.profile;
+import com.example.leafdex.fragments.saved_posts;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -74,8 +76,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                         //Toast.makeText(Home.this, "EDIT PROFILE SELECTED", Toast.LENGTH_LONG).show();
                         drawerLayout.closeDrawers();
                         break;
+                    case  R.id.nav_change_password:
+                        replaceFragment(new change_password());
+                        drawerLayout.closeDrawers();
+                        break;
                     case  R.id.nav_saved_posts:
-                        //Toast.makeText(Home.this, "SAVED POSTS SELECTED", Toast.LENGTH_LONG).show();
+                        replaceFragment(new saved_posts());
+                        drawerLayout.closeDrawers();
                         break;
                     case  R.id.nav_logout:
                         mAuth.signOut();

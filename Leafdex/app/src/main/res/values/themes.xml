@@ -12,7 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-
+        <item name="actionBarSize">50dp</item>
     </style>
 
     <style name="Theme.Leafdex.Fullscreen" parent="Theme.Leafdex">
