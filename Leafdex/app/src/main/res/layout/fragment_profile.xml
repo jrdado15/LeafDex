@@ -11,6 +11,13 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.85" />
+
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,62 +43,69 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".12" />
+            app:layout_constraintGuide_percent="0.2" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".30" />
+            app:layout_constraintGuide_percent="0.37" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.75" />
+            app:layout_constraintGuide_percent="0.65" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.85" />
+            app:layout_constraintGuide_percent="0.75" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.40" />
+            app:layout_constraintGuide_percent="0.47" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:text="@string/edit_profile"
             android:textAlignment="center"
             android:textColor="@color/main_green"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/guideline10"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
-            app:layout_constraintStart_toStartOf="@+id/guideline7"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.505"
+            app:layout_constraintStart_toStartOf="@+id/guideline7" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="0dp"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView2"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            app:cardCornerRadius="200dp"
             app:layout_constraintBottom_toTopOf="@+id/guideline11"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
             app:layout_constraintStart_toStartOf="@+id/guideline7"
-            app:layout_constraintTop_toTopOf="@+id/guideline10"
-            app:srcCompat="@drawable/ic_profile_picture" />
+            app:layout_constraintTop_toTopOf="@+id/guideline10">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_profile_picture" />
+
+        </androidx.cardview.widget.CardView>
+
 
         <EditText
             android:id="@+id/input_first_name"
@@ -107,6 +121,7 @@
             android:inputType="textPersonName"
             android:paddingStart="15sp"
             android:textColorHint="@color/white"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/guideline14"
             app:layout_constraintEnd_toStartOf="@+id/guideline9"
             app:layout_constraintStart_toStartOf="@+id/guideline7"
@@ -126,17 +141,19 @@
             android:inputType="textPersonName"
             android:paddingStart="15sp"
             android:textColorHint="@color/white"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/guideline14"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
             app:layout_constraintStart_toStartOf="@+id/guideline9"
             app:layout_constraintTop_toTopOf="@+id/guideline11" />
+
 
         <EditText
             android:id="@+id/input_emailAddress"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/rounded_forms"
             android:ems="10"
@@ -144,51 +161,12 @@
             android:inputType="textEmailAddress"
             android:paddingStart="15sp"
             android:textColorHint="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/input_password"
-            app:layout_constraintEnd_toStartOf="@+id/guideline8"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline7"
-            app:layout_constraintTop_toTopOf="@+id/guideline14"
-            tools:ignore="TouchTargetSizeCheck" />
-
-        <EditText
-            android:id="@+id/input_password"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/rounded_forms"
-            android:ems="10"
-            android:hint="@string/pw"
-            android:inputType="textPassword"
-            android:paddingStart="15sp"
-            android:textColorHint="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/input_confirm_password"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/input_phone_number"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/guideline7"
-            app:layout_constraintTop_toBottomOf="@+id/input_emailAddress"
-            tools:ignore="TouchTargetSizeCheck" />
-
-        <EditText
-            android:id="@+id/input_confirm_password"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/rounded_forms"
-            android:ems="10"
-            android:hint="@string/cp"
-            android:inputType="textPassword"
-            android:paddingStart="15sp"
-            android:textColorHint="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/input_phone_number"
-            app:layout_constraintEnd_toStartOf="@+id/guideline8"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline7"
-            app:layout_constraintTop_toBottomOf="@+id/input_password"
+            app:layout_constraintTop_toBottomOf="@+id/input_first_name"
             tools:ignore="TouchTargetSizeCheck" />
 
         <EditText
@@ -204,11 +182,13 @@
             android:hint="@string/contact_no"
             android:inputType="number"
             android:paddingStart="15sp"
+            android:textColor="@color/white"
             android:textColorHint="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/guideline12"
+            app:layout_constraintBottom_toTopOf="@+id/input_birthDate"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline7"
-            app:layout_constraintTop_toBottomOf="@+id/input_confirm_password"
+            app:layout_constraintTop_toBottomOf="@+id/input_emailAddress"
             tools:ignore="TouchTargetSizeCheck" />
 
         <EditText
@@ -218,12 +198,13 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_forms"
             android:ems="10"
-            android:hint="@string/Birthdate"
             android:focusable="false"
+            android:hint="@string/Birthdate"
             android:inputType="date"
+            android:textColor="@color/white"
             android:paddingStart="15sp"
             android:textColorHint="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/guideline13"
@@ -239,11 +220,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
             android:autofillHints="@string/sex"
             android:background="@drawable/rounded_forms"
             android:contentDescription="@string/sex"
             android:textColorHint="@color/white"
+
             app:layout_constraintBottom_toTopOf="@+id/guideline13"
             app:layout_constraintEnd_toStartOf="@+id/guideline9"
             app:layout_constraintHorizontal_bias="0.64"
@@ -255,35 +237,36 @@
             android:id="@+id/btn_save"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_button"
             android:text="@string/save"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/btn_cancel"
+            app:layout_constraintBottom_toTopOf="@+id/guideline17"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline7"
-            app:layout_constraintTop_toBottomOf="@+id/input_birthDate"
+            app:layout_constraintStart_toStartOf="@+id/guideline9"
+            app:layout_constraintTop_toTopOf="@+id/guideline13"
+            app:layout_constraintVertical_bias="0.0"
             tools:ignore="TouchTargetSizeCheck" />
 
         <Button
             android:id="@+id/btn_cancel"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_button"
             android:text="@string/cancel"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline8"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintBottom_toTopOf="@+id/guideline17"
+            app:layout_constraintEnd_toStartOf="@+id/guideline9"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/guideline7"
-            app:layout_constraintTop_toBottomOf="@+id/btn_save"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@+id/guideline13" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
