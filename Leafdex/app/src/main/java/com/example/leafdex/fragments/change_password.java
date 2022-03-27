@@ -1,6 +1,7 @@
 package com.example.leafdex.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -52,12 +53,6 @@ public class change_password extends Fragment {
         // Required empty public constructor
     }
 
-    public change_password(Home home) {
-        mProgressDialog = new ProgressDialog(home);
-        mProgressDialog.setMessage("Updating user profile...");
-        mProgressDialog.setCancelable(false);
-    }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -85,6 +80,7 @@ public class change_password extends Fragment {
         }
 
         user = FirebaseAuth.getInstance().getCurrentUser();
+        userEmail = user.getEmail();
     }
 
     @Override
@@ -92,7 +88,6 @@ public class change_password extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_change_password, container, false);
-
 
         changePassword = (Button) view.findViewById(R.id.btn_changePassword);
         oldPassword = (EditText) view.findViewById(R.id.cp_oldPassword);
@@ -106,7 +101,6 @@ public class change_password extends Fragment {
             }
         });
 
-
         return view;
     }
 
@@ -116,7 +110,7 @@ public class change_password extends Fragment {
         String sconfirmPassword = confirmPassword.getText().toString().trim();
 
         if(soldPassword.isEmpty()) {
-            oldPassword.setError("Old password is required!");
+            oldPassword.setError("Current password is required!");
             oldPassword.requestFocus();
             return;
         }
@@ -133,35 +127,42 @@ public class change_password extends Fragment {
             return;
         }
 
+        if(spassword.length() < 6) {
+            password.setError("Minimum length should be 6 characters.");
+            password.requestFocus();
+            return;
+        }
+
         if(!sconfirmPassword.equals(spassword)) {
             confirmPassword.setError("Two passwords didn't match.");
             confirmPassword.requestFocus();
             return;
         }
 
-        userEmail = user.getEmail();
-        mProgressDialog.show();
-
-        credential = EmailAuthProvider.getCredential(userEmail, soldPassword);
-        user.reauthenticate(credential)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            user.updatePassword(spassword).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(getActivity(), "Changed password successfully.", Toast.LENGTH_LONG).show();
-                                    } else {
-                                        Toast.makeText(getActivity(), "Failed to change password.", Toast.LENGTH_LONG).show();
+        if(!(userEmail.isEmpty() && soldPassword.isEmpty())) {
+            credential = EmailAuthProvider.getCredential(userEmail, soldPassword);
+            user.reauthenticate(credential)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                user.updatePassword(spassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(getActivity(), "Changed password successfully.", Toast.LENGTH_LONG).show();
+                                            Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
+                                            getActivity().startActivity(intent);
+                                        } else {
+                                            Toast.makeText(getActivity(), "Failed to change password.", Toast.LENGTH_LONG).show();
+                                        }
                                     }
-                                }
-                            });
-                        } else {
-                            Toast.makeText(getActivity(), "Failed to change password. Please try again.", Toast.LENGTH_LONG).show();
+                                });
+                            } else {
+                                Toast.makeText(getActivity(), "Failed to change password. Please try again.", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 }

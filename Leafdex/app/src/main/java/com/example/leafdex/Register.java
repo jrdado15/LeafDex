@@ -287,7 +287,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
                     }
                 });
         } else {
-            downloadURL = "https://firebasestorage.googleapis.com/v0/b/leafdex-8b555.appspot.com/o/images%2Fplaceholder.png?alt=media&token=10295b86-4c49-43ab-a5b5-86e9919726e1";
+            downloadURL = "https://firebasestorage.googleapis.com/v0/b/leafdex-8b555.appspot.com/o/images%2Fplaceholder.png?alt=media&token=f1779a87-c76e-4fc9-ab02-be3ca3d53958";
             
             mAuth.createUserWithEmailAndPassword(semail, spassword)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
