@@ -139,30 +139,28 @@ public class change_password extends Fragment {
             return;
         }
 
-        if(!(userEmail.isEmpty() && soldPassword.isEmpty())) {
-            credential = EmailAuthProvider.getCredential(userEmail, soldPassword);
-            user.reauthenticate(credential)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                user.updatePassword(spassword).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(getActivity(), "Changed password successfully.", Toast.LENGTH_LONG).show();
-                                            Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
-                                            getActivity().startActivity(intent);
-                                        } else {
-                                            Toast.makeText(getActivity(), "Failed to change password.", Toast.LENGTH_LONG).show();
-                                        }
+        credential = EmailAuthProvider.getCredential(userEmail, soldPassword);
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            user.updatePassword(spassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getActivity(), "Changed password successfully.", Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
+                                        getActivity().startActivity(intent);
+                                    } else {
+                                        Toast.makeText(getActivity(), "Failed to change password.", Toast.LENGTH_LONG).show();
                                     }
-                                });
-                            } else {
-                                Toast.makeText(getActivity(), "Failed to change password. Please try again.", Toast.LENGTH_LONG).show();
-                            }
+                                }
+                            });
+                        } else {
+                            Toast.makeText(getActivity(), "Failed to change password. Please try again.", Toast.LENGTH_LONG).show();
                         }
-                    });
-        }
+                    }
+                });
     }
 }
