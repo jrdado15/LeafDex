@@ -93,7 +93,7 @@ public class change_password extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_change_password, container, false);
 
-        /*
+
         changePassword = (Button) view.findViewById(R.id.btn_changePassword);
         oldPassword = (EditText) view.findViewById(R.id.cp_oldPassword);
         password = (EditText) view.findViewById(R.id.cp_password);
@@ -105,13 +105,12 @@ public class change_password extends Fragment {
                 changePw();
             }
         });
-        */
+
 
         return view;
     }
 
     private void changePw() {
-        /*
         String soldPassword = oldPassword.getText().toString().trim();
         String spassword = password.getText().toString().trim();
         String sconfirmPassword = confirmPassword.getText().toString().trim();
@@ -164,6 +163,5 @@ public class change_password extends Fragment {
                         }
                     }
                 });
-         */
     }
 }

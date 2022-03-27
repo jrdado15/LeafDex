@@ -19,6 +19,10 @@
     <string name="sign_in">Sign in</string>
     <string name="register">Register</string>
     <string name="logout">Logout</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="current_password">Current Password</string>
     <string-array name="sex">
         <item>Male</item>
         <item>Female</item>
