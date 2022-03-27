@@ -77,7 +77,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                         drawerLayout.closeDrawers();
                         break;
                     case  R.id.nav_change_password:
-                        replaceFragment(new change_password());
+                        replaceFragment(new change_password(Home.this));
                         drawerLayout.closeDrawers();
                         break;
                     case  R.id.nav_saved_posts:

@@ -276,7 +276,6 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
 
         final String randomKey = UUID.randomUUID().toString();
         StorageReference ref = storageReference.child("images/" + randomKey);
-        StorageReference ref2 = storageReference.child("images/" + randomKey);
         mProgressDialog.show();
 
         if(samePic.equals("false")) {
@@ -287,45 +286,33 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
                         ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                StorageReference ref = FirebaseStorage.getInstance().getReferenceFromUrl(uimageURL);
-                                ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        downloadURL = uri.toString();
+                                downloadURL = uri.toString();
 
-                                        HashMap hashMap = new HashMap();
-                                        hashMap.put("imageURL", downloadURL);
-                                        hashMap.put("fname", sfname);
-                                        hashMap.put("lname", slname);
-                                        hashMap.put("contact", scontact);
-                                        hashMap.put("sex", ssex);
-                                        hashMap.put("birthdate", sbirthdate);
+                                HashMap hashMap = new HashMap();
+                                hashMap.put("imageURL", downloadURL);
+                                hashMap.put("fname", sfname);
+                                hashMap.put("lname", slname);
+                                hashMap.put("contact", scontact);
+                                hashMap.put("sex", ssex);
+                                hashMap.put("birthdate", sbirthdate);
 
-                                        reference.child(userID).updateChildren(hashMap)
-                                            .addOnSuccessListener(new OnSuccessListener() {
-                                                @Override
-                                                public void onSuccess(Object o) {
-                                                    mProgressDialog.dismiss();
-                                                    Toast.makeText(getActivity(), "Updated successfully.", Toast.LENGTH_LONG).show();
-                                                    Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
-                                                    getActivity().startActivity(intent);
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    mProgressDialog.dismiss();
-                                                    Toast.makeText(getActivity(), "Failed to update.", Toast.LENGTH_LONG).show();
-                                                }
-                                            });
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception exception) {
-                                        mProgressDialog.dismiss();
-                                        Toast.makeText(getActivity(), "Failed to remove old picture. Please try again.", Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                                reference.child(userID).updateChildren(hashMap)
+                                        .addOnSuccessListener(new OnSuccessListener() {
+                                            @Override
+                                            public void onSuccess(Object o) {
+                                                mProgressDialog.dismiss();
+                                                Toast.makeText(getActivity(), "Updated successfully.", Toast.LENGTH_LONG).show();
+                                                Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
+                                                getActivity().startActivity(intent);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                mProgressDialog.dismiss();
+                                                Toast.makeText(getActivity(), "Failed to update.", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
                             }
                         });
                     }

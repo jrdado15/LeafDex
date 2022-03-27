@@ -53,6 +53,12 @@ public class change_password extends Fragment {
         // Required empty public constructor
     }
 
+    public change_password(Home home) {
+        mProgressDialog = new ProgressDialog(home);
+        mProgressDialog.setMessage("Changing password...");
+        mProgressDialog.setCancelable(false);
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -139,6 +145,8 @@ public class change_password extends Fragment {
             return;
         }
 
+        mProgressDialog.show();
+
         credential = EmailAuthProvider.getCredential(userEmail, soldPassword);
         user.reauthenticate(credential)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -149,15 +157,18 @@ public class change_password extends Fragment {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
+                                        mProgressDialog.dismiss();
                                         Toast.makeText(getActivity(), "Changed password successfully.", Toast.LENGTH_LONG).show();
                                         Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
                                         getActivity().startActivity(intent);
                                     } else {
+                                        mProgressDialog.dismiss();
                                         Toast.makeText(getActivity(), "Failed to change password.", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
                         } else {
+                            mProgressDialog.dismiss();
                             Toast.makeText(getActivity(), "Failed to change password. Please try again.", Toast.LENGTH_LONG).show();
                         }
                     }
