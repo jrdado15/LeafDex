@@ -1,18 +1,28 @@
 package com.example.leafdex;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -35,23 +45,41 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Objects;
+import java.io.File;
 
 public class Home extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private DatabaseReference reference;
 
+    Bundle extras;
     ActivityHomeBinding binding;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
+    Intent chooserIntent;
 
+    private Uri plantPicUri;
+    private Uri plantPicUriFromCamera;
     private ImageView profilePic;
     private TextView fullname;
     private TextView email;
     private String userID;
     private String uimageURL, ufname, ulname, uemail;
+
+    private String[] PERMISSIONS = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA,
+    };
+
+    public Uri getPlantPic() {
+        return plantPicUri;
+    }
+
+    public Uri getPlantPicUriFromCamera() {
+        return plantPicUriFromCamera;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +156,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                     replaceFragment(new home());
                     break;
                 case R.id.nav_bar_camera:
-                    replaceFragment(new camera());
+                    choosePicture();
+                    //pickFromGalleryLauncher.launch(Pair.create("image/*", "Select voucher"));
                     break;
                 case R.id.nav_bar_plantEncyclopedia:
                     replaceFragment(new encyclopedia());
@@ -164,5 +193,70 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
 
+    }
+
+    private void choosePicture() {
+        //TODO: @JUSTINE modal for the mean time, dito mo lagay floating button if keri
+
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        plantPicUriFromCamera = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "plant_"+ String.valueOf(System.currentTimeMillis()) + ".jpg"));
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, plantPicUriFromCamera);
+
+        //TODO: if okay na @JUSTINE delete mo to sabay gamitin mo ung cameraIntent and galleryIntent
+        //TODO: no need alalahanin ung Uri na kailangan ni cajay
+        chooserIntent = Intent.createChooser(galleryIntent, "Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {cameraIntent});
+
+        //TODO: sa permissions ako na alahab dipende sa need
+        if (hasPermissions(PERMISSIONS)) {
+            activityForResult.launch(chooserIntent);
+        } else {
+            Log.d("PERMISSIONS", "Launching multiple contract permission launcher for ALL required permissions");
+            requestMultiplePermission.launch(PERMISSIONS);
+        }
+    }
+
+    ActivityResultLauncher<Intent> activityForResult = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    try {
+                        plantPicUri = data.getData();
+                    } catch(NullPointerException e){ /* */ }
+                    replaceFragment(new camera());
+                }
+            }
+        }
+    );
+
+    ActivityResultLauncher<String[]> requestMultiplePermission = registerForActivityResult(
+        new ActivityResultContracts.RequestMultiplePermissions(),
+        isGranted -> {
+            if (isGranted.containsValue(false)) {
+                Log.d("PERMISSIONS", "At least one of the permissions was not granted.");
+                return;
+            }
+            activityForResult.launch(chooserIntent);
+            Log.d("PERMISSIONS", "All permissions are granted.");
+        }
+    );
+
+    private boolean hasPermissions(String[] permissions) {
+        if (permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                    Log.d("PERMISSIONS", "Permission request not granted " + permission);
+                    return false;
+                }
+                Log.d("PERMISSIONS", "Permission already granted: " + permission);
+            }
+            return true;
+        }
+        return false;
     }
 }
