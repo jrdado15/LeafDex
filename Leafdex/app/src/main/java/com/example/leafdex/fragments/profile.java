@@ -321,7 +321,7 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         mProgressDialog.dismiss();
-                        Toast.makeText(getActivity(), "Failed to upload picture. Please try again.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Failed to upload image. Please try again.", Toast.LENGTH_LONG).show();
                     }
                 });
         } else {

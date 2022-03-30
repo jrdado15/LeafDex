@@ -59,7 +59,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     NavigationView navigationView;
     Intent chooserIntent;
 
-    private Uri plantPicUri;
+    private Uri plantPicUriFromGallery;
     private Uri plantPicUriFromCamera;
     private ImageView profilePic;
     private TextView fullname;
@@ -73,8 +73,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             Manifest.permission.CAMERA,
     };
 
-    public Uri getPlantPic() {
-        return plantPicUri;
+    public Uri getPlantPicUriFromGallery() {
+        return plantPicUriFromGallery;
     }
 
     public Uri getPlantPicUriFromCamera() {
@@ -101,7 +101,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 {
                     case  R.id.nav_edit_profile:
                         replaceFragment(new profile(Home.this));
-                        //Toast.makeText(Home.this, "EDIT PROFILE SELECTED", Toast.LENGTH_LONG).show();
                         drawerLayout.closeDrawers();
                         break;
                     case  R.id.nav_change_password:
@@ -116,7 +115,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                         mAuth.signOut();
                         startActivity(new Intent(Home.this, Login.class));
                         finish();
-                        //Toast.makeText(Home.this, "SIGNED OUT", Toast.LENGTH_LONG).show();
                         break;
                 }
                 return false;
@@ -226,8 +224,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
                     try {
-                        plantPicUri = data.getData();
-                    } catch(NullPointerException e){ /* */ }
+                        plantPicUriFromGallery = data.getData();
+                    } catch(NullPointerException e) {}
                     replaceFragment(new camera());
                 }
             }

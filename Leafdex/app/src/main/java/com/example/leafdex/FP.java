@@ -67,7 +67,7 @@ public class FP extends AppCompatActivity {
                     Toast.makeText(FP.this, "Check your email to reset the password.", Toast.LENGTH_LONG).show();
                 } else {
                     pbar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(FP.this, "Try again.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(FP.this, "Please try again.", Toast.LENGTH_LONG).show();
                 }
             }
         });

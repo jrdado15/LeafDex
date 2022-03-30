@@ -265,7 +265,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
                                                         startActivity(new Intent (Register.this, Home.class));
                                                         finish();
                                                     } else {
-                                                        Toast.makeText(Register.this, "Failed to register. Try again.", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(Register.this, "Failed to register. Please try again.", Toast.LENGTH_LONG).show();
                                                     }
                                                 }
                                             });
@@ -283,7 +283,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         mProgressDialog.dismiss();
-                        Toast.makeText(Register.this, "Failed to upload picture. Please try again.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Register.this, "Failed to upload image. Please try again.", Toast.LENGTH_LONG).show();
                     }
                 });
         } else {
@@ -307,7 +307,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
                                         startActivity(new Intent (Register.this, Home.class));
                                         finish();
                                     } else {
-                                        Toast.makeText(Register.this, "Failed to register. Try again.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(Register.this, "Failed to register. Please try again.", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });

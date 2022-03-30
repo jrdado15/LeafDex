@@ -2,17 +2,31 @@ package com.example.leafdex.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
 import com.example.leafdex.Home;
 import com.example.leafdex.R;
+
+import org.json.simple.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,12 +87,35 @@ public class camera extends Fragment {
         cameraLabel = (TextView) view.findViewById(R.id.cameraLabel);
         uriExample = (ImageView) view.findViewById(R.id.uriExample);
         Home home = (Home) getActivity();
-        Uri plantPicUri = home.getPlantPic();
-        if(plantPicUri == null){
-            plantPicUri = home.getPlantPicUriFromCamera();
+        // Uri plantPicUri = home.getPlantPicUriFromGallery();
+        Uri plantPicUri = home.getPlantPicUriFromCamera();
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        // uriExample.setImageURI(plantPicUri);
+        Log.d("TAG", plantPicUri.toString().substring(8));
+        final String imageUri = plantPicUri.toString().substring(8);
+        final String imageName = "image.jpeg";
+        File file = new File(imageUri);
+        final MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("images", imageName,
+                        RequestBody.create(file, MEDIA_TYPE_JPEG))
+                .addFormDataPart("organs", "leaf")
+                .build();
+        Request request = new Request.Builder()
+                .url("https://my-api.plantnet.org/v2/identify/all?include-related-images=true&api-key=2b10aINHPAiPDXBJNcQY89sCyu")
+                .post(requestBody)
+                .build();
+        OkHttpClient client = new OkHttpClient();
+        Response response;
+        try {
+            response = client.newCall(request).execute();
+            Log.d("TAG", response.body().string());
+        } catch (IOException e) {
+            Toast.makeText(getActivity(), "Please try again.", Toast.LENGTH_LONG).show();
         }
-        cameraLabel.setText(plantPicUri.toString());
-        Glide.with(home).load(plantPicUri).into(uriExample);
+
         return view;
     }
 }
