@@ -66,6 +66,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     private TextView email;
     private String userID;
     private String uimageURL, ufname, ulname, uemail;
+    private Boolean isFromGallery = false;
 
     private String[] PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -73,12 +74,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             Manifest.permission.CAMERA,
     };
 
-    public Uri getPlantPicUriFromGallery() {
-        return plantPicUriFromGallery;
-    }
+    public Uri getPlantPicUriFromGallery() { return plantPicUriFromGallery; }
 
     public Uri getPlantPicUriFromCamera() {
         return plantPicUriFromCamera;
+    }
+
+    public Boolean getIsFromGallery() {
+        return isFromGallery;
     }
 
     @Override
@@ -199,8 +202,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-        plantPicUriFromCamera = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "plant_"+ String.valueOf(System.currentTimeMillis()) + ".jpg"));
+        plantPicUriFromCamera = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/DCIM/Leafdex", "plant_"+ String.valueOf(System.currentTimeMillis()) + ".jpg"));
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, plantPicUriFromCamera);
+        getContentResolver().notifyChange(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null);
 
         //TODO: if okay na @JUSTINE delete mo to sabay gamitin mo ung cameraIntent and galleryIntent
         //TODO: no need alalahanin ung Uri na kailangan ni cajay
@@ -225,7 +229,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                     Intent data = result.getData();
                     try {
                         plantPicUriFromGallery = data.getData();
-                    } catch(NullPointerException e) {}
+                        isFromGallery = true;
+                    } catch(NullPointerException e) {
+                        isFromGallery = false;
+                    }
                     replaceFragment(new camera());
                 }
             }

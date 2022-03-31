@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 
@@ -14,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.io.File;
 
 public class Welcome extends AppCompatActivity {
     Handler h = new Handler();
@@ -33,6 +36,13 @@ public class Welcome extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         askMultiplePermissions(requestMultiplePermission);
+
+        File f = new File(Environment.getExternalStorageDirectory() + "/DCIM/Leafdex");
+        if(!f.isDirectory()) {
+            String dir = Environment.getExternalStorageDirectory() + "/DCIM/Leafdex";
+            File imageDirectory = new File(dir);
+            imageDirectory.mkdirs();
+        }
     }
 
     private void askMultiplePermissions(ActivityResultLauncher<String[]> multiplePermissionLauncher) {

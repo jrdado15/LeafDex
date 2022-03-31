@@ -1,8 +1,10 @@
 package com.example.leafdex.fragments;
 
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +17,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.leafdex.Home;
 import com.example.leafdex.R;
-
-import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,6 +48,8 @@ public class camera extends Fragment {
     private View view;
     private TextView cameraLabel;
     private ImageView uriExample;
+
+    private Home home;
 
     public camera() {
     }
@@ -86,14 +88,24 @@ public class camera extends Fragment {
         view = inflater.inflate(R.layout.fragment_camera, container, false);
         cameraLabel = (TextView) view.findViewById(R.id.cameraLabel);
         uriExample = (ImageView) view.findViewById(R.id.uriExample);
-        Home home = (Home) getActivity();
+        home = (Home) getActivity();
         // Uri plantPicUri = home.getPlantPicUriFromGallery();
-        Uri plantPicUri = home.getPlantPicUriFromCamera();
+        // Uri plantPicUri = home.getPlantPicUriFromCamera();
+        Uri plantPicUri;
+        String filePath = "";
+        if (home.getIsFromGallery()) {
+            plantPicUri = home.getPlantPicUriFromGallery();
+            filePath = getRealPathFromURI(plantPicUri).substring(1);
+        } else {
+            plantPicUri = home.getPlantPicUriFromCamera();
+            filePath = plantPicUri.toString().substring(8);
+        }
+        Toast.makeText(getActivity(), filePath, Toast.LENGTH_LONG).show();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         // uriExample.setImageURI(plantPicUri);
-        Log.d("TAG", plantPicUri.toString().substring(8));
-        final String imageUri = plantPicUri.toString().substring(8);
+        Log.d("TAG", filePath);
+        final String imageUri = filePath;
         final String imageName = "image.jpeg";
         File file = new File(imageUri);
         final MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
@@ -117,5 +129,17 @@ public class camera extends Fragment {
         }
 
         return view;
+    }
+
+    private String getRealPathFromURI(Uri uri) {
+        String res = null;
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = home.getContentResolver().query(uri, proj, null, null, null);
+        if(cursor.moveToFirst()){;
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            res = cursor.getString(column_index);
+        }
+        cursor.close();
+        return res;
     }
 }
