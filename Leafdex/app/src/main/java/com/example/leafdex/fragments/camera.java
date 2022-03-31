@@ -17,9 +17,15 @@ import androidx.fragment.app.Fragment;
 
 import com.example.leafdex.Home;
 import com.example.leafdex.R;
+import com.example.leafdex.fragments.parsers.Result;
+import com.example.leafdex.fragments.parsers.Root;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -43,7 +49,6 @@ public class camera extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private Uri picUri;
 
     private View view;
     private TextView cameraLabel;
@@ -89,8 +94,6 @@ public class camera extends Fragment {
         cameraLabel = (TextView) view.findViewById(R.id.cameraLabel);
         uriExample = (ImageView) view.findViewById(R.id.uriExample);
         home = (Home) getActivity();
-        // Uri plantPicUri = home.getPlantPicUriFromGallery();
-        // Uri plantPicUri = home.getPlantPicUriFromCamera();
         Uri plantPicUri;
         String filePath = "";
         if (home.getIsFromGallery()) {
@@ -103,8 +106,6 @@ public class camera extends Fragment {
         Toast.makeText(getActivity(), filePath, Toast.LENGTH_LONG).show();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        // uriExample.setImageURI(plantPicUri);
-        Log.d("TAG", filePath);
         final String imageUri = filePath;
         final String imageName = "image.jpeg";
         File file = new File(imageUri);
@@ -123,9 +124,21 @@ public class camera extends Fragment {
         Response response;
         try {
             response = client.newCall(request).execute();
-            Log.d("TAG", response.body().string());
+            String json = response.body().string();
+            Moshi moshi = new Moshi.Builder().build();
+            JsonAdapter<Root> jsonAdapter = moshi.adapter(Root.class);
+            Root root = jsonAdapter.fromJson(json);
+            List<Result> result = root.getResults();
+            DecimalFormat df = new DecimalFormat("0.00");
+            Log.d("TAG", "Score: " + df.format(result.get(0).getScore() * 100) + "%");
+            Log.d("TAG", "Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
+            for(int i = 0; i < result.get(0).getSpecies().commonNames.size(); i++) {
+                Log.d("TAG", "Common name " + (i + 1) + ": " + result.get(0).getSpecies().commonNames.get(i));
+            }
+            Log.d("TAG", "Image url: " + result.get(0).getImages().get(0).url.s);
         } catch (IOException e) {
             Toast.makeText(getActivity(), "Please try again.", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
 
         return view;
