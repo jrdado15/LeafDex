@@ -51,7 +51,6 @@ public class camera extends Fragment {
     private String mParam2;
 
     private View view;
-    private TextView cameraLabel;
     private ImageView uriExample;
 
     private Home home;
@@ -91,7 +90,6 @@ public class camera extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_camera, container, false);
-        cameraLabel = (TextView) view.findViewById(R.id.cameraLabel);
         uriExample = (ImageView) view.findViewById(R.id.uriExample);
         home = (Home) getActivity();
         Uri plantPicUri;

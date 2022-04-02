@@ -23,6 +23,8 @@
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="current_password">Current Password</string>
+    <string name="post">Post</string>
+    <string name="expound_details">More Details</string>
     <string-array name="sex">
         <item>Male</item>
         <item>Female</item>
