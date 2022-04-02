@@ -1,5 +1,6 @@
 package com.example.leafdex.fragments;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -151,10 +152,12 @@ public class camera extends Fragment {
                 comNamesTV.setText("Common names: " + comNames);
             } catch(IOException e) {
                 Toast.makeText(getActivity(), "Please try again.", Toast.LENGTH_LONG).show();
+                cancelChanges();
                 e.printStackTrace();
             }
         } catch(RuntimeException e) {
             Toast.makeText(getActivity(), "An error occurred.", Toast.LENGTH_LONG).show();
+            cancelChanges();
             e.printStackTrace();
         }
 
@@ -171,5 +174,10 @@ public class camera extends Fragment {
         }
         cursor.close();
         return res;
+    }
+
+    private void cancelChanges() {
+        Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
+        getActivity().startActivity(intent);
     }
 }
