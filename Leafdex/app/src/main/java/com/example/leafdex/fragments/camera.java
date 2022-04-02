@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.leafdex.Home;
 import com.example.leafdex.R;
 import com.example.leafdex.fragments.parsers.Result;
@@ -52,6 +53,7 @@ public class camera extends Fragment {
 
     private View view;
     private ImageView uriExample;
+    private TextView scoreTV, sciNameTV, comNamesTV;
 
     private Home home;
 
@@ -91,6 +93,9 @@ public class camera extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_camera, container, false);
         uriExample = (ImageView) view.findViewById(R.id.uriExample);
+        scoreTV = (TextView) view.findViewById(R.id.textView12);
+        sciNameTV = (TextView) view.findViewById(R.id.textView13);
+        comNamesTV = (TextView) view.findViewById(R.id.textView14);
         home = (Home) getActivity();
         Uri plantPicUri;
         String filePath = "";
@@ -101,7 +106,6 @@ public class camera extends Fragment {
             plantPicUri = home.getPlantPicUriFromCamera();
             filePath = plantPicUri.toString().substring(8);
         }
-        Toast.makeText(getActivity(), filePath, Toast.LENGTH_LONG).show();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         final String imageUri = filePath;
@@ -121,21 +125,36 @@ public class camera extends Fragment {
         OkHttpClient client = new OkHttpClient();
         Response response;
         try {
-            response = client.newCall(request).execute();
-            String json = response.body().string();
-            Moshi moshi = new Moshi.Builder().build();
-            JsonAdapter<Root> jsonAdapter = moshi.adapter(Root.class);
-            Root root = jsonAdapter.fromJson(json);
-            List<Result> result = root.getResults();
-            DecimalFormat df = new DecimalFormat("0.00");
-            Log.d("TAG", "Score: " + df.format(result.get(0).getScore() * 100) + "%");
-            Log.d("TAG", "Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
-            for(int i = 0; i < result.get(0).getSpecies().commonNames.size(); i++) {
-                Log.d("TAG", "Common name " + (i + 1) + ": " + result.get(0).getSpecies().commonNames.get(i));
+            try {
+                response = client.newCall(request).execute();
+                String json = response.body().string();
+                Moshi moshi = new Moshi.Builder().build();
+                JsonAdapter<Root> jsonAdapter = moshi.adapter(Root.class);
+                Root root = jsonAdapter.fromJson(json);
+                List<Result> result = root.getResults();
+                DecimalFormat df = new DecimalFormat("0.00");
+                Log.d("TAG", "Image url: " + result.get(0).getImages().get(0).url.s);
+                Glide.with(getActivity()).load(result.get(0).getImages().get(0).url.s).into(uriExample);
+                Log.d("TAG", "Score: " + df.format(result.get(0).getScore() * 100) + "%");
+                scoreTV.setText("Score: " + df.format(result.get(0).getScore() * 100) + "%");
+                Log.d("TAG", "Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
+                sciNameTV.setText("Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
+                String comNames = "";
+                for(int i = 0; i < result.get(0).getSpecies().commonNames.size(); i++) {
+                    Log.d("TAG", "Common name " + (i + 1) + ": " + result.get(0).getSpecies().commonNames.get(i));
+                    if(i == 0) {
+                        comNames += result.get(0).getSpecies().commonNames.get(0);
+                    } else {
+                        comNames += ", " + result.get(0).getSpecies().commonNames.get(i);
+                    }
+                }
+                comNamesTV.setText("Common names: " + comNames);
+            } catch(IOException e) {
+                Toast.makeText(getActivity(), "Please try again.", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
-            Log.d("TAG", "Image url: " + result.get(0).getImages().get(0).url.s);
-        } catch (IOException e) {
-            Toast.makeText(getActivity(), "Please try again.", Toast.LENGTH_LONG).show();
+        } catch(RuntimeException e) {
+            Toast.makeText(getActivity(), "An error occurred.", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
 
