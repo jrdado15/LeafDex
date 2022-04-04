@@ -1,14 +1,42 @@
 package com.example.leafdex.fragments;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.method.KeyListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.leafdex.Home;
 import com.example.leafdex.R;
+import com.example.leafdex.Register;
+import com.example.leafdex.User;
+import com.example.leafdex.fragments.parsers.Post;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +53,18 @@ public class home extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private String filePath, comName, desc, userID;
+    private Uri filePathUri;
+
+    private View view;
+    private ImageView postIV;
+    private EditText comNameET, descET;
+    private Button postBtn1, postBtn2;
+
+    private FirebaseUser user;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
 
     public home() {
         // Required empty public constructor
@@ -61,6 +101,90 @@ public class home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            filePath = bundle.getString("filePath");
+            comName = bundle.getString("comName");
+        }
+        if(filePath != null && comName != null) {
+            view = inflater.inflate(R.layout.fragment_home_post, container, false);
+            storage = FirebaseStorage.getInstance();
+            storageReference = storage.getReference();
+            postIV = (ImageView) view.findViewById(R.id.postImageView);
+            comNameET = (EditText) view.findViewById(R.id.postEditText1);
+            descET = (EditText) view.findViewById(R.id.postEditText2);
+            postBtn1 = (Button) view.findViewById(R.id.postButton1);
+            postBtn2 = (Button) view.findViewById(R.id.postButton2);
+            Log.d("TAG", filePath);
+            filePathUri = Uri.parse("file:///" + filePath);
+            postIV.setImageURI(filePathUri);
+            comNameET.setText(comName);
+            KeyListener keyListener = comNameET.getKeyListener();
+            comNameET.setKeyListener(null);
+            postBtn1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    desc = descET.getText().toString().trim();
+                    if(desc.isEmpty()) {
+                        descET.setError("Plant description is required!");
+                        descET.requestFocus();
+                        return;
+                    }
+                    final String randomKey = UUID.randomUUID().toString();
+                    StorageReference ref = storageReference.child("posts/" + randomKey);
+                    ProgressDialog mProgressDialog = new ProgressDialog(getActivity());
+                    mProgressDialog.setMessage("Posting...");
+                    mProgressDialog.show();
+                    mProgressDialog.setCancelable(false);
+                    ref.putFile(filePathUri)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            String downloadURL = uri.toString();
+                                            user = FirebaseAuth.getInstance().getCurrentUser();
+                                            userID = user.getUid();
+                                            Post post = new Post(downloadURL, comName, desc, userID);
+                                            String key = FirebaseDatabase.getInstance().getReference("Posts").push().getKey();
+                                            FirebaseDatabase.getInstance().getReference("Posts").child(key)
+                                                    .setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    mProgressDialog.dismiss();
+                                                    if(task.isSuccessful()) {
+                                                        Toast.makeText(getActivity(), "Posted successfully.", Toast.LENGTH_LONG).show();
+                                                        Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
+                                                        getActivity().startActivity(intent);
+                                                    } else {
+                                                        Toast.makeText(getActivity(), "Failed to post. Please try again.", Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    mProgressDialog.dismiss();
+                                    Toast.makeText(getActivity(), "Failed to upload image. Please try again.", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
+            });
+            postBtn2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
+                    getActivity().startActivity(intent);
+                }
+            });
+        }
+
+        return view;
     }
 }

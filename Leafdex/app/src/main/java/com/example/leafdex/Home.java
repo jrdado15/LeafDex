@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -36,6 +37,7 @@ import com.example.leafdex.fragments.encyclopedia;
 import com.example.leafdex.fragments.home;
 import com.example.leafdex.fragments.profile;
 import com.example.leafdex.fragments.saved_posts;
+import com.example.leafdex.fragments.your_posts;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -110,6 +112,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                         replaceFragment(new change_password(Home.this));
                         drawerLayout.closeDrawers();
                         break;
+                    case  R.id.nav_your_posts:
+                        replaceFragment(new your_posts());
+                        drawerLayout.closeDrawers();
+                        break;
                     case  R.id.nav_saved_posts:
                         replaceFragment(new saved_posts());
                         drawerLayout.closeDrawers();
@@ -167,7 +173,15 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             return true;
         });
 
-        replaceFragment(new home());
+        Intent intent = getIntent();
+        String filePath = intent.getStringExtra("filePath");
+        String comName = intent.getStringExtra("comName");
+        Bundle bundle = new Bundle();
+        bundle.putString("filePath", filePath);
+        bundle.putString("comName", comName);
+        home homeFrag = new home();
+        homeFrag.setArguments(bundle);
+        replaceFragment(homeFrag);
     }
 
     public void setUpToolbar() {

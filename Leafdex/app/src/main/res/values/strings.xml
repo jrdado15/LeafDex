@@ -32,6 +32,8 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="common_name">Common Name</string>
+    <string name="plant_description">Plant Description</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_test">test</string>
