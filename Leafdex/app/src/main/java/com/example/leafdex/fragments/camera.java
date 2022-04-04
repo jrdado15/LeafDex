@@ -1,5 +1,6 @@
 package com.example.leafdex.fragments;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,15 +11,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.leafdex.Home;
+import com.example.leafdex.Login;
 import com.example.leafdex.R;
+import com.example.leafdex.Register;
 import com.example.leafdex.fragments.parsers.Result;
 import com.example.leafdex.fragments.parsers.Root;
 import com.squareup.moshi.JsonAdapter;
@@ -52,9 +59,12 @@ public class camera extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private String imageUri, comName;
+
     private View view;
     private ImageView uriExample;
     private TextView scoreTV, sciNameTV, comNamesTV;
+    private Button postBtn;
 
     private Home home;
 
@@ -97,6 +107,7 @@ public class camera extends Fragment {
         scoreTV = (TextView) view.findViewById(R.id.textView12);
         sciNameTV = (TextView) view.findViewById(R.id.textView13);
         comNamesTV = (TextView) view.findViewById(R.id.textView14);
+        postBtn = (Button) view.findViewById(R.id.button);
         home = (Home) getActivity();
         Uri plantPicUri;
         String filePath = "";
@@ -109,7 +120,7 @@ public class camera extends Fragment {
         }
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        final String imageUri = filePath;
+        imageUri = filePath;
         final String imageName = "image.jpeg";
         File file = new File(imageUri);
         final MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
@@ -145,6 +156,7 @@ public class camera extends Fragment {
                     Log.d("TAG", "Common name " + (i + 1) + ": " + result.get(0).getSpecies().commonNames.get(i));
                     if(i == 0) {
                         comNames += result.get(0).getSpecies().commonNames.get(0);
+                        comName = result.get(0).getSpecies().commonNames.get(0);
                     } else {
                         comNames += ", " + result.get(0).getSpecies().commonNames.get(i);
                     }
@@ -152,14 +164,25 @@ public class camera extends Fragment {
                 comNamesTV.setText("Common names: " + comNames);
             } catch(IOException e) {
                 Toast.makeText(getActivity(), "Please try again.", Toast.LENGTH_LONG).show();
-                cancelChanges();
+                backToHome();
                 e.printStackTrace();
             }
         } catch(RuntimeException e) {
             Toast.makeText(getActivity(), "An error occurred.", Toast.LENGTH_LONG).show();
-            cancelChanges();
+            backToHome();
             e.printStackTrace();
         }
+        postBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(imageUri != null && comName != null) {
+                    Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
+                    intent.putExtra("filePath", imageUri);
+                    intent.putExtra("comName", comName);
+                    getActivity().startActivity(intent);
+                }
+            }
+        });
 
         return view;
     }
@@ -176,7 +199,7 @@ public class camera extends Fragment {
         return res;
     }
 
-    private void cancelChanges() {
+    private void backToHome() {
         Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
         getActivity().startActivity(intent);
     }
