@@ -1,14 +1,26 @@
 package com.example.leafdex.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.example.leafdex.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +28,13 @@ import com.example.leafdex.R;
  * create an instance of this fragment.
  */
 public class your_posts extends Fragment {
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
+    private DatabaseReference userReference;
+    private DatabaseReference reference;
+
+    private String userID;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,12 +74,42 @@ public class your_posts extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        reference = FirebaseDatabase.getInstance().getReference(); //Root
+        user = mAuth.getCurrentUser();
+        userReference = FirebaseDatabase.getInstance().getReference("Users"); //Users Parent
+        reference = FirebaseDatabase.getInstance().getReference(); //Root
+        userID = user.getUid();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        List<List<String>> posts = new ArrayList<List<String>>();
+        Query query = reference.child("Posts").orderByChild("userID").equalTo(userID);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot != null){
+                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                        List<String> post = new ArrayList<String>();
+                        post.add(childDataSnapshot.getKey()); //post key
+                        post.add(childDataSnapshot.child("comName").getValue().toString()); //post plant name
+                        post.add(childDataSnapshot.child("desc").getValue().toString()); //post plant description
+                        post.add(childDataSnapshot.child("imageURL").getValue().toString()); //post plant image
+                        post.add(childDataSnapshot.child("userID").getValue().toString()); //post user
+                        posts.add(post);
+                    }
+                } else {
+                    Log.d("POSTS", "No posts found.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("POSTS", "Error found: " + error.toString());
+            }
+        });
         return inflater.inflate(R.layout.fragment_your_posts, container, false);
     }
 }

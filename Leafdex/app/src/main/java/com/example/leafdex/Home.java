@@ -2,6 +2,7 @@ package com.example.leafdex;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -13,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -45,13 +45,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Home extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
+    private DatabaseReference userReference;
     private DatabaseReference reference;
 
     Bundle extras;
@@ -73,6 +77,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     private String[] PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.INTERNET,
             Manifest.permission.CAMERA,
     };
 
@@ -94,7 +99,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("Users");
+        userReference = FirebaseDatabase.getInstance().getReference("Users"); //Users Parent
+        reference = FirebaseDatabase.getInstance().getReference(); //Root
         userID = user.getUid();
 
         setUpToolbar();
@@ -134,7 +140,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         fullname = (TextView) navigationView.getHeaderView(0).findViewById(R.id.sidebar_fullname);
         email = (TextView) navigationView.getHeaderView(0).findViewById(R.id.sidebar_email);
 
-        reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+        userReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User userProfile = snapshot.getValue(User.class);
@@ -172,6 +178,38 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             }
             return true;
         });
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+        //Public posts
+        //if user lang Query query = reference.child("Posts").orderByChild("userID").equalTo(userID);
+        List<List<String>> posts = new ArrayList<List<String>>();
+        Query query = reference.child("Posts");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot != null){
+                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                        List<String> post = new ArrayList<String>();
+                        post.add(childDataSnapshot.getKey()); //post key
+                        post.add(childDataSnapshot.child("comName").getValue().toString()); //post plant name
+                        post.add(childDataSnapshot.child("desc").getValue().toString()); //post plant description
+                        post.add(childDataSnapshot.child("imageURL").getValue().toString()); //post plant image
+                        post.add(childDataSnapshot.child("userID").getValue().toString()); //post user
+                        posts.add(post);
+                    }
+                } else {
+                    Log.d("POSTS", "No posts found.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("POSTS", "Error found: " + error.toString());
+            }
+        });
+
+        //end of posts
 
         Intent intent = getIntent();
         String filePath = intent.getStringExtra("filePath");
@@ -211,7 +249,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void choosePicture() {
-        //TODO: @JUSTINE modal for the mean time, dito mo lagay floating button if keri
 
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -220,8 +257,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, plantPicUriFromCamera);
         getContentResolver().notifyChange(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null);
 
-        //TODO: if okay na @JUSTINE delete mo to sabay gamitin mo ung cameraIntent and galleryIntent
-        //TODO: no need alalahanin ung Uri na kailangan ni cajay
         chooserIntent = Intent.createChooser(galleryIntent, "Select Image");
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {cameraIntent});
 
@@ -241,13 +276,29 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
-                    try {
-                        plantPicUriFromGallery = data.getData();
-                        isFromGallery = true;
-                    } catch(NullPointerException e) {
-                        isFromGallery = false;
-                    }
-                    replaceFragment(new camera());
+                    ProgressDialog mProgressDialog = new ProgressDialog(Home.this);
+                    mProgressDialog.setMessage("Processing image...");
+                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.show();
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // do your stuff
+                            try {
+                                isFromGallery = true;
+                                plantPicUriFromGallery = data.getData();
+                            } catch (NullPointerException e){
+                                isFromGallery = false;
+                            }
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    // do onPostExecute stuff
+                                    replaceFragment(new camera(mProgressDialog));
+                                }
+                            });
+                        }
+                    }).start();
                 }
             }
         }

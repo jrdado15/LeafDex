@@ -1,6 +1,6 @@
 package com.example.leafdex.fragments;
 
-import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,20 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.leafdex.Home;
-import com.example.leafdex.Login;
 import com.example.leafdex.R;
-import com.example.leafdex.Register;
 import com.example.leafdex.fragments.parsers.Result;
 import com.example.leafdex.fragments.parsers.Root;
 import com.squareup.moshi.JsonAdapter;
@@ -67,8 +62,14 @@ public class camera extends Fragment {
     private Button postBtn;
 
     private Home home;
+    private ProgressDialog mProgressDialog = null;
 
-    public camera() {
+    public camera(){
+
+    }
+
+    public camera(ProgressDialog mProgressDialog){
+        this.mProgressDialog = mProgressDialog;
     }
 
     /**
@@ -162,15 +163,20 @@ public class camera extends Fragment {
                     }
                 }
                 comNamesTV.setText("Common names: " + comNames);
+                if (mProgressDialog != null){
+                    mProgressDialog.dismiss();
+                }
             } catch(IOException e) {
-                Toast.makeText(getActivity(), "Please try again.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "An error occurred. Please try again." + e.toString(), Toast.LENGTH_LONG).show();
                 backToHome();
                 e.printStackTrace();
+                return null;
             }
         } catch(RuntimeException e) {
-            Toast.makeText(getActivity(), "An error occurred.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Plant not found. Please try again.", Toast.LENGTH_LONG).show();
             backToHome();
             e.printStackTrace();
+            return null;
         }
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override

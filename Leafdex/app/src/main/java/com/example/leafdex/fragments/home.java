@@ -4,10 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,19 +12,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.example.leafdex.Home;
 import com.example.leafdex.R;
-import com.example.leafdex.Register;
-import com.example.leafdex.User;
 import com.example.leafdex.fragments.parsers.Post;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -138,42 +133,42 @@ public class home extends Fragment {
                     mProgressDialog.show();
                     mProgressDialog.setCancelable(false);
                     ref.putFile(filePathUri)
-                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            String downloadURL = uri.toString();
-                                            user = FirebaseAuth.getInstance().getCurrentUser();
-                                            userID = user.getUid();
-                                            Post post = new Post(downloadURL, comName, desc, userID);
-                                            String key = FirebaseDatabase.getInstance().getReference("Posts").push().getKey();
-                                            FirebaseDatabase.getInstance().getReference("Posts").child(key)
-                                                    .setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    mProgressDialog.dismiss();
-                                                    if(task.isSuccessful()) {
-                                                        Toast.makeText(getActivity(), "Posted successfully.", Toast.LENGTH_LONG).show();
-                                                        Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
-                                                        getActivity().startActivity(intent);
-                                                    } else {
-                                                        Toast.makeText(getActivity(), "Failed to post. Please try again.", Toast.LENGTH_LONG).show();
-                                                    }
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        String downloadURL = uri.toString();
+                                        user = FirebaseAuth.getInstance().getCurrentUser();
+                                        userID = user.getUid();
+                                        Post post = new Post(downloadURL, comName, desc, userID);
+                                        String key = FirebaseDatabase.getInstance().getReference("Posts").push().getKey();
+                                        FirebaseDatabase.getInstance().getReference("Posts").child(key)
+                                                .setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                mProgressDialog.dismiss();
+                                                if(task.isSuccessful()) {
+                                                    Toast.makeText(getActivity(), "Posted successfully.", Toast.LENGTH_LONG).show();
+                                                    Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
+                                                    getActivity().startActivity(intent);
+                                                } else {
+                                                    Toast.makeText(getActivity(), "Failed to post. Please try again.", Toast.LENGTH_LONG).show();
                                                 }
-                                            });
-                                        }
-                                    });
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    mProgressDialog.dismiss();
-                                    Toast.makeText(getActivity(), "Failed to upload image. Please try again.", Toast.LENGTH_LONG).show();
-                                }
-                            });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                mProgressDialog.dismiss();
+                                Toast.makeText(getActivity(), "Failed to upload image. Please try again.", Toast.LENGTH_LONG).show();
+                            }
+                        });
                 }
             });
             postBtn2.setOnClickListener(new View.OnClickListener() {

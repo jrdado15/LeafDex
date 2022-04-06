@@ -45,9 +45,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
     implementation files('libs\\glide-3.6.0.jar')
-    implementation files('libs\\okio-3.0.0-alpha.9.jar')
-    implementation files('libs\\okhttp-4.9.0.jar')
-    implementation files('libs\\moshi-1.13.0.jar')
     implementation files('libs\\moshi-1.13.0.jar')
     implementation files('libs\\okhttp-4.9.0.jar')
     implementation files('libs\\okio-3.0.0-alpha.9.jar')
