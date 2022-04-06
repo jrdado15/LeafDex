@@ -13,7 +13,7 @@
             android:title="Change Password">
         </item>
         <item android:id="@+id/nav_your_posts"
-            android:icon="@drawable/ic_baseline_bookmark_border_24"
+            android:icon="@drawable/ic_baseline_article_24"
             android:title="Your Posts">
         </item>
         <item android:id="@+id/nav_saved_posts"

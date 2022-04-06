@@ -3,12 +3,17 @@ package com.example.leafdex.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.leafdex.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +30,11 @@ public class your_posts extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private View view;
+    private RecyclerView mRecyclerView;
+    private List<String> titles;
+    private List<Integer> mImages;
+    private YourPostsAdapter yourPostsAdapter;
 
     public your_posts() {
         // Required empty public constructor
@@ -61,6 +71,27 @@ public class your_posts extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_your_posts, container, false);
+        view = inflater.inflate(R.layout.fragment_your_posts, container, false);
+        Bundle bundle = getArguments();
+        titles = new ArrayList<>();
+        mImages = new ArrayList<>();
+        mRecyclerView = view.findViewById(R.id.rv_your_posts);
+        yourPostsAdapter = new YourPostsAdapter(getActivity(), titles, mImages);
+        //LAGAY SA ARRAY TYM
+        mImages.add(R.drawable.sample);
+        mImages.add(R.drawable.sample);
+        mImages.add(R.drawable.sample);
+        mImages.add(R.drawable.sample);
+
+        titles.add("GOMU GOMU NO ONE");
+        titles.add("GOMU GOMU NO TWO");
+        titles.add("GOMU GOMU NO THREE");
+        titles.add("GOMU GOMU NO FOUR");
+
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false));
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(yourPostsAdapter);
+
+        return view;
     }
 }
