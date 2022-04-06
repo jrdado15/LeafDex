@@ -2,6 +2,11 @@ package com.example.leafdex.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +23,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +52,11 @@ public class your_posts extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private View view;
+    private RecyclerView mRecyclerView;
+    private List<String> titles;
+    private List<Integer> mImages;
+    private YourPostsAdapter yourPostsAdapter;
 
     public your_posts() {
         // Required empty public constructor
@@ -110,6 +123,28 @@ public class your_posts extends Fragment {
                 Log.d("POSTS", "Error found: " + error.toString());
             }
         });
-        return inflater.inflate(R.layout.fragment_your_posts, container, false);
+        
+        view = inflater.inflate(R.layout.fragment_your_posts, container, false);
+        Bundle bundle = getArguments();
+        titles = new ArrayList<>();
+        mImages = new ArrayList<>();
+        mRecyclerView = view.findViewById(R.id.rv_your_posts);
+        yourPostsAdapter = new YourPostsAdapter(getActivity(), titles, mImages);
+        //LAGAY SA ARRAY TYM
+        mImages.add(R.drawable.sample);
+        mImages.add(R.drawable.sample);
+        mImages.add(R.drawable.sample);
+        mImages.add(R.drawable.sample);
+
+        titles.add("GOMU GOMU NO ONE");
+        titles.add("GOMU GOMU NO TWO");
+        titles.add("GOMU GOMU NO THREE");
+        titles.add("GOMU GOMU NO FOUR");
+
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false));
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(yourPostsAdapter);
+
+        return view;
     }
 }

@@ -28,9 +28,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.leafdex.databinding.ActivityHomeBinding;
+import com.example.leafdex.fragments.FeedAdapter;
 import com.example.leafdex.fragments.camera;
 import com.example.leafdex.fragments.change_password;
 import com.example.leafdex.fragments.encyclopedia;
@@ -73,7 +76,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     private String userID;
     private String uimageURL, ufname, ulname, uemail;
     private Boolean isFromGallery = false;
-
     private String[] PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -96,12 +98,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         userReference = FirebaseDatabase.getInstance().getReference("Users"); //Users Parent
         reference = FirebaseDatabase.getInstance().getReference(); //Root
         userID = user.getUid();
+
 
         setUpToolbar();
         navigationView = (NavigationView) findViewById(R.id.navigation_menu);

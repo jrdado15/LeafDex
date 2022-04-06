@@ -4,6 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +24,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.leafdex.Home;
+import com.example.leafdex.Product;
+import com.example.leafdex.Product_info;
 import com.example.leafdex.R;
 import com.example.leafdex.fragments.parsers.Post;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,6 +39,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -61,6 +71,12 @@ public class home extends Fragment {
     private FirebaseStorage storage;
     private StorageReference storageReference;
 
+    //START NG RECYCLER VIEW PARA SA FEEDS XD
+    private RecyclerView mRecyclerView;
+    private ArrayList<Product> productList;
+    private List<Integer> mImages;
+    private FeedAdapter feedAdapter;
+    private FeedAdapter.FeedAdapterViewClickListener listener;
     public home() {
         // Required empty public constructor
     }
@@ -90,6 +106,7 @@ public class home extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -98,6 +115,21 @@ public class home extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
         Bundle bundle = getArguments();
+        productList = new ArrayList<>();
+        mImages = new ArrayList<>();
+        mRecyclerView = view.findViewById(R.id.rv_feeds);
+        setOnClickListener();
+        feedAdapter = new FeedAdapter(getActivity(), productList, mImages, listener);
+        //LAGAY SA ARRAY TYM
+        mImages.add(R.drawable.sample);
+        mImages.add(R.drawable.sample);
+        mImages.add(R.drawable.sample);
+        mImages.add(R.drawable.sample);
+        setProductList();
+
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false));
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(feedAdapter);
         if(bundle != null) {
             filePath = bundle.getString("filePath");
             comName = bundle.getString("comName");
@@ -181,5 +213,24 @@ public class home extends Fragment {
         }
 
         return view;
+    }
+
+    private void setProductList(){
+        productList.add(new Product("Rubber plant"));
+        productList.add(new Product("Mango tree"));
+        productList.add(new Product("Money plant"));
+        productList.add(new Product("String beans"));
+    }
+
+
+    private void setOnClickListener() {
+        listener = new FeedAdapter.FeedAdapterViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(getActivity().getBaseContext(), Product_info.class);
+                intent.putExtra("product_name", productList.get(position).getProduct());
+                getActivity().startActivity(intent);
+            }
+        };
     }
 }

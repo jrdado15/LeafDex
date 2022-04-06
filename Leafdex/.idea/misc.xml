@@ -33,6 +33,7 @@
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_home.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_login.xml" value="0.4" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_product_info.xml" value="0.20863616930312098" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_register.xml" value="0.264" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_test.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/content_test.xml" value="0.25416666666666665" />
@@ -40,9 +41,13 @@
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_change_password.xml" value="0.264" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_encyclopedia.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_gallery.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_home.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_home.xml" value="0.264" />
+        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_product_info.xml" value="0.20863616930312098" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_saved_posts.xml" value="0.2542991141219385" />
+        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_your_posts.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/grid_item.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/grid_item_own_post.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/header.xml" value="0.1" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/menu/drawer_menu.xml" value="0.25416666666666665" />
