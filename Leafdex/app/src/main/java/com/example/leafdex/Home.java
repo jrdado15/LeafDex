@@ -28,12 +28,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.leafdex.databinding.ActivityHomeBinding;
-import com.example.leafdex.fragments.FeedAdapter;
 import com.example.leafdex.fragments.camera;
 import com.example.leafdex.fragments.change_password;
 import com.example.leafdex.fragments.encyclopedia;
@@ -48,12 +45,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Home extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
@@ -185,31 +179,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
         //Public posts
         //if user lang Query query = reference.child("Posts").orderByChild("userID").equalTo(userID);
-        List<List<String>> posts = new ArrayList<List<String>>();
-        Query query = reference.child("Posts");
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot != null){
-                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
-                        List<String> post = new ArrayList<String>();
-                        post.add(childDataSnapshot.getKey()); //post key
-                        post.add(childDataSnapshot.child("comName").getValue().toString()); //post plant name
-                        post.add(childDataSnapshot.child("desc").getValue().toString()); //post plant description
-                        post.add(childDataSnapshot.child("imageURL").getValue().toString()); //post plant image
-                        post.add(childDataSnapshot.child("userID").getValue().toString()); //post user
-                        posts.add(post);
-                    }
-                } else {
-                    Log.d("POSTS", "No posts found.");
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("POSTS", "Error found: " + error.toString());
-            }
-        });
 
         //end of posts
 

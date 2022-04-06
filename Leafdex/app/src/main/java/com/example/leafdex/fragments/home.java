@@ -4,12 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.leafdex.Home;
 import com.example.leafdex.Product;
@@ -34,7 +30,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -61,6 +62,7 @@ public class home extends Fragment {
 
     private String filePath, comName, desc, userID;
     private Uri filePathUri;
+    private ArrayList<ArrayList<String>> posts;
 
     private View view;
     private ImageView postIV;
@@ -70,11 +72,12 @@ public class home extends Fragment {
     private FirebaseUser user;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+    private DatabaseReference reference;
 
     //START NG RECYCLER VIEW PARA SA FEEDS XD
     private RecyclerView mRecyclerView;
     private ArrayList<Product> productList;
-    private List<Integer> mImages;
+    private List<String> mImages;
     private FeedAdapter feedAdapter;
     private FeedAdapter.FeedAdapterViewClickListener listener;
     public home() {
@@ -106,7 +109,7 @@ public class home extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+        reference = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -120,16 +123,60 @@ public class home extends Fragment {
         mRecyclerView = view.findViewById(R.id.rv_feeds);
         setOnClickListener();
         feedAdapter = new FeedAdapter(getActivity(), productList, mImages, listener);
-        //LAGAY SA ARRAY TYM
-        mImages.add(R.drawable.sample);
-        mImages.add(R.drawable.sample);
-        mImages.add(R.drawable.sample);
-        mImages.add(R.drawable.sample);
-        setProductList();
 
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false));
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(feedAdapter);
+        posts = new ArrayList<ArrayList<String>>();
+        Query query = reference.child("Posts");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot != null){
+                    //Retrieval of data
+                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                        ArrayList<String> post = new ArrayList<String>();
+                        post.add(childDataSnapshot.getKey()); //post key
+                        post.add(childDataSnapshot.child("comName").getValue().toString()); //post plant name
+                        post.add(childDataSnapshot.child("desc").getValue().toString()); //post plant description
+                        post.add(childDataSnapshot.child("imageURL").getValue().toString()); //post plant image
+                        post.add(childDataSnapshot.child("userID").getValue().toString()); //post user
+                        posts.add(post);
+                    }
+
+                    //Addition of posts into recycler view
+                    for(ArrayList<String> childPosts  : posts){
+                        if(!childPosts.isEmpty()){
+                            productList.add(new Product(childPosts.get(1)));
+                            mImages.add(childPosts.get(3));
+                        }
+                    }
+                    mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false));
+                    mRecyclerView.setHasFixedSize(true);
+                    mRecyclerView.setAdapter(feedAdapter);
+                } else {
+                    Log.d("POSTS", "No posts found.");
+                }
+            }
+
+            public void onSuccess(@NonNull Void T) {
+                //Do whatever
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("POSTS", "Error found: " + error.toString());
+            }
+        });
+
+
+        /*
+        mImages.add(R.drawable.sample);
+        mImages.add(R.drawable.sample);
+        mImages.add(R.drawable.sample);
+        mImages.add(R.drawable.sample);
+        productList.add(new Product("Rubber plant"));
+        productList.add(new Product("Mango tree"));
+        productList.add(new Product("Money plant"));
+        productList.add(new Product("String beans"));
+*/
         if(bundle != null) {
             filePath = bundle.getString("filePath");
             comName = bundle.getString("comName");
@@ -215,20 +262,13 @@ public class home extends Fragment {
         return view;
     }
 
-    private void setProductList(){
-        productList.add(new Product("Rubber plant"));
-        productList.add(new Product("Mango tree"));
-        productList.add(new Product("Money plant"));
-        productList.add(new Product("String beans"));
-    }
-
-
     private void setOnClickListener() {
         listener = new FeedAdapter.FeedAdapterViewClickListener() {
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getActivity().getBaseContext(), Product_info.class);
-                intent.putExtra("product_name", productList.get(position).getProduct());
+                intent.putExtra("product_key", posts.get(position).get(0));
+                Log.d("POSTS", posts.get(position).get(0));
                 getActivity().startActivity(intent);
             }
         };

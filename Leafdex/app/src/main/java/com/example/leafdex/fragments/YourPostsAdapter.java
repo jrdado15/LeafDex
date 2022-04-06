@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.leafdex.R;
 
 import java.util.List;
@@ -17,9 +18,9 @@ import java.util.List;
 public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.YourPostsViewHolder>{
     private Context context;
     private List<String> titles;
-    private List<Integer> images;
+    private List<String> images;
 
-    public YourPostsAdapter(Context context, List<String> titles, List<Integer> images){
+    public YourPostsAdapter(Context context, List<String> titles, List<String> images){
         this.context = context;
         this.titles = titles;
         this.images = images;
@@ -36,7 +37,8 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
     @Override
     public void onBindViewHolder(@NonNull YourPostsAdapter.YourPostsViewHolder holder, int position) {
         holder.user_post_item_textView.setText(titles.get(position));
-        holder.user_post_item_image.setImageResource(images.get(position));
+        //holder.user_post_item_image.setImageResource(images.get(position));
+        Glide.with(context).load(images.get(position)).into(holder.user_post_item_image);
     }
 
     @Override

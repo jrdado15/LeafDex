@@ -1,7 +1,6 @@
 package com.example.leafdex.fragments;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +10,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.leafdex.Product;
 import com.example.leafdex.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder> {
     private ArrayList<Product> productsList;
     private Context context;
-    private List<Integer> images;
+    private List<String> images;
     private FeedAdapterViewClickListener listener;
     
-    public FeedAdapter(Context context, ArrayList<Product> productsList,  List<Integer> images,FeedAdapterViewClickListener listener){
+    public FeedAdapter(Context context, ArrayList<Product> productsList,  List<String> images,FeedAdapterViewClickListener listener){
         this.context = context;
         this.productsList = productsList;
         this.images = images;
@@ -42,7 +41,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     public void onBindViewHolder(@NonNull FeedViewHolder holder, int position) {
         String product_name = productsList.get(position).getProduct();
         holder.feed_textView.setText(product_name);
-        holder.feed_imageView.setImageResource(images.get(position));
+        //holder.feed_imageView.setImageResource(images.get(position));
+        Glide.with(context).load(images.get(position)).into(holder.feed_imageView);
     }
 
     @Override
