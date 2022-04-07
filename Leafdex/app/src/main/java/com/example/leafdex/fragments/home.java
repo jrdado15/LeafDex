@@ -40,8 +40,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -166,7 +169,6 @@ public class home extends Fragment {
             }
         });
 
-
         /*
         mImages.add(R.drawable.sample);
         mImages.add(R.drawable.sample);
@@ -221,7 +223,11 @@ public class home extends Fragment {
                                         String downloadURL = uri.toString();
                                         user = FirebaseAuth.getInstance().getCurrentUser();
                                         userID = user.getUid();
-                                        Post post = new Post(downloadURL, comName, desc, userID);
+                                        String currentTime = new SimpleDateFormat("HH:mm a", Locale.getDefault()).format(new Date());
+                                        String currentDate = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(new Date());
+                                        String timeDate = currentTime + " - " + currentDate;
+                                        Log.d("TAG", timeDate);
+                                        Post post = new Post(downloadURL, comName, desc, userID, timeDate);
                                         String key = FirebaseDatabase.getInstance().getReference("Posts").push().getKey();
                                         FirebaseDatabase.getInstance().getReference("Posts").child(key)
                                                 .setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {

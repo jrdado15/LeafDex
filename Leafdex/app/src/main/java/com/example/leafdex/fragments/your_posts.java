@@ -1,5 +1,6 @@
 package com.example.leafdex.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.leafdex.Home;
 import com.example.leafdex.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,6 +50,7 @@ public class your_posts extends Fragment {
     private String mParam2;
     private View view;
     private RecyclerView mRecyclerView;
+    private List<String> postIDs;
     private List<String> titles;
     private List<String> mImages;
     private YourPostsAdapter yourPostsAdapter;
@@ -97,11 +100,12 @@ public class your_posts extends Fragment {
         view = inflater.inflate(R.layout.fragment_your_posts, container, false);
 
         Query query = reference.child("Posts").orderByChild("userID").equalTo(userID);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot != null){
                     //retrieval of user's posts
+                    posts.clear();
                     for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
                         ArrayList<String> post = new ArrayList<String>();
                         post.add(childDataSnapshot.getKey()); //post key -- 0
@@ -112,15 +116,16 @@ public class your_posts extends Fragment {
                     }
 
                     //Addition of user's posts into recyclerview
-                    Bundle bundle = getArguments();
+                    postIDs = new ArrayList<>();
                     titles = new ArrayList<>();
                     mImages = new ArrayList<>();
                     mRecyclerView = view.findViewById(R.id.rv_your_posts);
-                    yourPostsAdapter = new YourPostsAdapter(getActivity(), titles, mImages);
+                    yourPostsAdapter = new YourPostsAdapter(getActivity(), postIDs, titles, mImages);
 
                     // TODO: GANITO KUMUHA VALUES @CJ
                     for(ArrayList<String> childPosts : posts){
                         if(!childPosts.isEmpty()){
+                            postIDs.add(childPosts.get(0));
                             titles.add(childPosts.get(1));
                             mImages.add(childPosts.get(3));
                         }
@@ -138,7 +143,8 @@ public class your_posts extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("POSTS", "Error found: " + error.toString());
             }
-        });
+        };
+        query.addValueEventListener(postListener);
 
         return view;
     }
