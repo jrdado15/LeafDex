@@ -43,12 +43,14 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
     private static String imageURL;
     private static DatabaseReference reference;
     private static FirebaseStorage storage;
+    private static EditClickListener listener;
 
-    public YourPostsAdapter(Context context, List<String> postIDs, List<String> titles, List<String> images){
+    public YourPostsAdapter(Context context, List<String> postIDs, List<String> titles, List<String> images, EditClickListener listener){
         this.context = context;
         this.postIDs = postIDs;
         this.titles = titles;
         this.images = images;
+        this.listener = listener;
     }
 
     @NonNull
@@ -81,7 +83,11 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
         return titles.size();
     }
 
-    public static class YourPostsViewHolder extends RecyclerView.ViewHolder {
+    public interface EditClickListener {
+        void onClick(View v, int position);
+    }
+
+    public static class YourPostsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView user_post_item_image;
         TextView  user_post_item_textView;
         Button user_post_item_button2, user_post_item_button4;
@@ -93,6 +99,8 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
             user_post_item_image = itemView.findViewById(R.id.user_post_item_image);
             user_post_item_button2 = itemView.findViewById(R.id.button2);
             user_post_item_button4 = itemView.findViewById(R.id.button4);
+
+            user_post_item_button2.setOnClickListener(this);
 
             user_post_item_button4.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -142,6 +150,11 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
                     });
                 }
             });
+        }
+
+        @Override
+        public void onClick(View view) {
+            listener.onClick(view, getAdapterPosition());
         }
     }
 }

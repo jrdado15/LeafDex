@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Leafdex">
         <activity
+            android:name=".Post_edit"
+            android:exported="false" />
+        <activity
             android:name=".Product_info"
             android:exported="false" />
         <activity

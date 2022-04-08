@@ -57,9 +57,10 @@ public class Product_info extends AppCompatActivity {
                         productValues.add(post.desc); //post plant description -- 1
                         productValues.add(post.imageURL); //post plant image -- 2
                         productValues.add(post.userID); //post user -- 3
+                        productValues.add(post.dateTime); //post date and time -- 4
 
                         //TODO: SET TEXT NG IBA PANG DETAILS @JUSTINE
-                        plant_name.setText(productValues.get(0));
+                        plant_name.setText(productValues.get(4));
                     } else {
                         plant_name.setText(product);
                         Log.d("POSTS", "No post found.");

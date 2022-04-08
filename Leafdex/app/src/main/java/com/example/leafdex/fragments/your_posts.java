@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.leafdex.Home;
+import com.example.leafdex.Post_edit;
 import com.example.leafdex.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,6 +38,7 @@ public class your_posts extends Fragment {
     private FirebaseUser user;
     private DatabaseReference userReference;
     private DatabaseReference reference;
+    private YourPostsAdapter.EditClickListener listener;
 
     private String userID;
 
@@ -119,8 +121,9 @@ public class your_posts extends Fragment {
                     postIDs = new ArrayList<>();
                     titles = new ArrayList<>();
                     mImages = new ArrayList<>();
+                    setOnClickListener();
                     mRecyclerView = view.findViewById(R.id.rv_your_posts);
-                    yourPostsAdapter = new YourPostsAdapter(getActivity(), postIDs, titles, mImages);
+                    yourPostsAdapter = new YourPostsAdapter(getActivity(), postIDs, titles, mImages, listener);
 
                     // TODO: GANITO KUMUHA VALUES @CJ
                     for(ArrayList<String> childPosts : posts){
@@ -147,5 +150,16 @@ public class your_posts extends Fragment {
         query.addValueEventListener(postListener);
 
         return view;
+    }
+
+    private void setOnClickListener() {
+        listener = new YourPostsAdapter.EditClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(getActivity(), Post_edit.class);
+                intent.putExtra("postID", postIDs.get(position));
+                startActivity(intent);
+            }
+        };
     }
 }

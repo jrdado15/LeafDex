@@ -141,6 +141,7 @@ public class home extends Fragment {
                         post.add(childDataSnapshot.child("desc").getValue().toString()); //post plant description
                         post.add(childDataSnapshot.child("imageURL").getValue().toString()); //post plant image
                         post.add(childDataSnapshot.child("userID").getValue().toString()); //post user
+                        post.add(childDataSnapshot.child("dateTime").getValue().toString()); //post user
                         posts.add(post);
                     }
 
