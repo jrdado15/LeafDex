@@ -64,13 +64,13 @@ public class home extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private String filePath, comName, desc, userID;
+    private String filePath, comName, price, desc, userID;
     private Uri filePathUri;
     private ArrayList<ArrayList<String>> posts;
 
     private View view;
     private ImageView postIV;
-    private EditText descET;
+    private EditText priceET, descET;
     private TextView comNameET;
     private Button postBtn1, postBtn2;
 
@@ -143,7 +143,7 @@ public class home extends Fragment {
                         post.add(childDataSnapshot.child("desc").getValue().toString()); //post plant description
                         post.add(childDataSnapshot.child("imageURL").getValue().toString()); //post plant image
                         post.add(childDataSnapshot.child("userID").getValue().toString()); //post user
-                        post.add(childDataSnapshot.child("dateTime").getValue().toString()); //post user
+                        post.add(childDataSnapshot.child("dateTime").getValue().toString()); //post date and time
                         posts.add(post);
                     }
 
@@ -192,6 +192,7 @@ public class home extends Fragment {
             storageReference = storage.getReference();
             postIV = (ImageView) view.findViewById(R.id.postImageView);
             comNameET = (TextView) view.findViewById(R.id.tv_post_plant);
+            priceET = (EditText) view.findViewById(R.id.et_post_price);
             descET = (EditText) view.findViewById(R.id.et_post_description);
             postBtn1 = (Button) view.findViewById(R.id.postButton1);
             postBtn2 = (Button) view.findViewById(R.id.postButton2);
@@ -204,7 +205,13 @@ public class home extends Fragment {
             postBtn1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    price = priceET.getText().toString().trim();
                     desc = descET.getText().toString().trim();
+                    if(price.isEmpty()) {
+                        priceET.setError("Plant price is required!");
+                        priceET.requestFocus();
+                        return;
+                    }
                     if(desc.isEmpty()) {
                         descET.setError("Plant description is required!");
                         descET.requestFocus();
@@ -230,7 +237,7 @@ public class home extends Fragment {
                                         String currentDate = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(new Date());
                                         String timeDate = currentTime + " - " + currentDate;
                                         Log.d("TAG", timeDate);
-                                        Post post = new Post(downloadURL, comName, desc, userID, timeDate);
+                                        Post post = new Post(downloadURL, comName, desc, userID, timeDate, price);
                                         String key = FirebaseDatabase.getInstance().getReference("Posts").push().getKey();
                                         FirebaseDatabase.getInstance().getReference("Posts").child(key)
                                                 .setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {

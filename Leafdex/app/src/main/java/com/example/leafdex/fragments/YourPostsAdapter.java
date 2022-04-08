@@ -1,7 +1,9 @@
 package com.example.leafdex.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,19 +65,8 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
     @Override
     public void onBindViewHolder(@NonNull YourPostsAdapter.YourPostsViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.user_post_item_textView.setText(titles.get(position));
-        //holder.user_post_item_image.setImageResource(images.get(position));
         Glide.with(context).load(images.get(position)).into(holder.user_post_item_image);
         holder.position = position;
-        /* ITO YUNG NAG-OOVERLAP
-        holder.user_post_item_button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                your_posts_edit fragment = new your_posts_edit();
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.frag_your_posts, fragment).addToBackStack(null).commit();
-            }
-        });
-        */
     }
 
     @Override
@@ -105,49 +96,65 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
             user_post_item_button4.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String postID = postIDs.get(position);
-                    Log.d("TAG", postID);
-
-                    reference = FirebaseDatabase.getInstance().getReference("Posts");
-                    storage = FirebaseStorage.getInstance();
-
-                    reference.child(postID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Post post = snapshot.getValue(Post.class);
-                            if (post != null) {
-                                imageURL = post.imageURL;
-                                storage.getReferenceFromUrl(imageURL).delete()
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                reference.child(postID).removeValue()
-                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch(which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    String postID = postIDs.get(position);
+                                    Log.d("TAG", postID);
+
+                                    reference = FirebaseDatabase.getInstance().getReference("Posts");
+                                    storage = FirebaseStorage.getInstance();
+
+                                    reference.child(postID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            Post post = snapshot.getValue(Post.class);
+                                            if (post != null) {
+                                                imageURL = post.imageURL;
+                                                storage.getReferenceFromUrl(imageURL).delete()
+                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                if (task.isSuccessful()) {
-                                                                    Toast.makeText(context, "Deleted successfully.", Toast.LENGTH_LONG).show();
-                                                                } else {
-                                                                    Toast.makeText(context, "Failed to delete.", Toast.LENGTH_LONG).show();
-                                                                }
+                                                            public void onSuccess(Void unused) {
+                                                                reference.child(postID).removeValue()
+                                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                                if (task.isSuccessful()) {
+                                                                                    Toast.makeText(context, "Deleted successfully.", Toast.LENGTH_LONG).show();
+                                                                                } else {
+                                                                                    Toast.makeText(context, "Failed to delete.", Toast.LENGTH_LONG).show();
+                                                                                }
+                                                                            }
+                                                                        });
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Toast.makeText(context, "Failed to delete image. Please try again.", Toast.LENGTH_LONG).show();
                                                             }
                                                         });
                                             }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(context, "Failed to delete image. Please try again.", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    // dp nothing
+                                    break;
                             }
                         }
+                    };
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
                 }
             });
         }

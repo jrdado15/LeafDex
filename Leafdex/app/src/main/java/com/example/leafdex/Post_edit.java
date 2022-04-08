@@ -29,8 +29,8 @@ import java.util.HashMap;
 public class Post_edit extends AppCompatActivity {
 
     private ImageView plant_IV;
-    private EditText desc_ET;
-    private TextView comName_ET;
+    private EditText price_ET, desc_ET;
+    private TextView comName_TV;
     private Button save_button, cancel_button;
     private String postID;
 
@@ -46,7 +46,8 @@ public class Post_edit extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance().getReference("Posts");
 
         plant_IV = (ImageView) findViewById(R.id.editImageView);
-        comName_ET = (TextView) findViewById(R.id.tv_post_plant);
+        comName_TV = (TextView) findViewById(R.id.tv_post_plant);
+        price_ET = (EditText) findViewById(R.id.edit_post_price);
         desc_ET = (EditText) findViewById(R.id.editEditText2);
         save_button = (Button) findViewById(R.id.editButton1);
         cancel_button = (Button) findViewById(R.id.editButton2);
@@ -66,7 +67,8 @@ public class Post_edit extends AppCompatActivity {
 
                 if(post != null) {
                     Glide.with(Post_edit.this).load(post.imageURL).into(plant_IV);
-                    comName_ET.setText(post.comName);
+                    comName_TV.setText(post.comName);
+                    price_ET.setText(post.price);
                     desc_ET.setText(post.desc);
                 }
             }
@@ -76,9 +78,6 @@ public class Post_edit extends AppCompatActivity {
 
             }
         });
-
-        KeyListener keyListener = comName_ET.getKeyListener();
-        comName_ET.setKeyListener(null);
 
         save_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +95,14 @@ public class Post_edit extends AppCompatActivity {
     }
 
     private void saveChanges() {
+        String sprice = price_ET.getText().toString().trim();
         String sdesc = desc_ET.getText().toString().trim();
+
+        if(sprice.isEmpty()) {
+            price_ET.setError("Plant price is required!");
+            price_ET.requestFocus();
+            return;
+        }
 
         if(sdesc.isEmpty()) {
             desc_ET.setError("Plant description is required!");
@@ -109,6 +115,7 @@ public class Post_edit extends AppCompatActivity {
         mProgressDialog.setCancelable(false);
 
         HashMap hashMap = new HashMap();
+        hashMap.put("price", sprice);
         hashMap.put("desc", sdesc);
 
         reference.child(postID).updateChildren(hashMap)
