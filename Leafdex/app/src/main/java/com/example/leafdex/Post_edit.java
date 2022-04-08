@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.KeyListener;
 import android.util.Log;
@@ -12,29 +11,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.leafdex.fragments.parsers.Image;
 import com.example.leafdex.fragments.parsers.Post;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 
 public class Post_edit extends AppCompatActivity {
 
     private ImageView plant_IV;
-    private EditText desc_ET, comName_ET;
+    private EditText desc_ET;
+    private TextView comName_ET;
     private Button save_button, cancel_button;
     private String postID;
 
@@ -50,7 +46,7 @@ public class Post_edit extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance().getReference("Posts");
 
         plant_IV = (ImageView) findViewById(R.id.editImageView);
-        comName_ET = (EditText) findViewById(R.id.editEditText1);
+        comName_ET = (TextView) findViewById(R.id.tv_post_plant);
         desc_ET = (EditText) findViewById(R.id.editEditText2);
         save_button = (Button) findViewById(R.id.editButton1);
         cancel_button = (Button) findViewById(R.id.editButton2);

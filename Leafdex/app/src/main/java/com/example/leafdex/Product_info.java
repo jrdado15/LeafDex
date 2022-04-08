@@ -34,7 +34,7 @@ public class Product_info extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_info);
-        TextView plant_name = findViewById(R.id.tv_plant_name);
+        TextView plant_name = findViewById(R.id.tv_plant_info_name);
         productValues = new ArrayList<String>();
         String product = "Product Unavailable";
 

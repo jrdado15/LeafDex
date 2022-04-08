@@ -27,11 +27,17 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="expound_details">More Details</string>
+    <string name="plant_info">Plant Information</string>
+    <string name="post_description">Post Description</string>
+    <string name="post_plant">Post Plant</string>
+    <string name="price">Price</string>
+    <string name="pm">Send Message</string>
     <string-array name="sex">
         <item>Male</item>
         <item>Female</item>
     </string-array>
     <string name="edit_profile">Edit Profile</string>
+    <string name="edit_post">Edit Post</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="common_name">Common Name</string>

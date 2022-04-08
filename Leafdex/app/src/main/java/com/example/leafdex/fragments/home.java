@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -69,7 +70,8 @@ public class home extends Fragment {
 
     private View view;
     private ImageView postIV;
-    private EditText comNameET, descET;
+    private EditText descET;
+    private TextView comNameET;
     private Button postBtn1, postBtn2;
 
     private FirebaseUser user;
@@ -189,8 +191,8 @@ public class home extends Fragment {
             storage = FirebaseStorage.getInstance();
             storageReference = storage.getReference();
             postIV = (ImageView) view.findViewById(R.id.postImageView);
-            comNameET = (EditText) view.findViewById(R.id.postEditText1);
-            descET = (EditText) view.findViewById(R.id.postEditText2);
+            comNameET = (TextView) view.findViewById(R.id.tv_post_plant);
+            descET = (EditText) view.findViewById(R.id.et_post_description);
             postBtn1 = (Button) view.findViewById(R.id.postButton1);
             postBtn2 = (Button) view.findViewById(R.id.postButton2);
             Log.d("TAG", filePath);
