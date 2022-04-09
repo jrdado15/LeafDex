@@ -175,14 +175,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             return true;
         });
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-
-        //Public posts
-        //if user lang Query query = reference.child("Posts").orderByChild("userID").equalTo(userID);
-
-
-        //end of posts
-
         Intent intent = getIntent();
         String filePath = intent.getStringExtra("filePath");
         String comName = intent.getStringExtra("comName");

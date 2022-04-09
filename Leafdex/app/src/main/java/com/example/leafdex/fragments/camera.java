@@ -167,7 +167,7 @@ public class camera extends Fragment {
                     mProgressDialog.dismiss();
                 }
             } catch(IOException e) {
-                Toast.makeText(getActivity(), "An error occurred. Please try again." + e.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "An error occurred. Please try again.", Toast.LENGTH_LONG).show();
                 backToHome();
                 e.printStackTrace();
                 return null;

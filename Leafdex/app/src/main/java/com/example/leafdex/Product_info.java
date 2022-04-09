@@ -1,5 +1,6 @@
 package com.example.leafdex;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 
 public class Product_info extends AppCompatActivity {
     private ArrayList<String> productValues;
-    private String userID, firebasePostKey, posterID;
+    private String userID, firebasePostKey, posterID, posterName;
 
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -111,7 +112,8 @@ public class Product_info extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 User user = snapshot.getValue(User.class);
                                 if(user != null) {
-                                    plant_owner.setText(user.fname + " " + user.lname);
+                                    posterName = user.fname + " " + user.lname;
+                                    plant_owner.setText(posterName);
                                 }
                                 plant_owner.setVisibility(View.VISIBLE);
                             }
@@ -119,6 +121,17 @@ public class Product_info extends AppCompatActivity {
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
                                 Log.d("USER", "No user found.");
+                            }
+                        });
+
+                        message_button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(Product_info.this, Chat_with_poster.class);
+                                intent.putExtra("userID", userID);
+                                intent.putExtra("posterID", posterID);
+                                intent.putExtra("posterName", posterName);
+                                startActivity(intent);
                             }
                         });
                     }
