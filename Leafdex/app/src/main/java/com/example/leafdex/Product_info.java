@@ -127,7 +127,7 @@ public class Product_info extends AppCompatActivity {
                         message_button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(Product_info.this, Chat_with_poster.class);
+                                Intent intent = new Intent(Product_info.this, Chat_users.class);
                                 intent.putExtra("userID", userID);
                                 intent.putExtra("posterID", posterID);
                                 intent.putExtra("posterName", posterName);

@@ -34,14 +34,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     @Override
     public FeedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.grid_item, parent,  false);
-                return new FeedViewHolder(v);
+        return new FeedViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FeedViewHolder holder, int position) {
         String product_name = productsList.get(position).getProduct();
         holder.feed_textView.setText(product_name);
-        //holder.feed_imageView.setImageResource(images.get(position));
         Glide.with(context).load(images.get(position)).into(holder.feed_imageView);
     }
 

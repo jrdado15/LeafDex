@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Chat_with_poster extends AppCompatActivity {
+public class Chat_users extends AppCompatActivity {
 
     private TextView posterName_TV;
     private EditText textbox_ET;
@@ -111,7 +111,7 @@ public class Chat_with_poster extends AppCompatActivity {
                             chat.getReceiver().equals(posterID) && chat.getSender().equals(userID)) {
                         mChat.add(chat);
                     }
-                    chatAdapter = new ChatAdapter(Chat_with_poster.this, mChat);
+                    chatAdapter = new ChatAdapter(Chat_users.this, mChat);
                     recyclerView.setAdapter(chatAdapter);
                 }
             }

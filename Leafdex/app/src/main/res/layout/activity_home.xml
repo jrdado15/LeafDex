@@ -31,10 +31,9 @@ android:minWidth="19dp">
                 <ImageView
                     android:id="@+id/imageView3"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    app:srcCompat="@drawable/ic_bell_solid_green" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/ic_messages_foreground"/>
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
     </LinearLayout>

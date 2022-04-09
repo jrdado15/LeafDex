@@ -53,13 +53,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private DatabaseReference userReference;
-    private DatabaseReference reference;
 
     Bundle extras;
     ActivityHomeBinding binding;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
+    ImageView messages;
     Intent chooserIntent;
 
     private Uri plantPicUriFromGallery;
@@ -95,7 +95,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         userReference = FirebaseDatabase.getInstance().getReference("Users"); //Users Parent
-        reference = FirebaseDatabase.getInstance().getReference(); //Root
         userID = user.getUid();
 
 
@@ -129,6 +128,16 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                         break;
                 }
                 return false;
+            }
+        });
+
+        messages = (ImageView) findViewById(R.id.imageView3);
+        messages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Home.this, Chat_list.class);
+                intent.putExtra("userID", userID);
+                startActivity(intent);
             }
         });
 
