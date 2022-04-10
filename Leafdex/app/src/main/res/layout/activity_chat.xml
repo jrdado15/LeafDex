@@ -51,8 +51,15 @@
             android:background="@android:color/transparent"
             android:hint="Type a message..."
             android:layout_marginLeft="10dp"
-            android:layout_toLeftOf="@id/send_btn"
+            android:layout_toLeftOf="@id/camgal_btn"
             android:layout_centerVertical="true"/>
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_camgal_foreground"
+            android:id="@+id/camgal_btn"
+            android:layout_toLeftOf="@id/send_btn"/>
 
         <ImageButton
             android:layout_width="50dp"
