@@ -7,13 +7,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -30,6 +35,7 @@ public class Chat_list extends AppCompatActivity {
     private List<String> userList;
     private String userID;
     private UserAdapter.UserClickListener listener;
+    private EditText search_users;
 
     private DatabaseReference reference;
 
@@ -46,6 +52,24 @@ public class Chat_list extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         userID = bundle.getString("userID");
 
+        search_users = findViewById(R.id.search_users);
+        search_users.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchUsers(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         userList = new ArrayList<>();
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
@@ -61,6 +85,35 @@ public class Chat_list extends AppCompatActivity {
                     }
                 }
                 readChat();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void searchUsers(String s) {
+        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        reference = FirebaseDatabase.getInstance().getReference("Users");
+        Query query = reference.orderByChild("search").startAt(s.toLowerCase()).endAt(s.toLowerCase() + "\uf8ff");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mUser.clear();
+                userList.clear();
+                for(DataSnapshot datasnapshot : snapshot.getChildren()) {
+                    User user = datasnapshot.getValue(User.class);
+                    if(!user.email.equals(userEmail)) {
+                        mUser.add(user);
+                        userList.add(datasnapshot.getKey());
+                    }
+                }
+                Collections.reverse(mUser);
+                Collections.reverse(userList);
+                userAdapter = new UserAdapter(Chat_list.this, mUser, listener, userList);
+                recyclerView.setAdapter(userAdapter);
             }
 
             @Override
