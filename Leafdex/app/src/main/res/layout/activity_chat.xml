@@ -8,34 +8,37 @@
     tools:context=".Chat_users">
 
     <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toolbar"
-        android:background="#F7FFFFFF"
-        android:theme="@style/ToolbarColoredBackArrow"
-        app:navigationIcon="@drawable/ic_baseline_arrow_back_24">
+        android:background="#F7FFFFFF">
 
-        <TextView
+        <ImageButton
+            android:id="@+id/chatBackButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/ic_baseline_arrow_back_24" />
+
+        <TextView
             android:id="@+id/posterName"
-            android:textSize="18sp"
-            android:layout_marginLeft="18dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:text="Carl Jayson Angeles"
             android:textColor="@color/main_green"
-            android:layout_marginStart="20dp"/>
+            android:textSize="20sp" />
 
     </androidx.appcompat.widget.Toolbar>
-    
+
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recycler_view"
-        android:layout_below="@+id/toolbar"
-        android:layout_above="@+id/bottom"/>
+        android:layout_above="@+id/bottom"
+        android:layout_below="@+id/toolbar" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:padding="5dp"
         android:id="@+id/bottom"
         android:background="#fff"
         android:layout_alignParentBottom="true"
@@ -47,6 +50,7 @@
             android:id="@+id/textbox"
             android:background="@android:color/transparent"
             android:hint="Type a message..."
+            android:layout_marginLeft="10dp"
             android:layout_toLeftOf="@id/send_btn"
             android:layout_centerVertical="true"/>
 

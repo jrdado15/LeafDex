@@ -93,12 +93,13 @@ public class Chat_list extends AppCompatActivity {
         mUser = new ArrayList<>();
         reference = FirebaseDatabase.getInstance().getReference("Users");
         for(int i = 0; i < userList.size(); i++) {
+            int finalI = i;
             reference.child(userList.get(i)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     User user = snapshot.getValue(User.class);
                     mUser.add(user);
-                    userAdapter = new UserAdapter(Chat_list.this, mUser, listener);
+                    userAdapter = new UserAdapter(Chat_list.this, mUser, listener, userList);
                     recyclerView.setAdapter(userAdapter);
                 }
 
