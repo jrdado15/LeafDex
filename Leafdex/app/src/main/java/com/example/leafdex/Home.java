@@ -54,7 +54,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     private FirebaseUser user;
     private DatabaseReference userReference;
 
-    Bundle extras;
     ActivityHomeBinding binding;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;

@@ -30,7 +30,7 @@ public class Chat_users extends AppCompatActivity {
     private TextView posterName_TV;
     private EditText textbox_ET;
     private ImageButton send;
-    private String message;
+    private String message, userID;
 
     private ChatAdapter chatAdapter;
     private List<Chat> mChat;
@@ -61,7 +61,7 @@ public class Chat_users extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         Bundle bundle = getIntent().getExtras();
-        String userID = bundle.getString("userID");
+        userID = bundle.getString("userID");
         String posterID = bundle.getString("posterID");
         String posterName = bundle.getString("posterName");
 
@@ -122,4 +122,24 @@ public class Chat_users extends AppCompatActivity {
             }
         });
     }
+
+    /*
+    private void status(String status) {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", status);
+        reference.child("Users").child(userID).updateChildren(hashMap);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("offline");
+    }
+    */
 }
