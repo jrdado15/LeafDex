@@ -83,6 +83,7 @@ public class home extends Fragment {
     private RecyclerView mRecyclerView;
     private ArrayList<Product> productList;
     private List<String> mImages;
+    private List<String> mPrices;
     private FeedAdapter feedAdapter;
     private FeedAdapter.FeedAdapterViewClickListener listener;
     public home() {
@@ -125,9 +126,10 @@ public class home extends Fragment {
         Bundle bundle = getArguments();
         productList = new ArrayList<>();
         mImages = new ArrayList<>();
+        mPrices = new ArrayList<>();
         mRecyclerView = view.findViewById(R.id.rv_feeds);
         setOnClickListener();
-        feedAdapter = new FeedAdapter(getActivity(), productList, mImages, listener);
+        feedAdapter = new FeedAdapter(getActivity(), productList, mImages, listener, mPrices);
 
         posts = new ArrayList<ArrayList<String>>();
         Query query = reference.child("Posts");
@@ -144,6 +146,7 @@ public class home extends Fragment {
                         post.add(childDataSnapshot.child("imageURL").getValue().toString()); //post plant image
                         post.add(childDataSnapshot.child("userID").getValue().toString()); //post user
                         post.add(childDataSnapshot.child("dateTime").getValue().toString()); //post date and time
+                        post.add(childDataSnapshot.child("price").getValue().toString()); //get price
                         posts.add(post);
                     }
 
@@ -152,6 +155,7 @@ public class home extends Fragment {
                         if(!childPosts.isEmpty()){
                             productList.add(new Product(childPosts.get(1)));
                             mImages.add(childPosts.get(3));
+                            mPrices.add(childPosts.get(6));
                         }
                     }
                     mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false));

@@ -21,13 +21,16 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     private ArrayList<Product> productsList;
     private Context context;
     private List<String> images;
+    private List<String> prices;
     private FeedAdapterViewClickListener listener;
+
     
-    public FeedAdapter(Context context, ArrayList<Product> productsList,  List<String> images,FeedAdapterViewClickListener listener){
+    public FeedAdapter(Context context, ArrayList<Product> productsList, List<String> images,FeedAdapterViewClickListener listener, List<String> prices){
         this.context = context;
         this.productsList = productsList;
         this.images = images;
         this.listener = listener;
+        this.prices = prices;
     }
 
     @NonNull
@@ -41,6 +44,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     public void onBindViewHolder(@NonNull FeedViewHolder holder, int position) {
         String product_name = productsList.get(position).getProduct();
         holder.feed_textView.setText(product_name);
+        holder.feed_price_textView.setText("₱" + prices.get(position));
         Glide.with(context).load(images.get(position)).into(holder.feed_imageView);
     }
 
@@ -56,11 +60,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     public class FeedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView feed_imageView;
         TextView feed_textView;
+        TextView feed_price_textView;
 
         public FeedViewHolder(@NonNull View itemView) {
             super(itemView);
             feed_imageView = itemView.findViewById(R.id.feed_item_image);
             feed_textView = itemView.findViewById(R.id.feed_item_textView);
+            feed_price_textView = itemView.findViewById(R.id.feed_price_textView);
+
             itemView.setOnClickListener(this);
         }
 
