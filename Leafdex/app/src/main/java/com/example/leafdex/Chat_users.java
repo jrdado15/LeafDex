@@ -27,20 +27,28 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.leafdex.fragments.camera;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class Chat_users extends AppCompatActivity {
 
@@ -68,6 +76,9 @@ public class Chat_users extends AppCompatActivity {
             Manifest.permission.INTERNET,
             Manifest.permission.CAMERA,
     };
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+    private String downloadURL;
     // CAMERA AND GALLERY
 
     @Override
@@ -117,7 +128,13 @@ public class Chat_users extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 message = textbox_ET.getText().toString().trim();
+                exit:
                 if(!message.isEmpty()) {
+                    if(checkURL(message)) {
+                        Toast.makeText(Chat_users.this, "URLs are not allowed.", Toast.LENGTH_LONG).show();
+                        textbox_ET.setText("");
+                        break exit;
+                    }
                     HashMap<String, Object> hashMap = new HashMap<>();
                     hashMap.put("sender", userID);
                     hashMap.put("receiver", posterID);
@@ -211,9 +228,9 @@ public class Chat_users extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
                         mProgressDialog = new ProgressDialog(Chat_users.this);
-                        mProgressDialog.setMessage("Processing image...");
+                        mProgressDialog.setMessage("Uploading image...");
                         mProgressDialog.setCancelable(false);
-                        // mProgressDialog.show();
+                        mProgressDialog.show();
 
                         new Thread(new Runnable() {
                             @Override
@@ -234,29 +251,53 @@ public class Chat_users extends AppCompatActivity {
 
     private void uploadImage() {
         Uri plantPicUri;
-        String filePath;
         if (isFromGallery) {
             plantPicUri = plantPicUriFromGallery;
-            filePath = getRealPathFromURI(plantPicUri).substring(1);
         } else {
             plantPicUri = plantPicUriFromCamera;
-            filePath = plantPicUri.toString().substring(8);
         }
-        Log.d("TAG", filePath);
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("sender", userID);
-        hashMap.put("receiver", posterID);
-        hashMap.put("message", filePath);
-        reference.child("Chats").push().setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()) {
-                    Log.d("TAG", "MESSAGE SENT");
-                } else {
-                    Log.d("TAG", "MESSAGE NOT SENT");
-                }
-            }
-        });
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        final String randomKey = UUID.randomUUID().toString();
+        StorageReference ref = storageReference.child("chats/" + randomKey);
+        ref.putFile(plantPicUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                downloadURL = uri.toString();
+
+                                HashMap<String, Object> hashMap = new HashMap<>();
+                                hashMap.put("sender", userID);
+                                hashMap.put("receiver", posterID);
+                                hashMap.put("message", downloadURL);
+
+                                reference.child("Chats").push().setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()) {
+                                            mProgressDialog.dismiss();
+                                            Log.d("TAG", "MESSAGE SENT");
+                                        } else {
+                                            mProgressDialog.dismiss();
+                                            Log.d("TAG", "MESSAGE NOT SENT");
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mProgressDialog.dismiss();
+                        Toast.makeText(Chat_users.this, "Failed to upload image. Please try again.", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     ActivityResultLauncher<String[]> requestMultiplePermission = registerForActivityResult(
@@ -285,16 +326,13 @@ public class Chat_users extends AppCompatActivity {
         return false;
     }
 
-    private String getRealPathFromURI(Uri uri) {
-        String res = null;
-        String[] proj = { MediaStore.Images.Media.DATA };
-        Cursor cursor = this.getContentResolver().query(uri, proj, null, null, null);
-        if(cursor.moveToFirst()){;
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            res = cursor.getString(column_index);
+    public boolean checkURL(String str) {
+        try {
+            new URL(str).toURI();
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-        cursor.close();
-        return res;
     }
     // CAMERA AND GALLERY
 }

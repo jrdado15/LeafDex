@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.net.URL;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -50,7 +51,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         User user = mUser.get(position);
         Glide.with(mContext).load(user.imageURL).into(holder.user_image);
         holder.user_name.setText(user.fname + " " + user.lname);
-        lastChat(userList.get(position), holder.user_last_chat);
+        lastChat(userList.get(position), holder.user_last_chat, position);
         /*
         if(user.status.equals("online")) {
             holder.onstatus.setVisibility(View.VISIBLE);
@@ -93,7 +94,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }
     }
 
-    private void lastChat(String userID, TextView user_last_chat) {
+    private void lastChat(String userID, TextView user_last_chat, int position) {
         last_chat = "default";
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -102,9 +103,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot datasnapshot : snapshot.getChildren()) {
                     Chat chat = datasnapshot.getValue(Chat.class);
-                    if(chat.getReceiver().equals(user.getUid()) && chat.getSender().equals(userID) ||
-                            chat.getReceiver().equals(userID) && chat.getSender().equals(user.getUid())) {
-                        last_chat = chat.getMessage();
+                    if(chat.getReceiver().equals(user.getUid()) && chat.getSender().equals(userID)) {
+                        if(checkURL(chat.getMessage())) {
+                            last_chat = mUser.get(position).fname + " sent a photo.";
+                        } else {
+                            last_chat = mUser.get(position).fname + ": " + chat.getMessage();
+                        }
+                    }
+                    else if(chat.getReceiver().equals(userID) && chat.getSender().equals(user.getUid())) {
+                        if(checkURL(chat.getMessage())) {
+                            last_chat = "You sent a photo.";
+                        } else {
+                            last_chat = "You: " + chat.getMessage();
+                        }
                     }
                 }
                 switch(last_chat) {
@@ -123,5 +134,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
             }
         });
+    }
+
+    public boolean checkURL(String str) {
+        try {
+            new URL(str).toURI();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
