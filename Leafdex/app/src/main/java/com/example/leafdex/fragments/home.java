@@ -129,7 +129,7 @@ public class home extends Fragment {
         mPrices = new ArrayList<>();
         mRecyclerView = view.findViewById(R.id.rv_feeds);
         setOnClickListener();
-        feedAdapter = new FeedAdapter(getActivity(), productList, mImages, listener, mPrices);
+        feedAdapter = new FeedAdapter(getActivity(), productList, mImages, mPrices, listener);
 
         posts = new ArrayList<ArrayList<String>>();
         Query query = reference.child("Posts");
@@ -142,10 +142,7 @@ public class home extends Fragment {
                         ArrayList<String> post = new ArrayList<String>();
                         post.add(childDataSnapshot.getKey()); //post key
                         post.add(childDataSnapshot.child("comName").getValue().toString()); //post plant name
-                        post.add(childDataSnapshot.child("desc").getValue().toString()); //post plant description
                         post.add(childDataSnapshot.child("imageURL").getValue().toString()); //post plant image
-                        post.add(childDataSnapshot.child("userID").getValue().toString()); //post user
-                        post.add(childDataSnapshot.child("dateTime").getValue().toString()); //post date and time
                         post.add(childDataSnapshot.child("price").getValue().toString()); //post price
                         posts.add(post);
                     }
@@ -154,8 +151,8 @@ public class home extends Fragment {
                     for(ArrayList<String> childPosts : posts){
                         if(!childPosts.isEmpty()){
                             productList.add(new Product(childPosts.get(1)));
-                            mImages.add(childPosts.get(3));
-                            mPrices.add(childPosts.get(6));
+                            mImages.add(childPosts.get(2));
+                            mPrices.add(childPosts.get(3));
                         }
                     }
                     mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false));

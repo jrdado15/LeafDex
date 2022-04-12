@@ -41,16 +41,18 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
     private static Context context;
     private static List<String> postIDs;
     private static List<String> titles;
+    private static List<String> prices;
     private static List<String> images;
     private static String imageURL;
     private static DatabaseReference reference;
     private static FirebaseStorage storage;
     private static EditClickListener listener;
 
-    public YourPostsAdapter(Context context, List<String> postIDs, List<String> titles, List<String> images, EditClickListener listener){
+    public YourPostsAdapter(Context context, List<String> postIDs, List<String> titles, List<String> prices, List<String> images, EditClickListener listener){
         this.context = context;
         this.postIDs = postIDs;
         this.titles = titles;
+        this.prices = prices;
         this.images = images;
         this.listener = listener;
     }
@@ -65,6 +67,7 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
     @Override
     public void onBindViewHolder(@NonNull YourPostsAdapter.YourPostsViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.user_post_item_textView.setText(titles.get(position));
+        //holder.user_post_item_price_textView.setText("₱" + prices.get(position));
         Glide.with(context).load(images.get(position)).into(holder.user_post_item_image);
         holder.position = position;
     }
@@ -79,14 +82,16 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
     }
 
     public static class YourPostsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView user_post_item_image;
         TextView  user_post_item_textView;
+        //TextView  user_post_item_price_textView;
+        ImageView user_post_item_image;
         Button user_post_item_button2, user_post_item_button4;
         int position;
         public YourPostsViewHolder(@NonNull View itemView) {
             super(itemView);
 
             user_post_item_textView = itemView.findViewById(R.id.user_post_item_textView);
+            //user_post_item_price_textView = itemView.findViewById(R.id.user_post_item_price_textView);
             user_post_item_image = itemView.findViewById(R.id.user_post_item_image);
             user_post_item_button2 = itemView.findViewById(R.id.button2);
             user_post_item_button4 = itemView.findViewById(R.id.button4);
@@ -102,7 +107,6 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
                             switch(which) {
                                 case DialogInterface.BUTTON_POSITIVE:
                                     String postID = postIDs.get(position);
-                                    Log.d("TAG", postID);
 
                                     reference = FirebaseDatabase.getInstance().getReference("Posts");
                                     storage = FirebaseStorage.getInstance();
@@ -146,7 +150,6 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
                                     });
                                     break;
                                 case DialogInterface.BUTTON_NEGATIVE:
-                                    // dp nothing
                                     break;
                             }
                         }

@@ -174,7 +174,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                     break;
                 case R.id.nav_bar_camera:
                     choosePicture();
-                    //pickFromGalleryLauncher.launch(Pair.create("image/*", "Select voucher"));
                     break;
                 case R.id.nav_bar_plantEncyclopedia:
                     replaceFragment(new encyclopedia());
@@ -221,7 +220,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void choosePicture() {
-
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
@@ -232,7 +230,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         chooserIntent = Intent.createChooser(galleryIntent, "Select Image");
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {cameraIntent});
 
-        //TODO: sa permissions ako na alahab dipende sa need
         if (hasPermissions(PERMISSIONS)) {
             activityForResult.launch(chooserIntent);
         } else {
@@ -256,7 +253,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            // do your stuff
                             try {
                                 isFromGallery = true;
                                 plantPicUriFromGallery = data.getData();
@@ -265,7 +261,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                             }
                             runOnUiThread(new Runnable() {
                                 public void run() {
-                                    // do onPostExecute stuff
                                     replaceFragment(new camera(mProgressDialog));
                                 }
                             });

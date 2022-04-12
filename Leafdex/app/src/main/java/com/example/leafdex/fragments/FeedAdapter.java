@@ -18,19 +18,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder> {
-    private ArrayList<Product> productsList;
     private Context context;
+    private ArrayList<Product> productsList;
     private List<String> images;
-    private FeedAdapterViewClickListener listener;
     private List<String> prices;
+    private FeedAdapterViewClickListener listener;
 
     
-    public FeedAdapter(Context context, ArrayList<Product> productsList, List<String> images,FeedAdapterViewClickListener listener, List<String> prices){
+    public FeedAdapter(Context context, ArrayList<Product> productsList, List<String> images, List<String> prices, FeedAdapterViewClickListener listener){
         this.context = context;
         this.productsList = productsList;
         this.images = images;
-        this.listener = listener;
         this.prices = prices;
+        this.listener = listener;
     }
 
     @NonNull
@@ -43,8 +43,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     @Override
     public void onBindViewHolder(@NonNull FeedViewHolder holder, int position) {
         String product_name = productsList.get(position).getProduct();
-        Glide.with(context).load(images.get(position)).into(holder.feed_imageView);
         holder.feed_textView.setText(product_name);
+        Glide.with(context).load(images.get(position)).into(holder.feed_imageView);
         holder.feed_price_textView.setText("₱" + prices.get(position));
     }
 
@@ -58,14 +58,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     }
 
     public class FeedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        ImageView feed_imageView;
         TextView feed_textView;
+        ImageView feed_imageView;
         TextView feed_price_textView;
 
         public FeedViewHolder(@NonNull View itemView) {
             super(itemView);
-            feed_imageView = itemView.findViewById(R.id.feed_item_image);
             feed_textView = itemView.findViewById(R.id.feed_item_textView);
+            feed_imageView = itemView.findViewById(R.id.feed_item_image);
             feed_price_textView = itemView.findViewById(R.id.feed_price_textView);
 
             itemView.setOnClickListener(this);

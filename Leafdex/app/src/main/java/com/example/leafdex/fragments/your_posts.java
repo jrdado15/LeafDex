@@ -54,6 +54,7 @@ public class your_posts extends Fragment {
     private RecyclerView mRecyclerView;
     private List<String> postIDs;
     private List<String> titles;
+    private List<String> prices;
     private List<String> mImages;
     private YourPostsAdapter yourPostsAdapter;
 
@@ -106,13 +107,13 @@ public class your_posts extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot != null){
-                    //retrieval of user's posts
+                    //Retrieval of user's posts
                     posts.clear();
                     for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
                         ArrayList<String> post = new ArrayList<String>();
                         post.add(childDataSnapshot.getKey()); //post key -- 0
                         post.add(childDataSnapshot.child("comName").getValue().toString()); //post plant name -- 1
-                        post.add(childDataSnapshot.child("desc").getValue().toString()); //post plant description -- 2
+                        post.add(childDataSnapshot.child("price").getValue().toString()); //post plant price -- 2
                         post.add(childDataSnapshot.child("imageURL").getValue().toString()); //post plant image -- 3
                         posts.add(post);
                     }
@@ -120,16 +121,17 @@ public class your_posts extends Fragment {
                     //Addition of user's posts into recyclerview
                     postIDs = new ArrayList<>();
                     titles = new ArrayList<>();
+                    prices = new ArrayList<>();
                     mImages = new ArrayList<>();
                     setOnClickListener();
                     mRecyclerView = view.findViewById(R.id.rv_your_posts);
-                    yourPostsAdapter = new YourPostsAdapter(getActivity(), postIDs, titles, mImages, listener);
+                    yourPostsAdapter = new YourPostsAdapter(getActivity(), postIDs, titles, prices, mImages, listener);
 
-                    // TODO: GANITO KUMUHA VALUES @CJ
                     for(ArrayList<String> childPosts : posts){
                         if(!childPosts.isEmpty()){
                             postIDs.add(childPosts.get(0));
                             titles.add(childPosts.get(1));
+                            prices.add(childPosts.get(2));
                             mImages.add(childPosts.get(3));
                         }
                     }

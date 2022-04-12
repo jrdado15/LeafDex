@@ -146,21 +146,20 @@ public class camera extends Fragment {
                 Root root = jsonAdapter.fromJson(json);
                 List<Result> result = root.getResults();
                 DecimalFormat df = new DecimalFormat("0.00");
-                Log.d("TAG", "Image url: " + result.get(0).getImages().get(0).url.s);
                 Glide.with(getActivity()).load(result.get(0).getImages().get(0).url.s).into(uriExample);
-                Log.d("TAG", "Score: " + df.format(result.get(0).getScore() * 100) + "%");
                 scoreTV.setText("Score: " + df.format(result.get(0).getScore() * 100) + "%");
-                Log.d("TAG", "Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
                 sciNameTV.setText("Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
                 String comNames = "";
                 for(int i = 0; i < result.get(0).getSpecies().commonNames.size(); i++) {
-                    Log.d("TAG", "Common name " + (i + 1) + ": " + result.get(0).getSpecies().commonNames.get(i));
                     if(i == 0) {
                         comNames += result.get(0).getSpecies().commonNames.get(0);
                         comName = result.get(0).getSpecies().commonNames.get(0);
                     } else {
                         comNames += ", " + result.get(0).getSpecies().commonNames.get(i);
                     }
+                }
+                if(comName.isEmpty()) {
+                    comName = result.get(0).getSpecies().scientificNameWithoutAuthor;
                 }
                 comNamesTV.setText("Common names: " + comNames);
                 if (mProgressDialog != null){
