@@ -107,14 +107,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                         if(checkURL(chat.getMessage())) {
                             last_chat = mUser.get(position).fname + " sent a photo.";
                         } else {
-                            last_chat = mUser.get(position).fname + ": " + chat.getMessage();
+                            if(chat.getMessage().length() <= 20) {
+                                last_chat = mUser.get(position).fname + ": " + chat.getMessage();
+                            } else {
+                                last_chat = mUser.get(position).fname + ": " + chat.getMessage().substring(0, 19) + "...";
+                            }
                         }
                     }
                     else if(chat.getReceiver().equals(userID) && chat.getSender().equals(user.getUid())) {
                         if(checkURL(chat.getMessage())) {
                             last_chat = "You sent a photo.";
                         } else {
-                            last_chat = "You: " + chat.getMessage();
+                            if(chat.getMessage().length() <= 20) {
+                                last_chat = "You: " + chat.getMessage();
+                            } else {
+                                last_chat = "You: " + chat.getMessage().substring(0, 19) + "...";
+                            }
                         }
                     }
                 }

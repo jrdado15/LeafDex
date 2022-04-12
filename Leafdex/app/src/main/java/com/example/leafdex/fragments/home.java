@@ -81,8 +81,8 @@ public class home extends Fragment {
 
     //START NG RECYCLER VIEW PARA SA FEEDS XD
     private RecyclerView mRecyclerView;
-    private ArrayList<Product> productList;
     private List<String> mImages;
+    private ArrayList<Product> productList;
     private List<String> mPrices;
     private FeedAdapter feedAdapter;
     private FeedAdapter.FeedAdapterViewClickListener listener;
@@ -146,12 +146,12 @@ public class home extends Fragment {
                         post.add(childDataSnapshot.child("imageURL").getValue().toString()); //post plant image
                         post.add(childDataSnapshot.child("userID").getValue().toString()); //post user
                         post.add(childDataSnapshot.child("dateTime").getValue().toString()); //post date and time
-                        post.add(childDataSnapshot.child("price").getValue().toString()); //get price
+                        post.add(childDataSnapshot.child("price").getValue().toString()); //post price
                         posts.add(post);
                     }
 
                     //Addition of posts into recycler view
-                    for(ArrayList<String> childPosts  : posts){
+                    for(ArrayList<String> childPosts : posts){
                         if(!childPosts.isEmpty()){
                             productList.add(new Product(childPosts.get(1)));
                             mImages.add(childPosts.get(3));
@@ -167,7 +167,7 @@ public class home extends Fragment {
             }
 
             public void onSuccess(@NonNull Void T) {
-                //Do whatever
+                //do whatever
             }
 
             @Override
@@ -176,16 +176,6 @@ public class home extends Fragment {
             }
         });
 
-        /*
-        mImages.add(R.drawable.sample);
-        mImages.add(R.drawable.sample);
-        mImages.add(R.drawable.sample);
-        mImages.add(R.drawable.sample);
-        productList.add(new Product("Rubber plant"));
-        productList.add(new Product("Mango tree"));
-        productList.add(new Product("Money plant"));
-        productList.add(new Product("String beans"));
-*/
         if(bundle != null) {
             filePath = bundle.getString("filePath");
             comName = bundle.getString("comName");

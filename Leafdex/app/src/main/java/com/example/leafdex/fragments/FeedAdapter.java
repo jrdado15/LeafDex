@@ -21,8 +21,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     private ArrayList<Product> productsList;
     private Context context;
     private List<String> images;
-    private List<String> prices;
     private FeedAdapterViewClickListener listener;
+    private List<String> prices;
 
     
     public FeedAdapter(Context context, ArrayList<Product> productsList, List<String> images,FeedAdapterViewClickListener listener, List<String> prices){
@@ -43,9 +43,9 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     @Override
     public void onBindViewHolder(@NonNull FeedViewHolder holder, int position) {
         String product_name = productsList.get(position).getProduct();
+        Glide.with(context).load(images.get(position)).into(holder.feed_imageView);
         holder.feed_textView.setText(product_name);
         holder.feed_price_textView.setText("₱" + prices.get(position));
-        Glide.with(context).load(images.get(position)).into(holder.feed_imageView);
     }
 
     @Override

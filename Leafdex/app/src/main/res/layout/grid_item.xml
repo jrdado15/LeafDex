@@ -36,6 +36,7 @@
                 android:layout_gravity="center"
                 android:text="Gomu gomu no mi"
                 android:textColor="@color/main_green" />
+
             <TextView
                 android:id="@+id/feed_price_textView"
                 android:layout_width="wrap_content"

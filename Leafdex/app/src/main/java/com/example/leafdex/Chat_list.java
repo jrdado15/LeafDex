@@ -159,31 +159,5 @@ public class Chat_list extends AppCompatActivity {
         }
         userAdapter = new UserAdapter(Chat_list.this, search_mUser, search_listener, search_userList);
         recyclerView.setAdapter(userAdapter);
-        /*
-        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        reference = FirebaseDatabase.getInstance().getReference("Users");
-        Query query = reference.orderByChild("search").startAt(s.toLowerCase()).endAt(s.toLowerCase() + "\uf8ff");
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mUser.clear();
-                userList.clear();
-                for(DataSnapshot datasnapshot : snapshot.getChildren()) {
-                    User user = datasnapshot.getValue(User.class);
-                    if(!user.email.equals(userEmail)) {
-                        mUser.add(user);
-                        userList.add(datasnapshot.getKey());
-                    }
-                }
-                userAdapter = new UserAdapter(Chat_list.this, mUser, listener, userList);
-                recyclerView.setAdapter(userAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        */
     }
 }
