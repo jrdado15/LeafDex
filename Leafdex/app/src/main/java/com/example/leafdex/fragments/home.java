@@ -164,7 +164,7 @@ public class home extends Fragment {
             }
 
             public void onSuccess(@NonNull Void T) {
-                //do whatever
+
             }
 
             @Override
@@ -275,7 +275,6 @@ public class home extends Fragment {
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getActivity().getBaseContext(), Product_info.class);
                 intent.putExtra("product_key", posts.get(position).get(0));
-                Log.d("POSTS", posts.get(position).get(0));
                 getActivity().startActivity(intent);
             }
         };

@@ -42,6 +42,7 @@ public class Product_info extends AppCompatActivity {
         TextView plant_price = findViewById(R.id.tv_plant_price);
         Button back_button = findViewById(R.id.back_button);
         Button bookmark_button = findViewById(R.id.btn_bookmark);
+        Button bookmark_button_filled = findViewById(R.id.btn_bookmark_filled);
         Button message_button = findViewById(R.id.btn_chat_post_owner);
         productValues = new ArrayList<String>();
         String product = "Product Unavailable";
@@ -51,11 +52,12 @@ public class Product_info extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            firebasePostKey  = extras.getString("product_key");
+            firebasePostKey = extras.getString("product_key");
         }
 
         reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference.child("Posts").child(firebasePostKey);
+        Query querySP = reference.child("Saved").child(userID);
         plant_owner.setVisibility(View.INVISIBLE);
         plant_image.setVisibility(View.INVISIBLE);
         plant_name.setVisibility(View.INVISIBLE);
@@ -72,6 +74,41 @@ public class Product_info extends AppCompatActivity {
         });
 
         if(firebasePostKey != null) {
+            querySP.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for(DataSnapshot datasnapshot : snapshot.getChildren()) {
+                        if(datasnapshot.getKey().equals(firebasePostKey)) {
+                            bookmark_button.setVisibility(View.GONE);
+                            bookmark_button_filled.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            bookmark_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    reference.child("Saved").child(userID).child(firebasePostKey).setValue("");
+                    bookmark_button.setVisibility(View.GONE);
+                    bookmark_button_filled.setVisibility(View.VISIBLE);
+                }
+            });
+
+            bookmark_button_filled.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    reference.child("Saved").child(userID).child(firebasePostKey).removeValue();
+                    bookmark_button_filled.setVisibility(View.GONE);
+                    bookmark_button.setVisibility(View.VISIBLE);
+                }
+            });
+
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

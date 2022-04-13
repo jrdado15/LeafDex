@@ -179,5 +179,16 @@
         app:layout_constraintStart_toEndOf="@+id/tv_plant_info_name"
         app:layout_constraintTop_toTopOf="@+id/guideline32" />
 
+    <Button
+        android:id="@+id/btn_bookmark_filled"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ic_baseline_bookmark_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/guideline35"
+        app:layout_constraintEnd_toStartOf="@+id/guideline30"
+        app:layout_constraintStart_toEndOf="@+id/tv_plant_info_name"
+        app:layout_constraintTop_toTopOf="@+id/guideline32" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

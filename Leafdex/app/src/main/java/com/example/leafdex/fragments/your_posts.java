@@ -38,7 +38,6 @@ public class your_posts extends Fragment {
     private FirebaseUser user;
     private DatabaseReference userReference;
     private DatabaseReference reference;
-    private YourPostsAdapter.EditClickListener listener;
 
     private String userID;
 
@@ -57,6 +56,7 @@ public class your_posts extends Fragment {
     private List<String> prices;
     private List<String> mImages;
     private YourPostsAdapter yourPostsAdapter;
+    private YourPostsAdapter.EditClickListener listener;
 
     public your_posts() {
         // Required empty public constructor
@@ -87,11 +87,10 @@ public class your_posts extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        reference = FirebaseDatabase.getInstance().getReference(); //Root
+        reference = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        userReference = FirebaseDatabase.getInstance().getReference("Users"); //Users Parent
-        reference = FirebaseDatabase.getInstance().getReference(); //Root
+        userReference = FirebaseDatabase.getInstance().getReference("Users");
         userID = user.getUid();
     }
 
@@ -106,15 +105,15 @@ public class your_posts extends Fragment {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot != null){
+                if(snapshot != null) {
                     //Retrieval of user's posts
                     posts.clear();
-                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                    for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         ArrayList<String> post = new ArrayList<String>();
-                        post.add(childDataSnapshot.getKey()); //post key -- 0
-                        post.add(childDataSnapshot.child("comName").getValue().toString()); //post plant name -- 1
-                        post.add(childDataSnapshot.child("price").getValue().toString()); //post plant price -- 2
-                        post.add(childDataSnapshot.child("imageURL").getValue().toString()); //post plant image -- 3
+                        post.add(dataSnapshot.getKey()); //post key -- 0
+                        post.add(dataSnapshot.child("comName").getValue().toString()); //post plant name -- 1
+                        post.add(dataSnapshot.child("price").getValue().toString()); //post plant price -- 2
+                        post.add(dataSnapshot.child("imageURL").getValue().toString()); //post plant image -- 3
                         posts.add(post);
                     }
 
