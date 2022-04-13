@@ -79,13 +79,13 @@ public class home extends Fragment {
     private StorageReference storageReference;
     private DatabaseReference reference;
 
-    //START NG RECYCLER VIEW PARA SA FEEDS XD
     private RecyclerView mRecyclerView;
-    private List<String> mImages;
-    private ArrayList<Product> productList;
-    private List<String> mPrices;
+    private ArrayList<Product> productList, search_productList;
+    private List<String> mImages, search_mImages;
+    private List<String> mPrices, search_mPrices;
     private FeedAdapter feedAdapter;
     private FeedAdapter.FeedAdapterViewClickListener listener;
+
     public home() {
         // Required empty public constructor
     }
@@ -172,6 +172,24 @@ public class home extends Fragment {
                 Log.d("POSTS", "Error found: " + error.toString());
             }
         });
+
+        /*EditText search_items = view.findViewById(R.id.search_items);
+        search_items.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchItems(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });*/
 
         if(bundle != null) {
             filePath = bundle.getString("filePath");
@@ -279,4 +297,19 @@ public class home extends Fragment {
             }
         };
     }
+
+    /*private void searchItems(String s) {
+        search_productList = new ArrayList<>();
+        search_mImages = new ArrayList<>();
+        search_mPrices = new ArrayList<>();
+        for(int i = 0; i < productList.size(); i++) {
+            if(productList.get(i).getProduct().toLowerCase().matches(s.toLowerCase() + "(.*)")) {
+                search_productList.add(productList.get(i));
+                search_mImages.add(mImages.get(i));
+                search_mPrices.add(mPrices.get(i));
+            }
+        }
+        feedAdapter = new FeedAdapter(getActivity(), search_productList, search_mImages, search_mPrices, listener);
+        mRecyclerView.setAdapter(feedAdapter);
+    }*/
 }

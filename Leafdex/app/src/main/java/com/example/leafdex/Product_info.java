@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -97,6 +98,7 @@ public class Product_info extends AppCompatActivity {
                     reference.child("Saved").child(userID).child(firebasePostKey).setValue("");
                     bookmark_button.setVisibility(View.GONE);
                     bookmark_button_filled.setVisibility(View.VISIBLE);
+                    Toast.makeText(Product_info.this, "Added to saved posts.", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -106,6 +108,7 @@ public class Product_info extends AppCompatActivity {
                     reference.child("Saved").child(userID).child(firebasePostKey).removeValue();
                     bookmark_button_filled.setVisibility(View.GONE);
                     bookmark_button.setVisibility(View.VISIBLE);
+                    Toast.makeText(Product_info.this, "Removed from saved posts.", Toast.LENGTH_LONG).show();
                 }
             });
 

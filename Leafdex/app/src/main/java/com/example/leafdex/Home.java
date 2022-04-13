@@ -96,7 +96,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         userReference = FirebaseDatabase.getInstance().getReference("Users"); //Users Parent
         userID = user.getUid();
 
-
         setUpToolbar();
         navigationView = (NavigationView) findViewById(R.id.navigation_menu);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {

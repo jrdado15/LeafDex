@@ -1,7 +1,5 @@
 package com.example.leafdex;
 
-import java.lang.reflect.Constructor;
-
 public class Product {
     private String product;
 

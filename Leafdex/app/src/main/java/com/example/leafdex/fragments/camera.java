@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.leafdex.Encyclopedia;
 import com.example.leafdex.Home;
 import com.example.leafdex.R;
 import com.example.leafdex.fragments.parsers.Result;
@@ -54,12 +55,12 @@ public class camera extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private String imageUri, comName;
+    private String imageUri, imageURL, comName, sciName;
 
     private View view;
     private ImageView uriExample;
     private TextView scoreTV, sciNameTV, comNamesTV;
-    private Button postBtn;
+    private Button postBtn, encBtn;
 
     private Home home;
     private ProgressDialog mProgressDialog = null;
@@ -109,6 +110,7 @@ public class camera extends Fragment {
         sciNameTV = (TextView) view.findViewById(R.id.textView13);
         comNamesTV = (TextView) view.findViewById(R.id.textView14);
         postBtn = (Button) view.findViewById(R.id.button);
+        encBtn = (Button) view.findViewById(R.id.button1);
         home = (Home) getActivity();
         Uri plantPicUri;
         String filePath = "";
@@ -147,8 +149,10 @@ public class camera extends Fragment {
                 List<Result> result = root.getResults();
                 DecimalFormat df = new DecimalFormat("0.00");
                 Glide.with(getActivity()).load(result.get(0).getImages().get(0).url.s).into(uriExample);
+                imageURL = result.get(0).getImages().get(0).url.s;
                 scoreTV.setText("Score: " + df.format(result.get(0).getScore() * 100) + "%");
                 sciNameTV.setText("Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
+                sciName = result.get(0).getSpecies().scientificNameWithoutAuthor;
                 String comNames = "";
                 for(int i = 0; i < result.get(0).getSpecies().commonNames.size(); i++) {
                     if(i == 0) {
@@ -184,6 +188,18 @@ public class camera extends Fragment {
                     Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
                     intent.putExtra("filePath", imageUri);
                     intent.putExtra("comName", comName);
+                    getActivity().startActivity(intent);
+                }
+            }
+        });
+        encBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(imageUri != null && comName != null) {
+                    Intent intent = new Intent(getActivity().getBaseContext(), Encyclopedia.class);
+                    intent.putExtra("imageURL", imageURL);
+                    intent.putExtra("comName", comName);
+                    intent.putExtra("sciName", sciName);
                     getActivity().startActivity(intent);
                 }
             }
