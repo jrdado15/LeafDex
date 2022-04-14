@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class Product_info extends AppCompatActivity {
     private ArrayList<String> productValues;
-    private String userID, firebasePostKey, posterID, posterName;
+    private String userID, firebasePostKey, signal, posterID, posterName;
 
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -54,6 +54,7 @@ public class Product_info extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             firebasePostKey = extras.getString("product_key");
+            signal = extras.getString("signal");
         }
 
         reference = FirebaseDatabase.getInstance().getReference();
@@ -70,7 +71,13 @@ public class Product_info extends AppCompatActivity {
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                if(signal.equals("saved_posts")) {
+                    Intent intent = new Intent(Product_info.this, Home.class);
+                    intent.putExtra("signal", "back");
+                    startActivity(intent);
+                } else {
+                    finish();
+                }
             }
         });
 
@@ -98,7 +105,7 @@ public class Product_info extends AppCompatActivity {
                     reference.child("Saved").child(userID).child(firebasePostKey).setValue("");
                     bookmark_button.setVisibility(View.GONE);
                     bookmark_button_filled.setVisibility(View.VISIBLE);
-                    Toast.makeText(Product_info.this, "Added to saved posts.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Product_info.this, "Added to saved posts.", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -108,7 +115,7 @@ public class Product_info extends AppCompatActivity {
                     reference.child("Saved").child(userID).child(firebasePostKey).removeValue();
                     bookmark_button_filled.setVisibility(View.GONE);
                     bookmark_button.setVisibility(View.VISIBLE);
-                    Toast.makeText(Product_info.this, "Removed from saved posts.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Product_info.this, "Removed from saved posts.", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -182,6 +189,18 @@ public class Product_info extends AppCompatActivity {
                     Log.d("POSTS", "No post found.");
                 }
             });
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(signal.equals("saved_posts")) {
+            Intent intent = new Intent(Product_info.this, Home.class);
+            intent.putExtra("signal", "back");
+            startActivity(intent);
+        } else {
+            finish();
         }
     }
 }

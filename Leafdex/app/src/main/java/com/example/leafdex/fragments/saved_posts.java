@@ -164,6 +164,7 @@ public class saved_posts extends Fragment {
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getActivity(), Product_info.class);
                 intent.putExtra("product_key", postIDs.get(position));
+                intent.putExtra("signal", "saved_posts");
                 startActivity(intent);
             }
         };

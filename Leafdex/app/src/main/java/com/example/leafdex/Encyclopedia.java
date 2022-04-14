@@ -26,19 +26,15 @@ public class Encyclopedia extends AppCompatActivity {
     List<String> listDataHeader;
     HashMap<String,List<String>> listHashMap;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_encyclopedia);
+
         listView = findViewById(R.id.expandable_list_view);
         initializeData();
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listHashMap);
         listView.setAdapter(listAdapter);
-
-
-
-
 
         Intent intent = getIntent();
         String imageURL = intent.getStringExtra("imageURL");
@@ -70,9 +66,9 @@ public class Encyclopedia extends AppCompatActivity {
     }
 
     private void initializeData() {
-
         listDataHeader= new ArrayList<>();
         listHashMap = new HashMap<>();
+
         //HEADER LIST
         listDataHeader.add("Characteristics");
         listDataHeader.add("Care Tips");
@@ -107,9 +103,6 @@ public class Encyclopedia extends AppCompatActivity {
         plant_chars.add("Frost Tolerance:");
         plant_chars.add("Greywater Tolerance:");
 
-
-
-
         List<String> plant_care_info= new ArrayList<>();
         plant_care_info.add("Water Needs:");
         plant_care_info.add("Sunlight:");
@@ -122,10 +115,7 @@ public class Encyclopedia extends AppCompatActivity {
         plant_care_info.add("Soil ph minimum:");
         plant_care_info.add("Propagated by:");
 
-
         listHashMap.put(listDataHeader.get(0), plant_chars);
         listHashMap.put(listDataHeader.get(1), plant_care_info);
-
-
     }
 }

@@ -262,17 +262,17 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     mProgressDialog.dismiss();
                                                     if(task.isSuccessful()) {
-                                                        Toast.makeText(Register.this, "Registered successfully.", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(Register.this, "Registered successfully.", Toast.LENGTH_SHORT).show();
                                                         startActivity(new Intent (Register.this, Home.class));
                                                         finish();
                                                     } else {
-                                                        Toast.makeText(Register.this, "Failed to register. Please try again.", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(Register.this, "Failed to register. Please try again.", Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
                                             });
                                         } else {
                                             mProgressDialog.dismiss();
-                                            Toast.makeText(Register.this, "Failed to register.", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(Register.this, "Failed to register.", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });

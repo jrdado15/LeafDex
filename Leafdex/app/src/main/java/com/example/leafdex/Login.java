@@ -92,7 +92,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     startActivity(new Intent (Login.this, Home.class));
                     finish();
                 } else {
-                    Toast.makeText(Login.this, "Wrong credentials.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Login.this, "Wrong credentials.", Toast.LENGTH_SHORT).show();
                 }
                 mProgressDialog.dismiss();
             }

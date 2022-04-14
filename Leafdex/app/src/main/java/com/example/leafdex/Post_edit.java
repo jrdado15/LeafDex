@@ -123,7 +123,7 @@ public class Post_edit extends AppCompatActivity {
                     @Override
                     public void onSuccess(Object o) {
                         mProgressDialog.dismiss();
-                        Toast.makeText(Post_edit.this, "Updated successfully.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Post_edit.this, "Updated successfully.", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 })
@@ -131,7 +131,7 @@ public class Post_edit extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         mProgressDialog.dismiss();
-                        Toast.makeText(Post_edit.this, "Failed to update.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Post_edit.this, "Failed to update.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

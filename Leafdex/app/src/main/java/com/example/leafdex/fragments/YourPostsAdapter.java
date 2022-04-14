@@ -120,9 +120,9 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
                                                                             @Override
                                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                                 if (task.isSuccessful()) {
-                                                                                    Toast.makeText(context, "Deleted successfully.", Toast.LENGTH_LONG).show();
+                                                                                    Toast.makeText(context, "Deleted successfully.", Toast.LENGTH_SHORT).show();
                                                                                 } else {
-                                                                                    Toast.makeText(context, "Failed to delete.", Toast.LENGTH_LONG).show();
+                                                                                    Toast.makeText(context, "Failed to delete.", Toast.LENGTH_SHORT).show();
                                                                                 }
                                                                             }
                                                                         });
@@ -131,7 +131,7 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
                                                         .addOnFailureListener(new OnFailureListener() {
                                                             @Override
                                                             public void onFailure(@NonNull Exception e) {
-                                                                Toast.makeText(context, "Failed to delete image. Please try again.", Toast.LENGTH_LONG).show();
+                                                                Toast.makeText(context, "Failed to delete image. Please try again.", Toast.LENGTH_SHORT).show();
                                                             }
                                                         });
                                             }

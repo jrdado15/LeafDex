@@ -158,18 +158,18 @@ public class change_password extends Fragment {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         mProgressDialog.dismiss();
-                                        Toast.makeText(getActivity(), "Changed password successfully.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getActivity(), "Changed password successfully.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
                                         getActivity().startActivity(intent);
                                     } else {
                                         mProgressDialog.dismiss();
-                                        Toast.makeText(getActivity(), "Failed to change password.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getActivity(), "Failed to change password.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                         } else {
                             mProgressDialog.dismiss();
-                            Toast.makeText(getActivity(), "Failed to change password. Please try again.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Failed to change password. Please try again.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

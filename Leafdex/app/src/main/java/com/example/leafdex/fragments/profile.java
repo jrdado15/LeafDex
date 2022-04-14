@@ -32,7 +32,6 @@ import com.example.leafdex.R;
 import com.example.leafdex.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -301,7 +300,7 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
                                             @Override
                                             public void onSuccess(Object o) {
                                                 mProgressDialog.dismiss();
-                                                Toast.makeText(getActivity(), "Updated successfully.", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getActivity(), "Updated successfully.", Toast.LENGTH_SHORT).show();
                                                 Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
                                                 getActivity().startActivity(intent);
                                             }
@@ -310,7 +309,7 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 mProgressDialog.dismiss();
-                                                Toast.makeText(getActivity(), "Failed to update.", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getActivity(), "Failed to update.", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }
@@ -321,7 +320,7 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         mProgressDialog.dismiss();
-                        Toast.makeText(getActivity(), "Failed to upload image. Please try again.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Failed to upload image. Please try again.", Toast.LENGTH_SHORT).show();
                     }
                 });
         } else {
@@ -337,7 +336,7 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
                     @Override
                     public void onSuccess(Object o) {
                         mProgressDialog.dismiss();
-                        Toast.makeText(getActivity(), "Updated successfully.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Updated successfully.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
                         getActivity().startActivity(intent);
                     }
@@ -346,7 +345,7 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         mProgressDialog.dismiss();
-                        Toast.makeText(getActivity(), "Failed to update.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Failed to update.", Toast.LENGTH_SHORT).show();
                     }
                 });
         }

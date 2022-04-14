@@ -26,8 +26,7 @@
                 android:id="@+id/feed_item_image"
                 android:layout_width="140dp"
                 android:layout_height="160dp"
-                android:layout_gravity="center"
-                android:src="@drawable/sample" />
+                android:layout_gravity="center" />
 
             <TextView
                 android:id="@+id/feed_item_textView"

@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.leafdex.Encyclopedia;
 import com.example.leafdex.Home;
+import com.example.leafdex.Post_post;
 import com.example.leafdex.R;
 import com.example.leafdex.fragments.parsers.Result;
 import com.example.leafdex.fragments.parsers.Root;
@@ -170,13 +170,13 @@ public class camera extends Fragment {
                     mProgressDialog.dismiss();
                 }
             } catch(IOException e) {
-                Toast.makeText(getActivity(), "An error occurred. Please try again.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
                 backToHome();
                 e.printStackTrace();
                 return null;
             }
         } catch(RuntimeException e) {
-            Toast.makeText(getActivity(), "Plant not found. Please try again.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Plant not found. Please try again.", Toast.LENGTH_SHORT).show();
             backToHome();
             e.printStackTrace();
             return null;
@@ -185,7 +185,7 @@ public class camera extends Fragment {
             @Override
             public void onClick(View v) {
                 if(imageUri != null && comName != null) {
-                    Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
+                    Intent intent = new Intent(getActivity().getBaseContext(), Post_post.class);
                     intent.putExtra("filePath", imageUri);
                     intent.putExtra("comName", comName);
                     getActivity().startActivity(intent);

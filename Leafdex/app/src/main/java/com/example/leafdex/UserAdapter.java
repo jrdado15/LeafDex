@@ -52,15 +52,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         Glide.with(mContext).load(user.imageURL).into(holder.user_image);
         holder.user_name.setText(user.fname + " " + user.lname);
         lastChat(userList.get(position), holder.user_last_chat, position);
-        /*
-        if(user.status.equals("online")) {
-            holder.onstatus.setVisibility(View.VISIBLE);
-            holder.offstatus.setVisibility(View.GONE);
-        } else {
-            holder.onstatus.setVisibility(View.GONE);
-            holder.offstatus.setVisibility(View.VISIBLE);
-        }
-        */
     }
 
     @Override
@@ -73,8 +64,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public CircleImageView user_image;
         public TextView user_name;
-        // public CircleImageView onstatus;
-        // public CircleImageView offstatus;
         public TextView user_last_chat;
 
         public ViewHolder(@NonNull View itemView) {
@@ -82,8 +71,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
             user_image = itemView.findViewById(R.id.user_image);
             user_name = itemView.findViewById(R.id.user_name);
-            // onstatus = itemView.findViewById(R.id.user_onstatus);
-            // offstatus = itemView.findViewById(R.id.user_offstatus);
             user_last_chat = itemView.findViewById(R.id.user_last_chat);
             itemView.setOnClickListener(this);
         }

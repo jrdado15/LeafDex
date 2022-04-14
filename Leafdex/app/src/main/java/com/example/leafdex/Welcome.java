@@ -23,7 +23,6 @@ public class Welcome extends AppCompatActivity {
 
     FirebaseAuth mAuth;
 
-    //Ilagay lang ang mga kailangan ilagay
     private String[] PERMISSIONS = {
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -118,5 +117,4 @@ public class Welcome extends AppCompatActivity {
             }
         }, 3000);
     }
-
 }

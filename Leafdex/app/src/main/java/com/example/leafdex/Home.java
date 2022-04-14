@@ -181,15 +181,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             return true;
         });
 
-        Intent intent = getIntent();
-        String filePath = intent.getStringExtra("filePath");
-        String comName = intent.getStringExtra("comName");
-        Bundle bundle = new Bundle();
-        bundle.putString("filePath", filePath);
-        bundle.putString("comName", comName);
-        home homeFrag = new home();
-        homeFrag.setArguments(bundle);
-        replaceFragment(homeFrag);
+        replaceFragment(new home());
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            replaceFragment(new saved_posts());
+        }
     }
 
     public void setUpToolbar() {

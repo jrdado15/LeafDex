@@ -25,11 +25,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.leafdex.fragments.camera;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -131,7 +129,7 @@ public class Chat_users extends AppCompatActivity {
                 exit:
                 if(!message.isEmpty()) {
                     if(checkURL(message)) {
-                        Toast.makeText(Chat_users.this, "URLs are not allowed.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Chat_users.this, "URLs are not allowed.", Toast.LENGTH_SHORT).show();
                         textbox_ET.setText("");
                         break exit;
                     }
@@ -295,7 +293,7 @@ public class Chat_users extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         mProgressDialog.dismiss();
-                        Toast.makeText(Chat_users.this, "Failed to upload image. Please try again.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Chat_users.this, "Failed to upload image. Please try again.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
