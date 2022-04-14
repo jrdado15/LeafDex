@@ -31,7 +31,8 @@
     <string name="post_description">Post Description</string>
     <string name="post_plant">Post Plant</string>
     <string name="price">Price</string>
-    <string name="pm">Send Message</string>
+    <string name="pm">Send Message</string>\
+    <string name="characteristics">Characteristics</string>
     <string-array name="sex">
         <item>Male</item>
         <item>Female</item>
