@@ -197,7 +197,6 @@ public class camera extends Fragment {
             public void onClick(View v) {
                 if(imageUri != null && comName != null) {
                     Intent intent = new Intent(getActivity().getBaseContext(), Encyclopedia.class);
-                    intent.putExtra("imageURL", imageURL);
                     intent.putExtra("comName", comName);
                     intent.putExtra("sciName", sciName);
                     getActivity().startActivity(intent);

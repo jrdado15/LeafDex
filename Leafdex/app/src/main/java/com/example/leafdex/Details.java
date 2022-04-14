@@ -49,9 +49,10 @@ public class Details {
     ,type
     ,common_name
     ,flower_color
-    ,foliage_color;
+    ,foliage_color
+    ,image_url;
 
-    public Details(String scientific_name, String duration, String flower_conspicuous, String fruit_seed_color, String fruit_seed_conspicuous, String growth_form, String growth_rate, String lifespan, String resprout_ability, String shape_and_orientation, String toxicity, String drought_tolerance, String moisture_use, Float ph_minimum, Float ph_maximum, String shade_tolerance, String bloom_period, String propagated_by_bare_root, String propagated_by_bulb, String propagated_by_container, String propagated_by_corm, String propagated_by_cuttings, String propagated_by_seed, String propagated_by_sod, String propagated_by_sprigs, String propagated_by_tubers, String water_needs, String climate_zones, String sunlight, String soil_type, String potting_suggestion, String maintenance, String abcission, String height_ranges, String spread_ranges, String perfume, String edible, String bird_attracting, String bird_attractant, String bore_water_tolerance, String frost_tolerance, String greywater_tolerance, String butterfly_attracting, String butterfly_type, String notes, String type, String common_name, String flower_color, String foliage_color) {
+    public Details(String scientific_name, String duration, String flower_conspicuous, String fruit_seed_color, String fruit_seed_conspicuous, String growth_form, String growth_rate, String lifespan, String resprout_ability, String shape_and_orientation, String toxicity, String drought_tolerance, String moisture_use, Float ph_minimum, Float ph_maximum, String shade_tolerance, String bloom_period, String propagated_by_bare_root, String propagated_by_bulb, String propagated_by_container, String propagated_by_corm, String propagated_by_cuttings, String propagated_by_seed, String propagated_by_sod, String propagated_by_sprigs, String propagated_by_tubers, String water_needs, String climate_zones, String sunlight, String soil_type, String potting_suggestion, String maintenance, String abcission, String height_ranges, String spread_ranges, String perfume, String edible, String bird_attracting, String bird_attractant, String bore_water_tolerance, String frost_tolerance, String greywater_tolerance, String butterfly_attracting, String butterfly_type, String notes, String type, String common_name, String flower_color, String foliage_color, String image_url) {
         this.scientific_name = scientific_name;
         this.duration = duration;
         this.flower_conspicuous = flower_conspicuous;
@@ -101,6 +102,7 @@ public class Details {
         this.common_name = common_name;
         this.flower_color = flower_color;
         this.foliage_color = foliage_color;
+        this.image_url = image_url;
     }
 
     public Details() {

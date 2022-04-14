@@ -3,11 +3,16 @@ package com.example.leafdex;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,25 +30,29 @@ public class Encyclopedia extends AppCompatActivity {
     ExpandableListView listView;
     List<String> listDataHeader;
     HashMap<String,List<String>> listHashMap;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_encyclopedia);
 
-        listView = findViewById(R.id.expandable_list_view);
-        initializeData();
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listHashMap);
-        listView.setAdapter(listAdapter);
-
+        //from camera fragment
         Intent intent = getIntent();
-        String imageURL = intent.getStringExtra("imageURL");
         String comName = intent.getStringExtra("comName");
         String sciName = intent.getStringExtra("sciName");
-        Log.d("TAG", "FROM CAMERA FRAGMENT: " + imageURL);
-        Log.d("TAG", "FROM CAMERA FRAGMENT: " + comName);
-        Log.d("TAG", "FROM CAMERA FRAGMENT: " + sciName);
 
+        ImageView enc_image = findViewById(R.id.enc_image);
+        TextView enc_comName = findViewById(R.id.enc_comName);
+        TextView enc_sciName = findViewById(R.id.enc_sciName);
+        Button enc_back = findViewById(R.id.enc_back);
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.show();
+        mProgressDialog.setCancelable(false);
+
+        //from firebase
         reference = FirebaseDatabase.getInstance().getReference("Plants");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -51,11 +60,21 @@ public class Encyclopedia extends AppCompatActivity {
                 for(DataSnapshot datasnapshot : snapshot.getChildren()) {
                     Details details = datasnapshot.getValue(Details.class);
                     if(details.scientific_name.toLowerCase().matches(sciName.toLowerCase()  + "(.*)")) {
-                        Log.d("TAG", "FROM PLANT DATABASE: " + details.common_name);
-                        Log.d("TAG", "FROM PLANT DATABASE: " + details.scientific_name);
-                        Log.d("TAG", "FROM PLANT DATABASE: " + details.toxicity);
+                        Glide.with(Encyclopedia.this).load(details.image_url).into(enc_image);
+                        enc_comName.setText("Common name: " + comName);
+                        enc_sciName.setText("Scientific name: " + sciName);
+
+                        listView = findViewById(R.id.expandable_list_view);
+                        initializeData(details);
+                        listAdapter = new ExpandableListAdapter(Encyclopedia.this, listDataHeader, listHashMap);
+                        listView.setAdapter(listAdapter);
                     }
                 }
+                enc_back.setVisibility(View.VISIBLE);
+                enc_image.setVisibility(View.VISIBLE);
+                enc_comName.setVisibility(View.VISIBLE);
+                enc_sciName.setVisibility(View.VISIBLE);
+                mProgressDialog.dismiss();
             }
 
             @Override
@@ -63,9 +82,16 @@ public class Encyclopedia extends AppCompatActivity {
 
             }
         });
+
+        enc_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
-    private void initializeData() {
+    private void initializeData(Details details) {
         listDataHeader= new ArrayList<>();
         listHashMap = new HashMap<>();
 
@@ -75,45 +101,45 @@ public class Encyclopedia extends AppCompatActivity {
 
         //CHILD LIST
         List<String> plant_chars= new ArrayList<>();
-        plant_chars.add("Toxicity:");
-        plant_chars.add("Type:");
-        plant_chars.add("Lifespan:");
-        plant_chars.add("Foliage Color:");
-        plant_chars.add("Flower Color:");
-        plant_chars.add("Flower Conspicuous:");
-        plant_chars.add("Bloom Period:");
-        plant_chars.add("Fruit/Seed Color:");
-        plant_chars.add("Fruit Seed Conspicuous:");
-        plant_chars.add("Growth Form:");
-        plant_chars.add("Growth Rate:");
-        plant_chars.add("Shape and Orientation:");
-        plant_chars.add("Duration:");
-        plant_chars.add("Abscission:");
-        plant_chars.add("Resprout Ability:");
-        plant_chars.add("Height Ranges:");
-        plant_chars.add("Spread Ranges:");
-        plant_chars.add("Butterfly Type:");
-        plant_chars.add("Climate Zones:");
-        plant_chars.add("Perfume/Fragrance:");
-        plant_chars.add("Edible:");
-        plant_chars.add("Bird Attractant:");
-        plant_chars.add("Shade Tolerance:");
-        plant_chars.add("Bore Water Tolerance:");
-        plant_chars.add("Drought Tolerance:");
-        plant_chars.add("Frost Tolerance:");
-        plant_chars.add("Greywater Tolerance:");
+        plant_chars.add("Toxicity: " + details.toxicity);
+        plant_chars.add("Type: " + details.type);
+        plant_chars.add("Lifespan: " + details.lifespan);
+        plant_chars.add("Foliage Color: " + details.foliage_color);
+        plant_chars.add("Flower Color: " + details.flower_color);
+        plant_chars.add("Flower Conspicuous: ");
+        plant_chars.add("Bloom Period: ");
+        plant_chars.add("Fruit/Seed Color: ");
+        plant_chars.add("Fruit Seed Conspicuous: ");
+        plant_chars.add("Growth Form: ");
+        plant_chars.add("Growth Rate: ");
+        plant_chars.add("Shape and Orientation: ");
+        plant_chars.add("Duration: ");
+        plant_chars.add("Abscission: ");
+        plant_chars.add("Resprout Ability: ");
+        plant_chars.add("Height Ranges: ");
+        plant_chars.add("Spread Ranges: ");
+        plant_chars.add("Butterfly Type: ");
+        plant_chars.add("Climate Zones: ");
+        plant_chars.add("Perfume/Fragrance: ");
+        plant_chars.add("Edible: ");
+        plant_chars.add("Bird Attractant: ");
+        plant_chars.add("Shade Tolerance: ");
+        plant_chars.add("Bore Water Tolerance: ");
+        plant_chars.add("Drought Tolerance: ");
+        plant_chars.add("Frost Tolerance: ");
+        plant_chars.add("Greywater Tolerance: ");
 
         List<String> plant_care_info= new ArrayList<>();
-        plant_care_info.add("Water Needs:");
-        plant_care_info.add("Sunlight:");
-        plant_care_info.add("Soil Type:");
-        plant_care_info.add("Potting Suggestion:");
-        plant_care_info.add("Maintenance:");
-        plant_care_info.add("Moisture Use:");
-        plant_care_info.add("Water Needs:");
-        plant_care_info.add("Soil pH maximum");
-        plant_care_info.add("Soil ph minimum:");
-        plant_care_info.add("Propagated by:");
+        plant_care_info.add("Water Needs: ");
+        plant_care_info.add("Sunlight: ");
+        plant_care_info.add("Soil Type: ");
+        plant_care_info.add("Potting Suggestion: ");
+        plant_care_info.add("Maintenance: ");
+        plant_care_info.add("Moisture Use: ");
+        plant_care_info.add("Water Needs: ");
+        plant_care_info.add("Soil pH maximum: ");
+        plant_care_info.add("Soil ph minimum: ");
+        plant_care_info.add("Propagated by: ");
 
         listHashMap.put(listDataHeader.get(0), plant_chars);
         listHashMap.put(listDataHeader.get(1), plant_care_info);
