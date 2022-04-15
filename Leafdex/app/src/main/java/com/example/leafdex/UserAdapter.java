@@ -1,6 +1,7 @@
 package com.example.leafdex;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,6 +100,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                             } else {
                                 last_chat = mUser.get(position).fname + ": " + chat.getMessage().substring(0, 19) + "...";
                             }
+                        }
+                        if(chat.getSeen().equals("false")) {
+                            user_last_chat.setTypeface(null, Typeface.BOLD);
+                        } else {
+                            user_last_chat.setTypeface(null, Typeface.NORMAL);
                         }
                     }
                     else if(chat.getReceiver().equals(userID) && chat.getSender().equals(user.getUid())) {

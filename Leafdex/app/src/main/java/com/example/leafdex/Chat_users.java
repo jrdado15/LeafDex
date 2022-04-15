@@ -60,8 +60,8 @@ public class Chat_users extends AppCompatActivity {
     private RecyclerView recyclerView;
 
     private DatabaseReference reference;
+    ValueEventListener seenListener;
 
-    // CAMERA AND GALLERY
     Intent chooserIntent;
     ProgressDialog mProgressDialog;
 
@@ -77,7 +77,6 @@ public class Chat_users extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private String downloadURL;
-    // CAMERA AND GALLERY
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,15 +110,14 @@ public class Chat_users extends AppCompatActivity {
 
         posterName_TV.setText(posterName);
         readChats(userID, posterID); // display chat
+        seenChats(userID, posterID); // seen chat
 
-        // CAMERA AND GALLERY
         camgal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 choosePicture();
             }
         });
-        // CAMERA AND GALLERY
 
         // if send button is clicked
         send.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +135,7 @@ public class Chat_users extends AppCompatActivity {
                     hashMap.put("sender", userID);
                     hashMap.put("receiver", posterID);
                     hashMap.put("message", message);
+                    hashMap.put("seen", "false");
                     reference.child("Chats").push().setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -177,27 +176,36 @@ public class Chat_users extends AppCompatActivity {
         });
     }
 
-    /*
-    private void status(String status) {
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("status", status);
-        reference.child("Users").child(userID).updateChildren(hashMap);
-    }
+    private void seenChats(final String userID, final String posterID) {
+        seenListener = reference.child("Chats").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int i = 0;
+                for(DataSnapshot datasnapshot : snapshot.getChildren()) {
+                    i = i + 1;
+                    Chat chat = datasnapshot.getValue(Chat.class);
+                    if(chat.getReceiver().equals(userID) && chat.getSender().equals(posterID) &&
+                            i == snapshot.getChildrenCount()) {
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("seen", "true");
+                        datasnapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        status("online");
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        status("offline");
+        reference.child("Chats").removeEventListener(seenListener);
     }
-    */
 
-    // CAMERA AND GALLERY
     private void choosePicture() {
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -272,6 +280,7 @@ public class Chat_users extends AppCompatActivity {
                                 hashMap.put("sender", userID);
                                 hashMap.put("receiver", posterID);
                                 hashMap.put("message", downloadURL);
+                                hashMap.put("seen", "false");
 
                                 reference.child("Chats").push().setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -332,5 +341,4 @@ public class Chat_users extends AppCompatActivity {
             return false;
         }
     }
-    // CAMERA AND GALLERY
 }

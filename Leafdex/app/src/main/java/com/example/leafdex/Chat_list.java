@@ -128,8 +128,7 @@ public class Chat_list extends AppCompatActivity {
         mUser = new ArrayList<>();
         reference = FirebaseDatabase.getInstance().getReference("Users");
         for(int i = 0; i < userList.size(); i++) {
-            int finalI = i;
-            reference.child(userList.get(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+            reference.child(userList.get(i)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     User user = snapshot.getValue(User.class);
