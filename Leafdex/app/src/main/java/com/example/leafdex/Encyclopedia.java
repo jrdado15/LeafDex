@@ -95,51 +95,102 @@ public class Encyclopedia extends AppCompatActivity {
         listDataHeader= new ArrayList<>();
         listHashMap = new HashMap<>();
 
-        //HEADER LIST
+        //header list
         listDataHeader.add("Characteristics");
         listDataHeader.add("Care Tips");
 
-        //CHILD LIST
+        //child list
         List<String> plant_chars= new ArrayList<>();
-        plant_chars.add("Toxicity: " + details.toxicity);
-        plant_chars.add("Type: " + details.type);
-        plant_chars.add("Lifespan: " + details.lifespan);
-        plant_chars.add("Foliage Color: " + details.foliage_color);
-        plant_chars.add("Flower Color: " + details.flower_color);
-        plant_chars.add("Flower Conspicuous: " + details.flower_conspicuous);
-        plant_chars.add("Bloom Period: " + details.bloom_period);
-        plant_chars.add("Fruit Seed Color: " + details.fruit_seed_color);
-        plant_chars.add("Fruit Seed Conspicuous: " + details.fruit_seed_conspicuous);
-        plant_chars.add("Growth Form: " + details.growth_form);
-        plant_chars.add("Growth Rate: " + details.growth_rate);
-        plant_chars.add("Shape and Orientation: " + details.shape_and_orientation);
-        plant_chars.add("Duration: " + details.duration);
-        plant_chars.add("Abscission: " + details.abcission);
-        plant_chars.add("Resprout Ability: " + details.resprout_ability);
-        plant_chars.add("Height Ranges: " + details.height_ranges);
-        plant_chars.add("Spread Ranges: " + details.spread_ranges);
-        plant_chars.add("Butterfly Type: " + details.butterfly_type);
-        plant_chars.add("Climate Zones: " + details.climate_zones);
-        plant_chars.add("Perfume/Fragrance: " + details.perfume);
-        plant_chars.add("Edible: " + details.edible);
-        plant_chars.add("Bird Attractant: " + details.bird_attractant);
-        plant_chars.add("Shade Tolerance: " + details.shade_tolerance);
-        plant_chars.add("Bore Water Tolerance: " + details.bore_water_tolerance);
-        plant_chars.add("Drought Tolerance: " + details.drought_tolerance);
-        plant_chars.add("Frost Tolerance: " + details.frost_tolerance);
-        plant_chars.add("Greywater Tolerance: " + details.greywater_tolerance);
+        if(!details.toxicity.isEmpty())
+            plant_chars.add("Toxicity: " + details.toxicity);
+        if(!details.type.isEmpty())
+            plant_chars.add("Type: " + details.type);
+        if(!details.lifespan.isEmpty())
+            plant_chars.add("Lifespan: " + details.lifespan);
+        if(!details.foliage_color.isEmpty())
+            plant_chars.add("Foliage Color: " + details.foliage_color);
+        if(!details.flower_color.isEmpty())
+            plant_chars.add("Flower Color: " + details.flower_color);
+        if(!details.flower_conspicuous.isEmpty())
+            plant_chars.add("Flower Conspicuous: " + details.flower_conspicuous);
+        if(!details.bloom_period.isEmpty())
+            plant_chars.add("Bloom Period: " + details.bloom_period);
+        if(!details.fruit_seed_color.isEmpty())
+            plant_chars.add("Fruit Seed Color: " + details.fruit_seed_color);
+        if(!details.fruit_seed_conspicuous.isEmpty())
+            plant_chars.add("Fruit Seed Conspicuous: " + details.fruit_seed_conspicuous);
+        if(!details.growth_form.isEmpty())
+            plant_chars.add("Growth Form: " + details.growth_form);
+        if(!details.growth_rate.isEmpty())
+            plant_chars.add("Growth Rate: " + details.growth_rate);
+        if(!details.shape_and_orientation.isEmpty())
+            plant_chars.add("Shape and Orientation: " + details.shape_and_orientation);
+        if(!details.duration.isEmpty())
+            plant_chars.add("Duration: " + details.duration);
+        if(!details.abcission.isEmpty())
+            plant_chars.add("Abscission: " + details.abcission);
+        if(!details.resprout_ability.isEmpty())
+            plant_chars.add("Resprout Ability: " + details.resprout_ability);
+        if(!details.height_ranges.isEmpty())
+            plant_chars.add("Height Ranges: " + details.height_ranges);
+        if(!details.spread_ranges.isEmpty())
+            plant_chars.add("Spread Ranges: " + details.spread_ranges);
+        if(!details.butterfly_type.isEmpty())
+            plant_chars.add("Butterfly Type: " + details.butterfly_type);
+        if(!details.climate_zones.isEmpty())
+            plant_chars.add("Climate Zones: " + details.climate_zones);
+        if(!details.perfume.isEmpty())
+            plant_chars.add("Perfume/Fragrance: " + details.perfume);
+        if(!details.edible.isEmpty())
+            plant_chars.add("Edible: " + details.edible);
+        if(!details.bird_attractant.isEmpty())
+            plant_chars.add("Bird Attractant: " + details.bird_attractant);
+        if(!details.shade_tolerance.isEmpty())
+            plant_chars.add("Shade Tolerance: " + details.shade_tolerance);
+        if(!details.bore_water_tolerance.isEmpty())
+            plant_chars.add("Bore Water Tolerance: " + details.bore_water_tolerance);
+        if(!details.drought_tolerance.isEmpty())
+            plant_chars.add("Drought Tolerance: " + details.drought_tolerance);
+        if(!details.frost_tolerance.isEmpty())
+            plant_chars.add("Frost Tolerance: " + details.frost_tolerance);
+        if(!details.greywater_tolerance.isEmpty())
+            plant_chars.add("Greywater Tolerance: " + details.greywater_tolerance);
 
         List<String> plant_care_info= new ArrayList<>();
-        plant_care_info.add("Water Needs: " + details.water_needs);
-        plant_care_info.add("Sunlight: " + details.sunlight);
-        plant_care_info.add("Soil Type: " + details.soil_type);
-        plant_care_info.add("Potting Suggestion: " + details.potting_suggestion);
-        plant_care_info.add("Maintenance: " + details.maintenance);
-        plant_care_info.add("Moisture Use: " + details.moisture_use);
-        plant_care_info.add("Water Needs: " + details.water_needs);
+        if(!details.water_needs.isEmpty())
+            plant_care_info.add("Water Needs: " + details.water_needs);
+        if(!details.sunlight.isEmpty())
+            plant_care_info.add("Sunlight: " + details.sunlight);
+        if(!details.soil_type.isEmpty())
+            plant_care_info.add("Soil Type: " + details.soil_type);
+        if(!details.potting_suggestion.isEmpty())
+            plant_care_info.add("Potting Suggestion: " + details.potting_suggestion);
+        if(!details.maintenance.isEmpty())
+            plant_care_info.add("Maintenance: " + details.maintenance);
+        if(!details.moisture_use.isEmpty())
+            plant_care_info.add("Moisture Use: " + details.moisture_use);
+        if(!details.water_needs.isEmpty())
+            plant_care_info.add("Water Needs: " + details.water_needs);
         plant_care_info.add("Soil pH maximum: " + details.ph_maximum);
         plant_care_info.add("Soil ph minimum: " + details.ph_minimum);
-        plant_care_info.add("Propagated by: "); //IKAW NA BAHALA MAG-IF DITO @JOSEPH
+        if(details.propagated_by_bare_root.equals("Yes"))
+            plant_care_info.add("Propagated by bare root: Yes");
+        if(details.propagated_by_bulb.equals("Yes"))
+            plant_care_info.add("Propagated by bulb: Yes");
+        if(details.propagated_by_container.equals("yes"))
+            plant_care_info.add("Propagated by container: Yes");
+        if(details.propagated_by_corm.equals("Yes"))
+            plant_care_info.add("Propagated by corm: Yes");
+        if(details.propagated_by_cuttings.equals("Yes"))
+            plant_care_info.add("Propagated by cuttings: Yes");
+        if(details.propagated_by_seed.equals("Yes"))
+            plant_care_info.add("Propagated by seed: Yes");
+        if(details.propagated_by_sod.equals("Yes"))
+            plant_care_info.add("Propagated by sod: Yes");
+        if(details.propagated_by_sprigs.equals("Yes"))
+            plant_care_info.add("Propagated by sprigs: Yes");
+        if(details.propagated_by_tubers.equals("Yes"))
+            plant_care_info.add("Propagated by tubers: Yes");
 
         listHashMap.put(listDataHeader.get(0), plant_chars);
         listHashMap.put(listDataHeader.get(1), plant_care_info);
