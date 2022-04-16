@@ -131,7 +131,7 @@ public class saved_posts extends Fragment {
                                             }
                                         }
 
-                                        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false));
+                                        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false));
                                         mRecyclerView.setHasFixedSize(true);
                                         mRecyclerView.setAdapter(savedPostsAdapter);
                                     }

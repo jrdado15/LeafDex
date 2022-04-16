@@ -13,4 +13,9 @@
         <item name="android:textColorSecondary">@color/main_green</item>
     </style>
 
+    <style name="roundedCorners" parent="">
+        <item name="cornerSize">5%</item>
+
+    </style>
+
 </resources>
