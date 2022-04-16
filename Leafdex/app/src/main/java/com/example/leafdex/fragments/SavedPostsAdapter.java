@@ -43,7 +43,7 @@ public class SavedPostsAdapter extends RecyclerView.Adapter<SavedPostsAdapter.Sa
     @Override
     public void onBindViewHolder(@NonNull SavedPostsAdapter.SavedPostsViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.saved_post_item_textView.setText(titles.get(position));
-        //holder.saved_post_item_price_textView.setText("₱" + prices.get(position));
+        holder.saved_post_item_price.setText("₱" + prices.get(position));
         Glide.with(context).load(images.get(position)).into(holder.saved_post_item_image);
         holder.position = position;
     }
@@ -59,14 +59,14 @@ public class SavedPostsAdapter extends RecyclerView.Adapter<SavedPostsAdapter.Sa
 
     public static class SavedPostsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView saved_post_item_textView;
-        //TextView saved_post_item_price_textView;
+        TextView saved_post_item_price;
         ImageView saved_post_item_image;
         int position;
         public SavedPostsViewHolder(@NonNull View itemView) {
             super(itemView);
 
             saved_post_item_textView = itemView.findViewById(R.id.saved_post_item_textView);
-            //saved_post_item_price_textView = itemView.findViewById(R.id.saved_post_item_price_textView);
+            saved_post_item_price = itemView.findViewById(R.id.saved_post_item_price);
             saved_post_item_image = itemView.findViewById(R.id.saved_post_item_image);
 
             itemView.setOnClickListener(this);

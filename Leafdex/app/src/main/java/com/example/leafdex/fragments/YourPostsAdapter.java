@@ -60,8 +60,7 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
 
     @Override
     public void onBindViewHolder(@NonNull YourPostsAdapter.YourPostsViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.user_post_item_textView.setText(titles.get(position));
-        //holder.user_post_item_price_textView.setText("₱" + prices.get(position));
+        holder.user_post_item_textView.setText(titles.get(position) + "\n\n₱" + prices.get(position));
         Glide.with(context).load(images.get(position)).into(holder.user_post_item_image);
         holder.position = position;
     }
@@ -77,7 +76,6 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
 
     public static class YourPostsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView user_post_item_textView;
-        //TextView user_post_item_price_textView;
         ImageView user_post_item_image;
         Button user_post_item_button2, user_post_item_button4;
         int position;
@@ -85,7 +83,6 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
             super(itemView);
 
             user_post_item_textView = itemView.findViewById(R.id.user_post_item_textView);
-            //user_post_item_price_textView = itemView.findViewById(R.id.user_post_item_price_textView);
             user_post_item_image = itemView.findViewById(R.id.user_post_item_image);
             user_post_item_button2 = itemView.findViewById(R.id.button2);
             user_post_item_button4 = itemView.findViewById(R.id.button4);

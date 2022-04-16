@@ -2,10 +2,13 @@ package com.example.leafdex.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -52,7 +55,8 @@ public class home extends Fragment {
     private List<String> mImages, search_mImages;
     private List<String> mPrices, search_mPrices;
     private FeedAdapter feedAdapter;
-    private FeedAdapter.FeedAdapterViewClickListener listener;
+    private FeedAdapter.FeedAdapterViewClickListener listener, search_listener;
+    private List<Integer> search_position;
 
     public home() {
         // Required empty public constructor
@@ -141,7 +145,7 @@ public class home extends Fragment {
             }
         });
 
-        /*EditText search_items = view.findViewById(R.id.search_items);
+        EditText search_items = view.findViewById(R.id.search_items);
         search_items.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -157,7 +161,7 @@ public class home extends Fragment {
             public void afterTextChanged(Editable editable) {
 
             }
-        });*/
+        });
 
         return view;
     }
@@ -172,20 +176,31 @@ public class home extends Fragment {
                 getActivity().startActivity(intent);
             }
         };
+        search_listener = new FeedAdapter.FeedAdapterViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(getActivity().getBaseContext(), Product_info.class);
+                intent.putExtra("product_key", posts.get(search_position.get(position)).get(0));
+                intent.putExtra("signal", "home");
+                getActivity().startActivity(intent);
+            }
+        };
     }
 
-    /*private void searchItems(String s) {
+    private void searchItems(String s) {
         search_productList = new ArrayList<>();
         search_mImages = new ArrayList<>();
         search_mPrices = new ArrayList<>();
+        search_position = new ArrayList<>();
         for(int i = 0; i < productList.size(); i++) {
             if(productList.get(i).getProduct().toLowerCase().matches(s.toLowerCase() + "(.*)")) {
                 search_productList.add(productList.get(i));
                 search_mImages.add(mImages.get(i));
                 search_mPrices.add(mPrices.get(i));
+                search_position.add(i);
             }
         }
-        feedAdapter = new FeedAdapter(getActivity(), search_productList, search_mImages, search_mPrices, listener);
+        feedAdapter = new FeedAdapter(getActivity(), search_productList, search_mImages, search_mPrices, search_listener);
         mRecyclerView.setAdapter(feedAdapter);
-    }*/
+    }
 }

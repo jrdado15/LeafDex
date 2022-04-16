@@ -34,7 +34,7 @@
         android:textColor="@color/main_green"
         android:padding="5dp"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginVertical="5dp"
         android:layout_below="@+id/toolbar_chat_list"/>
 
     <androidx.recyclerview.widget.RecyclerView
