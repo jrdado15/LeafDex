@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".Register">
 
     <androidx.constraintlayout.widget.Guideline
@@ -91,27 +93,15 @@
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:cardBackgroundColor="@color/light_green"
-        app:cardCornerRadius="200dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageView"
+        android:background="@drawable/ic_baseline_add_circle_24"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline11"
         app:layout_constraintEnd_toStartOf="@+id/guideline19"
         app:layout_constraintStart_toStartOf="@+id/guideline18"
-        app:layout_constraintTop_toTopOf="@+id/guideline10">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:background="@drawable/ic_baseline_add_circle_24"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-           />
-    </androidx.cardview.widget.CardView>
-
+        app:layout_constraintTop_toTopOf="@+id/guideline10"/>
 
     <EditText
         android:id="@+id/input_first_name"
