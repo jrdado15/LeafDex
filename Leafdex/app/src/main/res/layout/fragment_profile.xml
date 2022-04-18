@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.85" />
+            app:layout_constraintGuide_percent="0.95" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline7"
@@ -26,6 +26,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent=".05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline42"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline43"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.7" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline8"
@@ -46,28 +60,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.2" />
+            app:layout_constraintGuide_percent="0.1" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.37" />
+            app:layout_constraintGuide_percent="0.35" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.65" />
+            app:layout_constraintGuide_percent="0.7" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.75" />
+            app:layout_constraintGuide_percent="0.83" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline14"
@@ -90,14 +104,18 @@
             app:layout_constraintHorizontal_bias="0.505"
             app:layout_constraintStart_toStartOf="@+id/guideline7" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView"
-            android:layout_width="105dp"
-            android:layout_height="105dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/ic_baseline_add_box_24"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toTopOf="@+id/guideline11"
-            app:layout_constraintEnd_toStartOf="@+id/guideline8"
-            app:layout_constraintStart_toStartOf="@+id/guideline7"
-            app:layout_constraintTop_toTopOf="@+id/guideline10"/>
+            app:layout_constraintEnd_toStartOf="@+id/guideline43"
+            app:layout_constraintStart_toStartOf="@+id/guideline42"
+            app:layout_constraintTop_toTopOf="@+id/guideline10"
+            app:layout_constraintVertical_bias=".5"
+            app:shapeAppearanceOverlay="@style/circleCorner" />
 
         <EditText
             android:id="@+id/input_first_name"
@@ -112,6 +130,7 @@
             android:hint="@string/fn"
             android:inputType="textPersonName"
             android:paddingStart="15sp"
+            android:paddingEnd="15sp"
             android:textColorHint="@color/white"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/guideline14"
@@ -132,6 +151,7 @@
             android:hint="@string/ln"
             android:inputType="textPersonName"
             android:paddingStart="15sp"
+            android:paddingEnd="15sp"
             android:textColorHint="@color/white"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/guideline14"
@@ -151,6 +171,7 @@
             android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:paddingStart="15sp"
+            android:paddingEnd="15sp"
             android:textColorHint="@color/white"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/input_phone_number"
@@ -173,6 +194,7 @@
             android:hint="@string/contact_no"
             android:inputType="number"
             android:paddingStart="15sp"
+            android:paddingEnd="15sp"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/input_birthDate"
@@ -197,6 +219,7 @@
             android:inputType="date"
             android:textColor="@color/white"
             android:paddingStart="15sp"
+            android:paddingEnd="15sp"
             android:textColorHint="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/guideline13"
             app:layout_constraintEnd_toStartOf="@+id/guideline8"

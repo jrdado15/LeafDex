@@ -42,30 +42,32 @@
 
             <TextView
                 android:id="@+id/user_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_gravity="center"
+                android:layout_gravity="start"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:textAlignment="center"
+                android:layout_marginEnd="8dp"
                 android:textColor="@color/main_green"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/user_last_chat"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline40"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <TextView
                 android:id="@+id/user_last_chat"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_gravity="center"
+                android:layout_gravity="start"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
                 android:maxLines="1"
-                android:textAlignment="center"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline40"
                 app:layout_constraintTop_toBottomOf="@+id/user_name" />
 
