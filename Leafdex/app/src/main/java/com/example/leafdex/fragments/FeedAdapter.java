@@ -45,7 +45,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         String product_name = productsList.get(position).getProduct();
         holder.feed_textView.setText(product_name);
         Glide.with(context).load(images.get(position)).into(holder.feed_imageView);
-        holder.feed_price_textView.setText("₱" + prices.get(position));
+        //holder.feed_price_textView.setText("₱" + prices.get(position));
+        holder.feed_price_textView.setText(prices.get(position));
     }
 
     @Override
