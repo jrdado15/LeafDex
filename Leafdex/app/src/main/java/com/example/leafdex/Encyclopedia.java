@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
@@ -57,6 +58,8 @@ public class Encyclopedia extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                enc_comName.setText("DATA UNAVAILABLE");
+                enc_sciName.setText("");
                 for(DataSnapshot datasnapshot : snapshot.getChildren()) {
                     Details details = datasnapshot.getValue(Details.class);
                     if(details.scientific_name.toLowerCase().matches(sciName.toLowerCase()  + "(.*)")) {

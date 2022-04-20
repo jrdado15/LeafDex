@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.leafdex.Encyclopedia;
-import com.example.leafdex.Product;
 import com.example.leafdex.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,12 +53,11 @@ public class encyclopedia extends Fragment {
     private DatabaseReference reference;
 
     private RecyclerView mRecyclerView;
-    private ArrayList<Product> encycList, search_encycList;
     private List<String> mImages, search_mImages;
-    private List<String> mComName;
+    private List<String> mComName, search_mComName;
     private List<String> mSciName, search_mSciName;
-    private FeedAdapter feedAdapter;
-    private FeedAdapter.FeedAdapterViewClickListener listener, search_listener;
+    private EncycAdapter encycAdapter;
+    private EncycAdapter.EncycAdapterViewClickListener listener, search_listener;
     private List<Integer> search_position;
     private ProgressDialog mProgressDialog;
 
@@ -104,21 +102,20 @@ public class encyclopedia extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_encyclopedia, container, false);
         Bundle bundle = getArguments();
-        encycList = new ArrayList<>();
-        mImages = new ArrayList<>();
         mComName = new ArrayList<>();
         mSciName = new ArrayList<>();
-        mRecyclerView = view.findViewById(R.id.rv_feeds);
+        mImages = new ArrayList<>();
+        mRecyclerView = view.findViewById(R.id.enc_rv_feeds);
         setOnClickListener();
-        feedAdapter = new FeedAdapter(getActivity(), encycList, mImages, mSciName, listener);
+        encycAdapter = new EncycAdapter(getActivity(), mComName, mSciName, mImages, listener);
 
         plants = new ArrayList<ArrayList<String>>();
         Query query = reference.child("Plants");//.limitToFirst(10);
 
         mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setMessage("Fetching data from database...");
+        mProgressDialog.setMessage("Fetching...");
         mProgressDialog.setCancelable(false);
         mProgressDialog.show();
 
@@ -128,7 +125,6 @@ public class encyclopedia extends Fragment {
                 if(snapshot != null){
                     mProgressDialog.dismiss();
 
-                    //Retrieval of data
                     for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
                         ArrayList<String> plant = new ArrayList<String>();
                         plant.add(childDataSnapshot.getKey()); //Plant key
@@ -137,11 +133,9 @@ public class encyclopedia extends Fragment {
                         plant.add(childDataSnapshot.child("image_url").getValue().toString()); //Plant Image URL
                         plants.add(plant);
                     }
-                    //Collections.reverse(plants);
-                    //Addition of posts into recycler view
+
                     for(ArrayList<String> childPosts : plants){
                         if(!childPosts.isEmpty()){
-                            encycList.add(new Product(childPosts.get(1)));
                             mComName.add(childPosts.get(1));
                             mSciName.add(childPosts.get(2));
                             mImages.add(childPosts.get(3));
@@ -150,7 +144,7 @@ public class encyclopedia extends Fragment {
                     mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false));
                     mRecyclerView.setHasFixedSize(true);
                     mLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                    mRecyclerView.setAdapter(feedAdapter);
+                    mRecyclerView.setAdapter(encycAdapter);
                     /*
                     mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
@@ -183,7 +177,7 @@ public class encyclopedia extends Fragment {
 
         });
 
-        EditText search_items = view.findViewById(R.id.search_items);
+        EditText search_items = view.findViewById(R.id.enc_search_items);
         search_items.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -205,7 +199,7 @@ public class encyclopedia extends Fragment {
     }
 
     private void setOnClickListener() {
-        listener = new FeedAdapter.FeedAdapterViewClickListener() {
+        listener = new EncycAdapter.EncycAdapterViewClickListener() {
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getActivity().getBaseContext(), Encyclopedia.class);
@@ -214,7 +208,7 @@ public class encyclopedia extends Fragment {
                 getActivity().startActivity(intent);
             }
         };
-        search_listener = new FeedAdapter.FeedAdapterViewClickListener() {
+        search_listener = new EncycAdapter.EncycAdapterViewClickListener() {
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getActivity().getBaseContext(), Encyclopedia.class);
@@ -226,19 +220,19 @@ public class encyclopedia extends Fragment {
     }
 
     private void searchItems(String s) {
-        search_encycList = new ArrayList<>();
-        search_mImages = new ArrayList<>();
+        search_mComName = new ArrayList<>();
         search_mSciName = new ArrayList<>();
+        search_mImages = new ArrayList<>();
         search_position = new ArrayList<>();
-        for(int i = 0; i < encycList.size(); i++) {
-            if(encycList.get(i).getProduct().toLowerCase().matches(s.toLowerCase() + "(.*)")) {
-                search_encycList.add(encycList.get(i));
-                search_mImages.add(mImages.get(i));
+        for(int i = 0; i < mComName.size(); i++) {
+            if(mComName.get(i).toLowerCase().matches(s.toLowerCase() + "(.*)")) {
+                search_mComName.add(mComName.get(i));
                 search_mSciName.add(mSciName.get(i));
+                search_mImages.add(mImages.get(i));
                 search_position.add(i);
             }
         }
-        feedAdapter = new FeedAdapter(getActivity(), search_encycList, search_mImages, search_mSciName, search_listener);
-        mRecyclerView.setAdapter(feedAdapter);
+        encycAdapter = new EncycAdapter(getActivity(), search_mComName, search_mSciName, search_mImages, search_listener);
+        mRecyclerView.setAdapter(encycAdapter);
     }
 }

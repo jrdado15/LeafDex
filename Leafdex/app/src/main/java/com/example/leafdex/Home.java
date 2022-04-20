@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -22,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -52,7 +54,7 @@ import java.io.File;
 public class Home extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
-    private DatabaseReference userReference;
+    private DatabaseReference userReference, chatReference;
 
     ActivityHomeBinding binding;
     DrawerLayout drawerLayout;
@@ -60,6 +62,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     NavigationView navigationView;
     ImageView messages;
     Intent chooserIntent;
+    String currentFragment;
 
     private Uri plantPicUriFromGallery;
     private Uri plantPicUriFromCamera;
@@ -89,11 +92,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        userReference = FirebaseDatabase.getInstance().getReference("Users"); //Users Parent
+        userReference = FirebaseDatabase.getInstance().getReference("Users");
+        chatReference = FirebaseDatabase.getInstance().getReference("Chats");
         userID = user.getUid();
 
         setUpToolbar();
@@ -104,19 +109,31 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 switch (menuItem.getItemId())
                 {
                     case  R.id.nav_edit_profile:
-                        replaceFragment(new profile(Home.this));
+                        if(!currentFragment.equals("profile")) {
+                            replaceFragment(new profile(Home.this));
+                            currentFragment = "profile";
+                        }
                         drawerLayout.closeDrawers();
                         break;
                     case  R.id.nav_change_password:
-                        replaceFragment(new change_password(Home.this));
+                        if(!currentFragment.equals("change_password")) {
+                            replaceFragment(new change_password(Home.this));
+                            currentFragment = "change_password";
+                        }
                         drawerLayout.closeDrawers();
                         break;
                     case  R.id.nav_your_posts:
-                        replaceFragment(new your_posts());
+                        if(!currentFragment.equals("your_posts")) {
+                            replaceFragment(new your_posts());
+                            currentFragment = "your_posts";
+                        }
                         drawerLayout.closeDrawers();
                         break;
                     case  R.id.nav_saved_posts:
-                        replaceFragment(new saved_posts());
+                        if(!currentFragment.equals("saved_posts")) {
+                            replaceFragment(new saved_posts());
+                            currentFragment = "saved_posts";
+                        }
                         drawerLayout.closeDrawers();
                         break;
                     case  R.id.nav_logout:
@@ -169,22 +186,47 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch(item.getItemId()){
                 case R.id.nav_bar_home:
-                    replaceFragment(new home());
+                    if(!currentFragment.equals("home")) {
+                        replaceFragment(new home());
+                        currentFragment = "home";
+                    }
                     break;
                 case R.id.nav_bar_camera:
                     choosePicture();
                     break;
                 case R.id.nav_bar_plantEncyclopedia:
-                    replaceFragment(new encyclopedia());
+                    if(!currentFragment.equals("encyclopedia")) {
+                        replaceFragment(new encyclopedia());
+                        currentFragment = "encyclopedia";
+                    }
                     break;
             }
             return true;
         });
 
+        /*chatReference.orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot datasnapshot : snapshot.getChildren()) {
+                    Chat chat = datasnapshot.getValue(Chat.class);
+                    if (chat.getReceiver().equals(userID) && !chat.getMessage().isEmpty()) {
+                        Log.d("EHE", chat.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });*/
+
         replaceFragment(new home());
+        currentFragment = "home";
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             replaceFragment(new saved_posts());
+            currentFragment = "saved_posts";
         }
     }
 
@@ -200,7 +242,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_bar_framelayout, fragment );
+        fragmentTransaction.replace(R.id.nav_bar_framelayout, fragment);
         fragmentTransaction.commit();
     }
 
@@ -257,6 +299,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     replaceFragment(new camera(mProgressDialog));
+                                    currentFragment = "camera";
                                 }
                             });
                         }

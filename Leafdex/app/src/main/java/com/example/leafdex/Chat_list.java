@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -44,6 +45,14 @@ public class Chat_list extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
+
+        ImageButton back = findViewById(R.id.chatListBackButton);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         setOnClickListener();
         recyclerView = findViewById(R.id.recycler_view_chat_list);
@@ -103,6 +112,7 @@ public class Chat_list extends AppCompatActivity {
                 intent.putExtra("userID", userID);
                 intent.putExtra("posterID", userList.get(position));
                 intent.putExtra("posterName", mUser.get(position).fname + " " + mUser.get(position).lname);
+                intent.putExtra("plantName", "messages");
                 startActivity(intent);
             }
         };
@@ -113,6 +123,7 @@ public class Chat_list extends AppCompatActivity {
                 intent.putExtra("userID", userID);
                 intent.putExtra("posterID", search_userList.get(position));
                 intent.putExtra("posterName", search_mUser.get(position).fname + " " + search_mUser.get(position).lname);
+                intent.putExtra("plantName", "messages");
                 startActivity(intent);
             }
         };

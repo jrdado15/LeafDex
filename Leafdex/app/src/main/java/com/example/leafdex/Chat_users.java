@@ -53,7 +53,7 @@ public class Chat_users extends AppCompatActivity {
     private TextView posterName_TV;
     private EditText textbox_ET;
     private ImageButton send, camgal;
-    private String message, userID, posterID;
+    private String message, userID, posterID, from;
 
     private ChatAdapter chatAdapter;
     private List<Chat> mChat;
@@ -101,6 +101,7 @@ public class Chat_users extends AppCompatActivity {
         userID = bundle.getString("userID");
         posterID = bundle.getString("posterID");
         String posterName = bundle.getString("posterName");
+        String plantName = bundle.getString("plantName");
 
         reference = FirebaseDatabase.getInstance().getReference();
         posterName_TV = findViewById(R.id.posterName);
@@ -111,6 +112,11 @@ public class Chat_users extends AppCompatActivity {
         posterName_TV.setText(posterName);
         readChats(userID, posterID); // display chat
         seenChats(userID, posterID); // seen chat
+
+        from = "";
+        if(!plantName.equals("messages")) {
+            from = "FROM " + plantName.toUpperCase() + "\n\n";
+        }
 
         camgal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,13 +140,14 @@ public class Chat_users extends AppCompatActivity {
                     HashMap<String, Object> hashMap = new HashMap<>();
                     hashMap.put("sender", userID);
                     hashMap.put("receiver", posterID);
-                    hashMap.put("message", message);
+                    hashMap.put("message", from + message);
                     hashMap.put("seen", "false");
                     reference.child("Chats").push().setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()) {
                                 Log.d("TAG", "MESSAGE SENT");
+                                from = "";
                             } else {
                                 Log.d("TAG", "MESSAGE NOT SENT");
                             }

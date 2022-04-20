@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class Product_info extends AppCompatActivity {
     private ArrayList<String> productValues;
-    private String userID, firebasePostKey, signal, posterID, posterName;
+    private String userID, firebasePostKey, signal, posterID, posterName, plantName;
 
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -131,12 +131,12 @@ public class Product_info extends AppCompatActivity {
                         productValues.add(post.dateTime); //post date and time -- 4
                         productValues.add(post.price); //post plant price -- 5
 
-                        //TODO: SET TEXT NG IBA PANG DETAILS @JUSTINE
                         Glide.with(Product_info.this).load(productValues.get(2)).into(plant_image);
                         plant_name.setText(productValues.get(0));
                         plant_desc.setText(productValues.get(1));
                         plant_price.setText("₱" + productValues.get(5));
                         posterID = productValues.get(3);
+                        plantName = productValues.get(0);
 
                         if(!userID.equals(posterID)) {
                             bookmark_button.setVisibility(View.VISIBLE);
@@ -178,6 +178,7 @@ public class Product_info extends AppCompatActivity {
                                 intent.putExtra("userID", userID);
                                 intent.putExtra("posterID", posterID);
                                 intent.putExtra("posterName", posterName);
+                                intent.putExtra("plantName", plantName);
                                 startActivity(intent);
                             }
                         });

@@ -26,6 +26,7 @@
             android:padding="5dp"
             android:textColor="@color/main_green"
             android:textColorHint="@color/light_green"
+            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
