@@ -31,9 +31,26 @@
     <string name="post_description">Post Description</string>
     <string name="post_plant">Post Plant</string>
     <string name="price">Price</string>
+    <string name="qty">Quantity</string>
     <string name="pm">Send Message</string>
     <string name="messages">Messages</string>
     <string name="search">Search</string>
+    <string name="change_pass">Change Password</string>
+    <string name="yp">Your Posts</string>
+    <string name="sp">Saved Posts</string>
+    <string name="abt">About</string>
+    <string name="abt_plantnet">About Pl@ntNet API</string>
+    <string name="leafdex_abt">We are committed to providing a platform for people who loves plants. Leafdex is designed in such a way that makes it possible for users to collaborate, trade and learn.</string>
+    <string name="plantnet_abt">The Pl@ntNet API is a RESTful JSON based API.
+        This API allows you to use Pl@ntNet\'s visual identification engine as a Web service.
+        It currently operates on 40,257 vascular plant species.
+        The list of recognizable species is growing regularly thanks to the contributions of the community and the integration of expert databases.</string>
+    <string name="plantnet_policy">
+        The use of the Pl@ntNet API is: \n
+        *Free up to 500 identification requests per day (for any usage) \n
+        *Paying for a commercial usage beyond 500 identification requests per day \n
+        *Free for specific non-profit educational and scientific purposes
+    </string>
     <string name="characteristics">Characteristics</string>
     <string-array name="sex">
         <item>Male</item>
@@ -55,7 +72,4 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
 </resources>

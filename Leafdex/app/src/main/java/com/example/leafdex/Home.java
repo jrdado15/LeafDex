@@ -33,6 +33,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.leafdex.databinding.ActivityHomeBinding;
+import com.example.leafdex.fragments.about;
 import com.example.leafdex.fragments.camera;
 import com.example.leafdex.fragments.change_password;
 import com.example.leafdex.fragments.encyclopedia;
@@ -133,6 +134,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                         if(!currentFragment.equals("saved_posts")) {
                             replaceFragment(new saved_posts());
                             currentFragment = "saved_posts";
+                        }
+                        drawerLayout.closeDrawers();
+                        break;
+                    case  R.id.nav_about:
+                        if(!currentFragment.equals("about")) {
+                            replaceFragment(new about());
+                            currentFragment = "about";
                         }
                         drawerLayout.closeDrawers();
                         break;

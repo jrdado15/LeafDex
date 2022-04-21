@@ -41,7 +41,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline53"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline11"
@@ -68,7 +75,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/edit_post"
         android:textAlignment="center"
         android:textColor="@color/main_green"
@@ -121,7 +128,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_outline_forms"
@@ -133,10 +139,32 @@
         android:textColor="@color/main_green"
         android:textColorHint="@color/light_green"
         app:layout_constraintBottom_toTopOf="@+id/editEditText2"
-        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toBottomOf="@+id/tv_post_plant" />
+        app:layout_constraintTop_toTopOf="@+id/guideline53" />
+
+    <EditText
+        android:id="@+id/edit_post_qty"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_outline_forms"
+        android:ems="10"
+        android:hint="@string/qty"
+        android:inputType="number"
+        android:paddingStart="15sp"
+        android:paddingEnd="15sp"
+        android:textColor="@color/main_green"
+        android:textColorHint="@color/light_green"
+        app:layout_constraintBottom_toTopOf="@+id/editEditText2"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline53"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/editEditText2"

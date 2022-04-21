@@ -6,20 +6,25 @@
         >
         <item android:id="@+id/nav_edit_profile"
             android:icon="@drawable/ic_edit_profile"
-            android:title="Edit Profile">
+            android:title="@string/edit_profile">
         </item>
         <item android:id="@+id/nav_change_password"
             android:icon="@drawable/ic_baseline_lock_open_24"
-            android:title="Change Password">
+            android:title="@string/change_pass">
         </item>
         <item android:id="@+id/nav_your_posts"
             android:icon="@drawable/ic_baseline_article_24"
-            android:title="Your Posts">
+            android:title="@string/yp">
         </item>
         <item android:id="@+id/nav_saved_posts"
             android:icon="@drawable/ic_baseline_bookmark_border_24"
-            android:title="Saved Posts">
+            android:title="@string/sp">
         </item>
+        <item android:id="@+id/nav_about"
+            android:icon="@drawable/ic_outline_info_24"
+            android:title="@string/abt">
+        </item>
+
 
     </group>
 

@@ -141,7 +141,7 @@ public class encyclopedia extends Fragment {
                             mImages.add(childPosts.get(3));
                         }
                     }
-                    mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false));
+                    mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false));
                     mRecyclerView.setHasFixedSize(true);
                     mLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
                     mRecyclerView.setAdapter(encycAdapter);
