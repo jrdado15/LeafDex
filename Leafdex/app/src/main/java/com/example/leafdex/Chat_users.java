@@ -6,7 +6,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +15,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -184,18 +182,17 @@ public class Chat_users extends AppCompatActivity {
     }
 
     private void seenChats(final String userID, final String posterID) {
-        seenListener = reference.child("Chats").addValueEventListener(new ValueEventListener() {
+        seenListener = reference.child("Chats").orderByChild("sender").equalTo(posterID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int i = 0;
                 for(DataSnapshot datasnapshot : snapshot.getChildren()) {
-                    i = i + 1;
+                    i++;
                     Chat chat = datasnapshot.getValue(Chat.class);
-                    if(chat.getReceiver().equals(userID) && chat.getSender().equals(posterID) &&
-                            i == snapshot.getChildrenCount()) {
+                    if(chat.getReceiver().equals(userID) && i == snapshot.getChildrenCount()) {
                         HashMap<String, Object> hashMap = new HashMap<>();
                         hashMap.put("seen", "true");
-                        datasnapshot.getRef().updateChildren(hashMap);
+                        reference.child("Chats").child(datasnapshot.getKey()).updateChildren(hashMap);
                     }
                 }
             }

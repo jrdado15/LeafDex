@@ -12,6 +12,7 @@ android:minWidth="19dp">
 <ScrollView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,6 +30,7 @@ android:minWidth="19dp">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -38,7 +40,6 @@ android:minWidth="19dp">
                     app:layout_constraintHorizontal_bias="0.495"
                     app:layout_constraintStart_toStartOf="@+id/guideline49"
                     app:layout_constraintTop_toTopOf="parent"/>
-
 
                 <ImageView
                     android:id="@+id/imageView3"
@@ -74,7 +75,6 @@ android:minWidth="19dp">
         android:layout_height="match_parent"
         tools:context=".Home">
 
-
         <FrameLayout
             android:id="@+id/nav_bar_framelayout"
             android:layout_width="0dp"
@@ -83,7 +83,6 @@ android:minWidth="19dp">
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
         </FrameLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -98,7 +97,6 @@ android:minWidth="19dp">
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_nav_menu">
-
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

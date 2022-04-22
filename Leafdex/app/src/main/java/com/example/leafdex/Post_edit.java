@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.text.method.KeyListener;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,7 +27,7 @@ import java.util.HashMap;
 public class Post_edit extends AppCompatActivity {
 
     private ImageView plant_IV;
-    private EditText price_ET, desc_ET;
+    private EditText price_ET, qty_ET, desc_ET;
     private TextView comName_TV;
     private Button save_button, cancel_button;
     private String postID;
@@ -48,6 +46,7 @@ public class Post_edit extends AppCompatActivity {
         plant_IV = (ImageView) findViewById(R.id.editImageView);
         comName_TV = (TextView) findViewById(R.id.tv_post_plant);
         price_ET = (EditText) findViewById(R.id.edit_post_price);
+        qty_ET = (EditText) findViewById(R.id.edit_post_qty);
         desc_ET = (EditText) findViewById(R.id.editEditText2);
         save_button = (Button) findViewById(R.id.editButton1);
         cancel_button = (Button) findViewById(R.id.editButton2);
@@ -57,7 +56,6 @@ public class Post_edit extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             postID = extras.getString("postID");
-            Log.d("TAG", postID);
         }
 
         reference.child(postID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -69,6 +67,7 @@ public class Post_edit extends AppCompatActivity {
                     Glide.with(Post_edit.this).load(post.imageURL).into(plant_IV);
                     comName_TV.setText(post.comName);
                     price_ET.setText(post.price);
+                    qty_ET.setText(post.qty);
                     desc_ET.setText(post.desc);
                 }
             }
@@ -96,11 +95,30 @@ public class Post_edit extends AppCompatActivity {
 
     private void saveChanges() {
         String sprice = price_ET.getText().toString().trim();
+        String sqty = qty_ET.getText().toString().trim();
         String sdesc = desc_ET.getText().toString().trim();
 
         if(sprice.isEmpty()) {
             price_ET.setError("Plant price is required!");
             price_ET.requestFocus();
+            return;
+        }
+
+        if(!isNumeric(sprice)) {
+            price_ET.setError("Not a number.");
+            price_ET.requestFocus();
+            return;
+        }
+
+        if(sqty.isEmpty()) {
+            qty_ET.setError("Plant quantity is required!");
+            qty_ET.requestFocus();
+            return;
+        }
+
+        if(!isNumeric(sqty)) {
+            qty_ET.setError("Not a number.");
+            qty_ET.requestFocus();
             return;
         }
 
@@ -116,6 +134,7 @@ public class Post_edit extends AppCompatActivity {
 
         HashMap hashMap = new HashMap();
         hashMap.put("price", sprice);
+        hashMap.put("qty", sqty);
         hashMap.put("desc", sdesc);
 
         reference.child(postID).updateChildren(hashMap)
@@ -138,5 +157,14 @@ public class Post_edit extends AppCompatActivity {
 
     private void cancelChanges() {
         finish();
+    }
+
+    public boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
     }
 }

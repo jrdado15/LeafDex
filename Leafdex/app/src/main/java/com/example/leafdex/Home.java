@@ -23,7 +23,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -51,6 +50,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Home extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
@@ -80,6 +81,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             Manifest.permission.CAMERA,
     };
 
+    private ArrayList<ArrayList<String>> mMessages1;
+    private ArrayList<ArrayList<String>> mMessages2;
+
     public Uri getPlantPicUriFromGallery() { return plantPicUriFromGallery; }
 
     public Uri getPlantPicUriFromCamera() {
@@ -93,7 +97,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         mAuth = FirebaseAuth.getInstance();
@@ -109,42 +112,42 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId())
                 {
-                    case  R.id.nav_edit_profile:
+                    case R.id.nav_edit_profile:
                         if(!currentFragment.equals("profile")) {
                             replaceFragment(new profile(Home.this));
                             currentFragment = "profile";
                         }
                         drawerLayout.closeDrawers();
                         break;
-                    case  R.id.nav_change_password:
+                    case R.id.nav_change_password:
                         if(!currentFragment.equals("change_password")) {
                             replaceFragment(new change_password(Home.this));
                             currentFragment = "change_password";
                         }
                         drawerLayout.closeDrawers();
                         break;
-                    case  R.id.nav_your_posts:
+                    case R.id.nav_your_posts:
                         if(!currentFragment.equals("your_posts")) {
                             replaceFragment(new your_posts());
                             currentFragment = "your_posts";
                         }
                         drawerLayout.closeDrawers();
                         break;
-                    case  R.id.nav_saved_posts:
+                    case R.id.nav_saved_posts:
                         if(!currentFragment.equals("saved_posts")) {
                             replaceFragment(new saved_posts());
                             currentFragment = "saved_posts";
                         }
                         drawerLayout.closeDrawers();
                         break;
-                    case  R.id.nav_about:
+                    case R.id.nav_about:
                         if(!currentFragment.equals("about")) {
                             replaceFragment(new about());
                             currentFragment = "about";
                         }
                         drawerLayout.closeDrawers();
                         break;
-                    case  R.id.nav_logout:
+                    case R.id.nav_logout:
                         mAuth.signOut();
                         startActivity(new Intent(Home.this, Login.class));
                         finish();
@@ -212,30 +215,60 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             return true;
         });
 
-        /*chatReference.orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot datasnapshot : snapshot.getChildren()) {
-                    Chat chat = datasnapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(userID) && !chat.getMessage().isEmpty()) {
-                        Log.d("EHE", chat.getMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });*/
-
         replaceFragment(new home());
         currentFragment = "home";
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             replaceFragment(new saved_posts());
             currentFragment = "saved_posts";
+        } else {
+            changeIcon();
         }
+    }
+
+    private void changeIcon() {
+        mMessages1 = new ArrayList<>();
+        mMessages2 = new ArrayList<>();
+        chatReference.orderByChild("sender").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot datasnapshot : snapshot.getChildren()) {
+                    ArrayList<String> msg = new ArrayList<String>();
+                    msg.add(datasnapshot.getKey());
+                    msg.add(datasnapshot.child("sender").getValue().toString());
+                    msg.add(datasnapshot.child("receiver").getValue().toString());
+                    msg.add(datasnapshot.child("message").getValue().toString());
+                    msg.add(datasnapshot.child("seen").getValue().toString());
+                    mMessages1.add(msg);
+                }
+                Collections.reverse(mMessages1);
+
+                int count = 0;
+                String current = "id";
+                for(ArrayList<String> msg : mMessages1) {
+                    if(!msg.isEmpty()) {
+                        if (msg.get(2).equals(userID) && !msg.get(1).equals(current)) {
+                            mMessages2.add(msg);
+                            if(msg.get(4).equals("false"))
+                                count++;
+                        }
+                        current = msg.get(1);
+                    }
+                }
+
+                ImageView imageView3 = findViewById(R.id.imageView3);
+                if(count > 0)
+                    Toast.makeText(Home.this, "You have " + count + " unread message(s).", Toast.LENGTH_SHORT).show();
+                    //imageView3.setImageResource(R.drawable.ic_unseen_messages_foreground);
+                //else
+                    //imageView3.setImageResource(R.drawable.ic_messages_foreground);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void setUpToolbar() {
@@ -288,7 +321,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
-                if (result.getResultCode() == Activity.RESULT_OK) {
+                if(result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
                     ProgressDialog mProgressDialog = new ProgressDialog(Home.this);
                     mProgressDialog.setMessage("Processing image...");

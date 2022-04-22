@@ -36,17 +36,19 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
     private static List<String> postIDs;
     private static List<String> titles;
     private static List<String> prices;
+    private static List<String> qtys;
     private static List<String> images;
     private static String imageURL;
     private static DatabaseReference reference;
     private static FirebaseStorage storage;
     private static EditClickListener listener;
 
-    public YourPostsAdapter(Context context, List<String> postIDs, List<String> titles, List<String> prices, List<String> images, EditClickListener listener){
+    public YourPostsAdapter(Context context, List<String> postIDs, List<String> titles, List<String> prices, List<String> qtys, List<String> images, EditClickListener listener){
         this.context = context;
         this.postIDs = postIDs;
         this.titles = titles;
         this.prices = prices;
+        this.qtys = qtys;
         this.images = images;
         this.listener = listener;
     }
@@ -60,7 +62,7 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Your
 
     @Override
     public void onBindViewHolder(@NonNull YourPostsAdapter.YourPostsViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.user_post_item_textView.setText(titles.get(position) + "\n\n₱" + prices.get(position));
+        holder.user_post_item_textView.setText(titles.get(position) + "\n₱" + prices.get(position) + "\nQty: " + qtys.get(position));
         Glide.with(context).load(images.get(position)).into(holder.user_post_item_image);
         holder.position = position;
     }

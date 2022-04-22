@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.leafdex.Home;
 import com.example.leafdex.Post_edit;
 import com.example.leafdex.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +53,7 @@ public class your_posts extends Fragment {
     private List<String> postIDs;
     private List<String> titles;
     private List<String> prices;
+    private List<String> qtys;
     private List<String> mImages;
     private YourPostsAdapter yourPostsAdapter;
     private YourPostsAdapter.EditClickListener listener;
@@ -113,7 +113,8 @@ public class your_posts extends Fragment {
                         post.add(dataSnapshot.getKey()); //post key -- 0
                         post.add(dataSnapshot.child("comName").getValue().toString()); //post plant name -- 1
                         post.add(dataSnapshot.child("price").getValue().toString()); //post plant price -- 2
-                        post.add(dataSnapshot.child("imageURL").getValue().toString()); //post plant image -- 3
+                        post.add(dataSnapshot.child("qty").getValue().toString()); //post plant quantity -- 3
+                        post.add(dataSnapshot.child("imageURL").getValue().toString()); //post plant image -- 4
                         posts.add(post);
                     }
 
@@ -121,17 +122,19 @@ public class your_posts extends Fragment {
                     postIDs = new ArrayList<>();
                     titles = new ArrayList<>();
                     prices = new ArrayList<>();
+                    qtys = new ArrayList<>();
                     mImages = new ArrayList<>();
                     setOnClickListener();
                     mRecyclerView = view.findViewById(R.id.rv_your_posts);
-                    yourPostsAdapter = new YourPostsAdapter(getActivity(), postIDs, titles, prices, mImages, listener);
+                    yourPostsAdapter = new YourPostsAdapter(getActivity(), postIDs, titles, prices, qtys, mImages, listener);
 
                     for(ArrayList<String> childPosts : posts){
                         if(!childPosts.isEmpty()){
                             postIDs.add(childPosts.get(0));
                             titles.add(childPosts.get(1));
                             prices.add(childPosts.get(2));
-                            mImages.add(childPosts.get(3));
+                            qtys.add(childPosts.get(3));
+                            mImages.add(childPosts.get(4));
                         }
                     }
 

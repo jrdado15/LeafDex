@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.KeyListener;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,11 +33,11 @@ import java.util.UUID;
 
 public class Post_post extends AppCompatActivity {
 
-    private String price, desc, userID;
+    private String price, qty, desc, userID;
     private Uri filePathUri;
 
     private ImageView postIV;
-    private EditText priceET, descET;
+    private EditText priceET, qtyET, descET;
     private TextView comNameET;
     private Button postBtn1, postBtn2;
 
@@ -59,10 +58,10 @@ public class Post_post extends AppCompatActivity {
         postIV = (ImageView) findViewById(R.id.postImageView);
         comNameET = (TextView) findViewById(R.id.tv_post_plant);
         priceET = (EditText) findViewById(R.id.et_post_price);
+        qtyET = (EditText) findViewById(R.id.et_post_qty);
         descET = (EditText) findViewById(R.id.et_post_description);
         postBtn1 = (Button) findViewById(R.id.postButton1);
         postBtn2 = (Button) findViewById(R.id.postButton2);
-        Log.d("TAG", filePath);
         filePathUri = Uri.parse("file:///" + filePath);
         postIV.setImageURI(filePathUri);
         comNameET.setText(comName);
@@ -72,10 +71,26 @@ public class Post_post extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 price = priceET.getText().toString().trim();
+                qty = qtyET.getText().toString().trim();
                 desc = descET.getText().toString().trim();
                 if(price.isEmpty()) {
                     priceET.setError("Plant price is required!");
                     priceET.requestFocus();
+                    return;
+                }
+                if(!isNumeric(price)) {
+                    priceET.setError("Not a number.");
+                    priceET.requestFocus();
+                    return;
+                }
+                if(qty.isEmpty()) {
+                    qtyET.setError("Plant quantity is required!");
+                    qtyET.requestFocus();
+                    return;
+                }
+                if(!isNumeric(qty)) {
+                    qtyET.setError("Not a number.");
+                    qtyET.requestFocus();
                     return;
                 }
                 if(desc.isEmpty()) {
@@ -102,8 +117,7 @@ public class Post_post extends AppCompatActivity {
                                         String currentTime = new SimpleDateFormat("HH:mm a", Locale.getDefault()).format(new Date());
                                         String currentDate = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(new Date());
                                         String timeDate = currentTime + " - " + currentDate;
-                                        Log.d("TAG", timeDate);
-                                        com.example.leafdex.fragments.parsers.Post post = new com.example.leafdex.fragments.parsers.Post(downloadURL, comName, desc, userID, timeDate, price);
+                                        com.example.leafdex.fragments.parsers.Post post = new com.example.leafdex.fragments.parsers.Post(downloadURL, comName, desc, userID, timeDate, price, qty);
                                         String key = FirebaseDatabase.getInstance().getReference("Posts").push().getKey();
                                         FirebaseDatabase.getInstance().getReference("Posts").child(key)
                                                 .setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -138,5 +152,14 @@ public class Post_post extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    public boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
     }
 }

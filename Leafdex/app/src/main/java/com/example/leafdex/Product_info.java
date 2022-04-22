@@ -2,7 +2,6 @@ package com.example.leafdex;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -41,12 +40,13 @@ public class Product_info extends AppCompatActivity {
         TextView plant_name = findViewById(R.id.tv_plant_info_name);
         TextView plant_desc = findViewById(R.id.tv_plant_post_description);
         TextView plant_price = findViewById(R.id.tv_plant_price);
+        TextView plant_qty = findViewById(R.id.tv_product_quantity);
         Button back_button = findViewById(R.id.back_button);
         Button bookmark_button = findViewById(R.id.btn_bookmark);
         Button bookmark_button_filled = findViewById(R.id.btn_bookmark_filled);
         Button message_button = findViewById(R.id.btn_chat_post_owner);
         productValues = new ArrayList<String>();
-        String product = "Product Unavailable";
+        String product = "Product unavailable";
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
@@ -65,6 +65,7 @@ public class Product_info extends AppCompatActivity {
         plant_name.setVisibility(View.INVISIBLE);
         plant_desc.setVisibility(View.INVISIBLE);
         plant_price.setVisibility(View.INVISIBLE);
+        plant_qty.setVisibility(View.INVISIBLE);
         bookmark_button.setVisibility(View.INVISIBLE);
         message_button.setVisibility(View.INVISIBLE);
 
@@ -128,13 +129,14 @@ public class Product_info extends AppCompatActivity {
                         productValues.add(post.desc); //post plant description -- 1
                         productValues.add(post.imageURL); //post plant image -- 2
                         productValues.add(post.userID); //post user -- 3
-                        productValues.add(post.dateTime); //post date and time -- 4
-                        productValues.add(post.price); //post plant price -- 5
+                        productValues.add(post.price); //post plant price -- 4
+                        productValues.add(post.qty); //post plant quantity -- 5
 
                         Glide.with(Product_info.this).load(productValues.get(2)).into(plant_image);
                         plant_name.setText(productValues.get(0));
                         plant_desc.setText(productValues.get(1));
-                        plant_price.setText("₱" + productValues.get(5));
+                        plant_price.setText("₱" + productValues.get(4));
+                        plant_qty.setText("Qty: " + productValues.get(5));
                         posterID = productValues.get(3);
                         plantName = productValues.get(0);
 
@@ -144,12 +146,12 @@ public class Product_info extends AppCompatActivity {
                         }
                     } else {
                         plant_name.setText(product);
-                        Log.d("POSTS", "No post found.");
                     }
                     plant_image.setVisibility(View.VISIBLE);
                     plant_name.setVisibility(View.VISIBLE);
                     plant_desc.setVisibility(View.VISIBLE);
                     plant_price.setVisibility(View.VISIBLE);
+                    plant_qty.setVisibility(View.VISIBLE);
 
                     Query queryUser = reference.child("Users").child(posterID);
 
@@ -167,7 +169,7 @@ public class Product_info extends AppCompatActivity {
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
-                                Log.d("USER", "No user found.");
+
                             }
                         });
 
@@ -187,7 +189,7 @@ public class Product_info extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.d("POSTS", "No post found.");
+
                 }
             });
         }

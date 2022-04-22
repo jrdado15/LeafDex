@@ -114,7 +114,7 @@ public class camera extends Fragment {
         home = (Home) getActivity();
         Uri plantPicUri;
         String filePath = "";
-        if (home.getIsFromGallery()) {
+        if(home.getIsFromGallery()) {
             plantPicUri = home.getPlantPicUriFromGallery();
             filePath = getRealPathFromURI(plantPicUri).substring(1);
         } else {
@@ -140,46 +140,40 @@ public class camera extends Fragment {
         OkHttpClient client = new OkHttpClient();
         Response response;
         try {
-            try {
-                response = client.newCall(request).execute();
-                String json = response.body().string();
-                Moshi moshi = new Moshi.Builder().build();
-                JsonAdapter<Root> jsonAdapter = moshi.adapter(Root.class);
-                Root root = jsonAdapter.fromJson(json);
-                List<Result> result = root.getResults();
-                DecimalFormat df = new DecimalFormat("0.00");
-                Glide.with(getActivity()).load(result.get(0).getImages().get(0).url.s).into(uriExample);
-                imageURL = result.get(0).getImages().get(0).url.s;
-                scoreTV.setText("Score: " + df.format(result.get(0).getScore() * 100) + "%");
-                sciNameTV.setText("Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
-                sciName = result.get(0).getSpecies().scientificNameWithoutAuthor;
-                String comNames = "";
-                for(int i = 0; i < result.get(0).getSpecies().commonNames.size(); i++) {
-                    if(i == 0) {
-                        comNames += result.get(0).getSpecies().commonNames.get(0);
-                        comName = result.get(0).getSpecies().commonNames.get(0);
-                    } else {
-                        comNames += ", " + result.get(0).getSpecies().commonNames.get(i);
-                    }
+            response = client.newCall(request).execute();
+            String json = response.body().string();
+            Moshi moshi = new Moshi.Builder().build();
+            JsonAdapter<Root> jsonAdapter = moshi.adapter(Root.class);
+            Root root = jsonAdapter.fromJson(json);
+            List<Result> result = root.getResults();
+            DecimalFormat df = new DecimalFormat("0.00");
+            Glide.with(getActivity()).load(result.get(0).getImages().get(0).url.s).into(uriExample);
+            imageURL = result.get(0).getImages().get(0).url.s;
+            scoreTV.setText("Score: " + df.format(result.get(0).getScore() * 100) + "%");
+            sciNameTV.setText("Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
+            sciName = result.get(0).getSpecies().scientificNameWithoutAuthor;
+            String comNames = "";
+            for(int i = 0; i < result.get(0).getSpecies().commonNames.size(); i++) {
+                if(i == 0) {
+                    comNames += result.get(0).getSpecies().commonNames.get(0);
+                    comName = result.get(0).getSpecies().commonNames.get(0);
+                } else {
+                    comNames += ", " + result.get(0).getSpecies().commonNames.get(i);
                 }
-                if(comName.isEmpty()) {
-                    comName = result.get(0).getSpecies().scientificNameWithoutAuthor;
-                }
-                comNamesTV.setText("Common names: " + comNames);
-                if (mProgressDialog != null){
-                    mProgressDialog.dismiss();
-                }
-            } catch(IOException e) {
-                Toast.makeText(getActivity(), "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
-                backToHome();
-                e.printStackTrace();
-                return null;
             }
+            if(comName.isEmpty()) {
+                comName = result.get(0).getSpecies().scientificNameWithoutAuthor;
+            }
+            comNamesTV.setText("Common names: " + comNames);
+            if (mProgressDialog != null){
+                mProgressDialog.dismiss();
+            }
+        } catch(IOException e) {
+            Toast.makeText(getActivity(), "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
+            backToHome();
         } catch(RuntimeException e) {
             Toast.makeText(getActivity(), "Plant not found. Please try again.", Toast.LENGTH_SHORT).show();
             backToHome();
-            e.printStackTrace();
-            return null;
         }
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
