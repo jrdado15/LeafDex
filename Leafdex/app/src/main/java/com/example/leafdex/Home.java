@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -221,9 +220,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         if(extras != null) {
             replaceFragment(new saved_posts());
             currentFragment = "saved_posts";
-        } else {
-            changeIcon();
         }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        changeIcon();
     }
 
     private void changeIcon() {
@@ -256,12 +259,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                     }
                 }
 
+                //Toast.makeText(Home.this, "You have " + count + " unread message(s).", Toast.LENGTH_SHORT).show();
                 ImageView imageView3 = findViewById(R.id.imageView3);
                 if(count > 0)
-                    Toast.makeText(Home.this, "You have " + count + " unread message(s).", Toast.LENGTH_SHORT).show();
-                    //imageView3.setImageResource(R.drawable.ic_unseen_messages_foreground);
-                //else
-                    //imageView3.setImageResource(R.drawable.ic_messages_foreground);
+                    imageView3.setImageResource(R.drawable.ic_unseen_messages_foreground);
+                else
+                    imageView3.setImageResource(R.drawable.ic_messages_foreground);
             }
 
             @Override
