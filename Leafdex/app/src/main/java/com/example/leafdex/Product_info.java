@@ -129,8 +129,8 @@ public class Product_info extends AppCompatActivity {
                         productValues.add(post.desc); //post plant description -- 1
                         productValues.add(post.imageURL); //post plant image -- 2
                         productValues.add(post.userID); //post user -- 3
-                        productValues.add(post.price); //post plant price -- 4
-                        productValues.add(post.qty); //post plant quantity -- 5
+                        productValues.add(post.price.toString()); //post plant price -- 4
+                        productValues.add(post.qty.toString()); //post plant quantity -- 5
 
                         Glide.with(Product_info.this).load(productValues.get(2)).into(plant_image);
                         plant_name.setText(productValues.get(0));

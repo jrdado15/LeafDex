@@ -79,7 +79,7 @@ public class Post_post extends AppCompatActivity {
                     return;
                 }
                 if(!isNumeric(price)) {
-                    priceET.setError("Not a number.");
+                    priceET.setError("Invalid input.");
                     priceET.requestFocus();
                     return;
                 }
@@ -89,7 +89,7 @@ public class Post_post extends AppCompatActivity {
                     return;
                 }
                 if(!isNumeric(qty)) {
-                    qtyET.setError("Not a number.");
+                    qtyET.setError("Invalid input.");
                     qtyET.requestFocus();
                     return;
                 }
@@ -117,7 +117,7 @@ public class Post_post extends AppCompatActivity {
                                         String currentTime = new SimpleDateFormat("HH:mm a", Locale.getDefault()).format(new Date());
                                         String currentDate = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(new Date());
                                         String timeDate = currentTime + " - " + currentDate;
-                                        com.example.leafdex.fragments.parsers.Post post = new com.example.leafdex.fragments.parsers.Post(downloadURL, comName, desc, userID, timeDate, price, qty);
+                                        com.example.leafdex.fragments.parsers.Post post = new com.example.leafdex.fragments.parsers.Post(downloadURL, comName, desc, userID, timeDate, Integer.parseInt(price), Integer.parseInt(qty));
                                         String key = FirebaseDatabase.getInstance().getReference("Posts").push().getKey();
                                         FirebaseDatabase.getInstance().getReference("Posts").child(key)
                                                 .setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -156,7 +156,7 @@ public class Post_post extends AppCompatActivity {
 
     public boolean isNumeric(String str) {
         try {
-            Double.parseDouble(str);
+            Integer.parseInt(str);
             return true;
         } catch(NumberFormatException e){
             return false;

@@ -4,9 +4,9 @@ public class Chat {
     private String sender;
     private String receiver;
     private String message;
-    private String seen;
+    private boolean seen;
 
-    public Chat(String sender, String receiver, String message, String seen) {
+    public Chat(String sender, String receiver, String message, boolean seen) {
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;
@@ -40,11 +40,11 @@ public class Chat {
         this.message = message;
     }
 
-    public String getSeen() {
+    public boolean getSeen() {
         return seen;
     }
 
-    public void setSeen(String seen) {
+    public void setSeen(boolean seen) {
         this.seen = seen;
     }
 }

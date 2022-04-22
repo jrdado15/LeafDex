@@ -101,7 +101,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                                 last_chat = mUser.get(position).fname + ": " + chat.getMessage().substring(0, 19) + "...";
                             }
                         }
-                        if(chat.getSeen().equals("false")) {
+                        if(!chat.getSeen()) {
                             user_last_chat.setTypeface(null, Typeface.BOLD);
                         } else {
                             user_last_chat.setTypeface(null, Typeface.NORMAL);

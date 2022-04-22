@@ -66,8 +66,8 @@ public class Post_edit extends AppCompatActivity {
                 if(post != null) {
                     Glide.with(Post_edit.this).load(post.imageURL).into(plant_IV);
                     comName_TV.setText(post.comName);
-                    price_ET.setText(post.price);
-                    qty_ET.setText(post.qty);
+                    price_ET.setText(post.price.toString());
+                    qty_ET.setText(post.qty.toString());
                     desc_ET.setText(post.desc);
                 }
             }
@@ -105,7 +105,7 @@ public class Post_edit extends AppCompatActivity {
         }
 
         if(!isNumeric(sprice)) {
-            price_ET.setError("Not a number.");
+            price_ET.setError("Invalid input.");
             price_ET.requestFocus();
             return;
         }
@@ -117,7 +117,7 @@ public class Post_edit extends AppCompatActivity {
         }
 
         if(!isNumeric(sqty)) {
-            qty_ET.setError("Not a number.");
+            qty_ET.setError("Invalid input.");
             qty_ET.requestFocus();
             return;
         }
@@ -133,8 +133,8 @@ public class Post_edit extends AppCompatActivity {
         mProgressDialog.setCancelable(false);
 
         HashMap hashMap = new HashMap();
-        hashMap.put("price", sprice);
-        hashMap.put("qty", sqty);
+        hashMap.put("price", Integer.parseInt(sprice));
+        hashMap.put("qty", Integer.parseInt(sqty));
         hashMap.put("desc", sdesc);
 
         reference.child(postID).updateChildren(hashMap)
@@ -161,7 +161,7 @@ public class Post_edit extends AppCompatActivity {
 
     public boolean isNumeric(String str) {
         try {
-            Double.parseDouble(str);
+            Integer.parseInt(str);
             return true;
         } catch(NumberFormatException e){
             return false;

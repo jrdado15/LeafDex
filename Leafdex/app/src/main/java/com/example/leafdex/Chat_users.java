@@ -113,7 +113,7 @@ public class Chat_users extends AppCompatActivity {
 
         from = "";
         if(!plantName.equals("messages")) {
-            from = "FROM " + plantName.toUpperCase() + "\n\n";
+            from = "(FROM " + plantName.toUpperCase() + ") ";
         }
 
         camgal.setOnClickListener(new View.OnClickListener() {
@@ -135,11 +135,11 @@ public class Chat_users extends AppCompatActivity {
                         textbox_ET.setText("");
                         break exit;
                     }
-                    HashMap<String, Object> hashMap = new HashMap<>();
+                    HashMap hashMap = new HashMap();
                     hashMap.put("sender", userID);
                     hashMap.put("receiver", posterID);
                     hashMap.put("message", from + message);
-                    hashMap.put("seen", "false");
+                    hashMap.put("seen", false);
                     reference.child("Chats").push().setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -190,8 +190,8 @@ public class Chat_users extends AppCompatActivity {
                     i++;
                     Chat chat = datasnapshot.getValue(Chat.class);
                     if(chat.getReceiver().equals(userID) && i == snapshot.getChildrenCount()) {
-                        HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("seen", "true");
+                        HashMap hashMap = new HashMap();
+                        hashMap.put("seen", true);
                         reference.child("Chats").child(datasnapshot.getKey()).updateChildren(hashMap);
                     }
                 }
@@ -280,11 +280,11 @@ public class Chat_users extends AppCompatActivity {
                             public void onSuccess(Uri uri) {
                                 downloadURL = uri.toString();
 
-                                HashMap<String, Object> hashMap = new HashMap<>();
+                                HashMap hashMap = new HashMap();
                                 hashMap.put("sender", userID);
                                 hashMap.put("receiver", posterID);
                                 hashMap.put("message", downloadURL);
-                                hashMap.put("seen", "false");
+                                hashMap.put("seen", false);
 
                                 reference.child("Chats").push().setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
