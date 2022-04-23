@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -218,8 +219,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         currentFragment = "home";
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            replaceFragment(new saved_posts());
-            currentFragment = "saved_posts";
+            if(extras.getString("signal").equals("back")) {
+                replaceFragment(new saved_posts());
+                currentFragment = "saved_posts";
+            } else {
+                Toast.makeText(Home.this, "Plant not found. Please try again.", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

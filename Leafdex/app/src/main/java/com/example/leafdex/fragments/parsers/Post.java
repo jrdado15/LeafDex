@@ -2,14 +2,14 @@ package com.example.leafdex.fragments.parsers;
 
 public class Post {
 
-    public String imageURL, comName, desc, userID, dateTime;
+    public String imageURL, comName, desc, userID, dateTime, sciName;
     public Integer price, qty;
 
     public Post() {
 
     }
 
-    public Post(String imageURL, String comName, String desc, String userID, String dateTime, Integer price, Integer qty) {
+    public Post(String imageURL, String comName, String desc, String userID, String dateTime, Integer price, Integer qty, String sciName) {
         this.imageURL = imageURL;
         this.comName = comName;
         this.desc = desc;
@@ -17,5 +17,6 @@ public class Post {
         this.dateTime = dateTime;
         this.price = price;
         this.qty = qty;
+        this.sciName = sciName;
     }
 }

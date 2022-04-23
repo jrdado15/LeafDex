@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class Product_info extends AppCompatActivity {
     private ArrayList<String> productValues;
-    private String userID, firebasePostKey, signal, posterID, posterName, plantName;
+    private String userID, firebasePostKey, signal, posterID, posterName, plantName, sciName;
 
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -45,6 +45,7 @@ public class Product_info extends AppCompatActivity {
         Button bookmark_button = findViewById(R.id.btn_bookmark);
         Button bookmark_button_filled = findViewById(R.id.btn_bookmark_filled);
         Button message_button = findViewById(R.id.btn_chat_post_owner);
+        Button learn_button = findViewById(R.id.btn_learn);
         productValues = new ArrayList<String>();
         String product = "Product unavailable";
 
@@ -68,6 +69,7 @@ public class Product_info extends AppCompatActivity {
         plant_qty.setVisibility(View.INVISIBLE);
         bookmark_button.setVisibility(View.INVISIBLE);
         message_button.setVisibility(View.INVISIBLE);
+        learn_button.setVisibility(View.INVISIBLE);
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +133,7 @@ public class Product_info extends AppCompatActivity {
                         productValues.add(post.userID); //post user -- 3
                         productValues.add(post.price.toString()); //post plant price -- 4
                         productValues.add(post.qty.toString()); //post plant quantity -- 5
+                        productValues.add(post.sciName); //post plant scientific name -- 6
 
                         Glide.with(Product_info.this).load(productValues.get(2)).into(plant_image);
                         plant_name.setText(productValues.get(0));
@@ -139,10 +142,12 @@ public class Product_info extends AppCompatActivity {
                         plant_qty.setText("Qty: " + productValues.get(5));
                         posterID = productValues.get(3);
                         plantName = productValues.get(0);
+                        sciName = productValues.get(6);
 
                         if(!userID.equals(posterID)) {
                             bookmark_button.setVisibility(View.VISIBLE);
                             message_button.setVisibility(View.VISIBLE);
+                            learn_button.setVisibility(View.VISIBLE);
                         }
                     } else {
                         plant_name.setText(product);
@@ -181,6 +186,16 @@ public class Product_info extends AppCompatActivity {
                                 intent.putExtra("posterID", posterID);
                                 intent.putExtra("posterName", posterName);
                                 intent.putExtra("plantName", plantName);
+                                startActivity(intent);
+                            }
+                        });
+
+                        learn_button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(Product_info.this, Encyclopedia.class);
+                                intent.putExtra("comName", plantName);
+                                intent.putExtra("sciName", sciName);
                                 startActivity(intent);
                             }
                         });

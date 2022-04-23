@@ -53,6 +53,7 @@ public class Post_post extends AppCompatActivity {
         Intent intent = getIntent();
         String filePath = intent.getStringExtra("filePath");
         String comName = intent.getStringExtra("comName");
+        String sciName = intent.getStringExtra("sciName");
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         postIV = (ImageView) findViewById(R.id.postImageView);
@@ -117,7 +118,7 @@ public class Post_post extends AppCompatActivity {
                                         String currentTime = new SimpleDateFormat("HH:mm a", Locale.getDefault()).format(new Date());
                                         String currentDate = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(new Date());
                                         String timeDate = currentTime + " - " + currentDate;
-                                        com.example.leafdex.fragments.parsers.Post post = new com.example.leafdex.fragments.parsers.Post(downloadURL, comName, desc, userID, timeDate, Integer.parseInt(price), Integer.parseInt(qty));
+                                        com.example.leafdex.fragments.parsers.Post post = new com.example.leafdex.fragments.parsers.Post(downloadURL, comName, desc, userID, timeDate, Integer.parseInt(price), Integer.parseInt(qty), sciName);
                                         String key = FirebaseDatabase.getInstance().getReference("Posts").push().getKey();
                                         FirebaseDatabase.getInstance().getReference("Posts").child(key)
                                                 .setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {

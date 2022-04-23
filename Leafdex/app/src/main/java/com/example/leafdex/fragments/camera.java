@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -55,7 +57,7 @@ public class camera extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private String imageUri, imageURL, comName, sciName;
+    private String imageUri, comName, sciName;
 
     private View view;
     private ImageView uriExample;
@@ -111,6 +113,8 @@ public class camera extends Fragment {
         comNamesTV = (TextView) view.findViewById(R.id.textView14);
         postBtn = (Button) view.findViewById(R.id.button);
         encBtn = (Button) view.findViewById(R.id.button1);
+        postBtn.setVisibility(View.INVISIBLE);
+        encBtn.setVisibility(View.INVISIBLE);
         home = (Home) getActivity();
         Uri plantPicUri;
         String filePath = "";
@@ -121,8 +125,6 @@ public class camera extends Fragment {
             plantPicUri = home.getPlantPicUriFromCamera();
             filePath = plantPicUri.toString().substring(8);
         }
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
         imageUri = filePath;
         final String imageName = "image.jpeg";
         File file = new File(imageUri);
@@ -138,43 +140,62 @@ public class camera extends Fragment {
                 .post(requestBody)
                 .build();
         OkHttpClient client = new OkHttpClient();
-        Response response;
-        try {
-            response = client.newCall(request).execute();
-            String json = response.body().string();
-            Moshi moshi = new Moshi.Builder().build();
-            JsonAdapter<Root> jsonAdapter = moshi.adapter(Root.class);
-            Root root = jsonAdapter.fromJson(json);
-            List<Result> result = root.getResults();
-            DecimalFormat df = new DecimalFormat("0.00");
-            Glide.with(getActivity()).load(result.get(0).getImages().get(0).url.s).into(uriExample);
-            imageURL = result.get(0).getImages().get(0).url.s;
-            scoreTV.setText("Score: " + df.format(result.get(0).getScore() * 100) + "%");
-            sciNameTV.setText("Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
-            sciName = result.get(0).getSpecies().scientificNameWithoutAuthor;
-            String comNames = "";
-            for(int i = 0; i < result.get(0).getSpecies().commonNames.size(); i++) {
-                if(i == 0) {
-                    comNames += result.get(0).getSpecies().commonNames.get(0);
-                    comName = result.get(0).getSpecies().commonNames.get(0);
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                backToHome1();
+            }
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()) {
+                    String json = response.body().string();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Moshi moshi = new Moshi.Builder().build();
+                            JsonAdapter<Root> jsonAdapter = moshi.adapter(Root.class);
+                            Root root;
+                            try {
+                                root = jsonAdapter.fromJson(json);
+                            } catch (IOException e) {
+                                backToHome2();
+                                return;
+                            }
+                            List<Result> result = root.getResults();
+                            if(result.get(0).getScore() < 0.1) {
+                                backToHome2();
+                                return;
+                            }
+                            DecimalFormat df = new DecimalFormat("0.00");
+                            Glide.with(getActivity()).load(result.get(0).getImages().get(0).url.getS()).into(uriExample);
+                            scoreTV.setText("Score: " + df.format(result.get(0).getScore() * 100) + "%");
+                            sciNameTV.setText("Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
+                            sciName = result.get(0).getSpecies().scientificNameWithoutAuthor;
+                            String comNames = "";
+                            for(int i = 0; i < result.get(0).getSpecies().commonNames.size(); i++) {
+                                if(i == 0) {
+                                    comNames += result.get(0).getSpecies().commonNames.get(0);
+                                    comName = result.get(0).getSpecies().commonNames.get(0);
+                                } else {
+                                    comNames += ", " + result.get(0).getSpecies().commonNames.get(i);
+                                }
+                            }
+                            if(comName.isEmpty()) {
+                                comName = sciName;
+                            }
+                            comNamesTV.setText("Common names: " + comNames);
+                            if (mProgressDialog != null) {
+                                mProgressDialog.dismiss();
+                            }
+                            postBtn.setVisibility(View.VISIBLE);
+                            encBtn.setVisibility(View.VISIBLE);
+                        }
+                    });
                 } else {
-                    comNames += ", " + result.get(0).getSpecies().commonNames.get(i);
+                    backToHome1();
                 }
             }
-            if(comName.isEmpty()) {
-                comName = result.get(0).getSpecies().scientificNameWithoutAuthor;
-            }
-            comNamesTV.setText("Common names: " + comNames);
-            if (mProgressDialog != null){
-                mProgressDialog.dismiss();
-            }
-        } catch(IOException e) {
-            Toast.makeText(getActivity(), "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
-            backToHome();
-        } catch(RuntimeException e) {
-            Toast.makeText(getActivity(), "Plant not found. Please try again.", Toast.LENGTH_SHORT).show();
-            backToHome();
-        }
+        });
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,6 +203,7 @@ public class camera extends Fragment {
                     Intent intent = new Intent(getActivity().getBaseContext(), Post_post.class);
                     intent.putExtra("filePath", imageUri);
                     intent.putExtra("comName", comName);
+                    intent.putExtra("sciName", sciName);
                     getActivity().startActivity(intent);
                 }
             }
@@ -213,7 +235,14 @@ public class camera extends Fragment {
         return res;
     }
 
-    private void backToHome() {
+    private void backToHome1() {
+        Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
+        intent.putExtra("signal", "error");
+        getActivity().startActivity(intent);
+    }
+
+    private void backToHome2() {
+        Toast.makeText(getActivity(), "Plant not found. Please try again.", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getActivity().getBaseContext(), Home.class);
         getActivity().startActivity(intent);
     }
