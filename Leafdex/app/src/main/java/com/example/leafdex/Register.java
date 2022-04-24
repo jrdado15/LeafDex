@@ -87,7 +87,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
         sex = (Spinner) findViewById(R.id.input_Sex);
         birthdate = (EditText) findViewById(R.id.input_birthDate);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.sex, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.sex, R.layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sex.setAdapter(adapter);
         sex.setOnItemSelectedListener(this);

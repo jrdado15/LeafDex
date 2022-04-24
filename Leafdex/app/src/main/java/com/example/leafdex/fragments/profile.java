@@ -129,7 +129,6 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile, container, false);
-
         save = (Button) view.findViewById(R.id.btn_save);
         cancel = (Button) view.findViewById(R.id.btn_cancel);
         pic = (ImageView) view.findViewById(R.id.imageView);
@@ -198,7 +197,7 @@ public class profile extends Fragment implements AdapterView.OnItemSelectedListe
             }
         });
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.sex, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.sex, R.layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sex.setAdapter(adapter);
         sex.setOnItemSelectedListener(this);

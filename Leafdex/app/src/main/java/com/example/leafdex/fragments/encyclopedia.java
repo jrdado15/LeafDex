@@ -225,7 +225,7 @@ public class encyclopedia extends Fragment {
         search_mImages = new ArrayList<>();
         search_position = new ArrayList<>();
         for(int i = 0; i < mComName.size(); i++) {
-            if(mComName.get(i).toLowerCase().matches(s.toLowerCase() + "(.*)")) {
+            if(mSciName.get(i).toLowerCase().matches(s.toLowerCase() + "(.*)")) {
                 search_mComName.add(mComName.get(i));
                 search_mSciName.add(mSciName.get(i));
                 search_mImages.add(mImages.get(i));
