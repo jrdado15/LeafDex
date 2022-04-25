@@ -135,6 +135,11 @@ public class Chat_users extends AppCompatActivity {
                         textbox_ET.setText("");
                         break exit;
                     }
+                    if(checkFrom(message)) {
+                        Toast.makeText(Chat_users.this, "Message not allowed.", Toast.LENGTH_SHORT).show();
+                        textbox_ET.setText("");
+                        break exit;
+                    }
                     HashMap hashMap = new HashMap();
                     hashMap.put("sender", userID);
                     hashMap.put("receiver", posterID);
@@ -342,6 +347,15 @@ public class Chat_users extends AppCompatActivity {
             new URL(str).toURI();
             return true;
         } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean checkFrom(String str) {
+        int index = str.indexOf("FROM");
+        if(index != -1) {
+            return true;
+        } else {
             return false;
         }
     }

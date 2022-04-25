@@ -1,7 +1,9 @@
 package com.example.leafdex;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     private Context mContext;
     private List<Chat> mChat;
+    private String product_key, plant_name;
 
     private FirebaseUser user;
 
@@ -58,6 +61,42 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         Chat chat = mChat.get(position);
         if(checkURL(chat.getMessage())) {
             Glide.with(mContext).load(chat.getMessage()).into(holder.show_image);
+        } else if(checkFrom(chat.getMessage())) {
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            String[] split = chat.getMessage().split("\\s+");
+            if(split[2].charAt(split[2].length() - 1) == ')') {
+                product_key = split[2].substring(0, split[2].length() - 1);
+                plant_name = split[1];
+            } else {
+                product_key = split[3].substring(0, split[3].length() - 1);
+                plant_name = split[1] + " " + split[2];
+            }
+            String master = chat.getMessage();
+            int start1 = master.indexOf(product_key) - 1;
+            int stop1 = start1 + 21;
+            StringBuilder builder = new StringBuilder(master);
+            builder.delete(start1, stop1);
+            int start2 = builder.toString().indexOf(plant_name);
+            int stop2 = start2 + plant_name.length();
+            SpannableString spannableString = new SpannableString(builder.toString());
+            spannableString.setSpan(new UnderlineSpan(), start2, stop2, 0);
+            if(chat.getReceiver().equals(user.getUid())) {
+                holder.show_message.setText(spannableString);
+            } else {
+                holder.show_message.setText(builder.toString());
+            }
+            holder.show_message.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(checkFrom(chat.getMessage()) && product_key.charAt(0) == '-' &&
+                            chat.getReceiver().equals(user.getUid())) {
+                        Intent intent = new Intent(mContext, Product_info.class);
+                        intent.putExtra("product_key", product_key);
+                        intent.putExtra("signal", "from");
+                        mContext.startActivity(intent);
+                    }
+                }
+            });
         } else {
             holder.show_message.setText(chat.getMessage());
         }
@@ -101,6 +140,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             new URL(str).toURI();
             return true;
         } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean checkFrom(String str) {
+        int index = str.indexOf("FROM");
+        if(index != -1) {
+            return true;
+        } else {
             return false;
         }
     }

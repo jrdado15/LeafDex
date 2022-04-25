@@ -47,7 +47,7 @@ public class Product_info extends AppCompatActivity {
         Button message_button = findViewById(R.id.btn_chat_post_owner);
         Button learn_button = findViewById(R.id.btn_learn);
         productValues = new ArrayList<String>();
-        String product = "Product unavailable";
+        String product = "PRODUCT UNAVAILABLE";
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
@@ -134,6 +134,7 @@ public class Product_info extends AppCompatActivity {
                         productValues.add(post.price.toString()); //post plant price -- 4
                         productValues.add(post.qty.toString()); //post plant quantity -- 5
                         productValues.add(post.sciName); //post plant scientific name -- 6
+                        productValues.add(snapshot.getKey());
 
                         Glide.with(Product_info.this).load(productValues.get(2)).into(plant_image);
                         plant_name.setText(productValues.get(0));
@@ -141,7 +142,7 @@ public class Product_info extends AppCompatActivity {
                         plant_price.setText("₱" + productValues.get(4));
                         plant_qty.setText("Qty: " + productValues.get(5));
                         posterID = productValues.get(3);
-                        plantName = productValues.get(0);
+                        plantName = productValues.get(0) + " " + productValues.get(7);
                         sciName = productValues.get(6);
 
                         if(!userID.equals(posterID)) {
@@ -158,9 +159,8 @@ public class Product_info extends AppCompatActivity {
                     plant_price.setVisibility(View.VISIBLE);
                     plant_qty.setVisibility(View.VISIBLE);
 
-                    Query queryUser = reference.child("Users").child(posterID);
-
                     if(posterID != null) {
+                        Query queryUser = reference.child("Users").child(posterID);
                         queryUser.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
