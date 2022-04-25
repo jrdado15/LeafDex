@@ -113,7 +113,12 @@ public class Chat_users extends AppCompatActivity {
 
         from = "";
         if(!plantName.equals("messages")) {
-            from = "(FROM " + plantName.toUpperCase() + ") ";
+            String[] split = plantName.split("\\s+");
+            if(split[1].charAt(0) == '-') {
+                from = "(FROM " + split[0].toUpperCase() + " " + split[1] + ") ";
+            } else {
+                from = "(FROM " + split[0].toUpperCase() + " " + split[1].toUpperCase() + " " + split[2] + ") ";
+            }
         }
 
         camgal.setOnClickListener(new View.OnClickListener() {
