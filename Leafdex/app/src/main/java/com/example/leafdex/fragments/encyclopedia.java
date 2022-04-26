@@ -63,6 +63,7 @@ public class encyclopedia extends Fragment {
 
     private LinearLayoutManager mLayoutManager;
     private boolean loading = true;
+    private String oldestPostId;
     private int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     public encyclopedia() {
@@ -110,72 +111,30 @@ public class encyclopedia extends Fragment {
         mRecyclerView = view.findViewById(R.id.enc_rv_feeds);
         setOnClickListener();
         encycAdapter = new EncycAdapter(getActivity(), mComName, mSciName, mImages, listener);
+        oldestPostId = null;
 
-        plants = new ArrayList<ArrayList<String>>();
-        Query query = reference.child("Plants");//.limitToFirst(10);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false));
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
 
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setMessage("Fetching...");
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.show();
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot != null){
-                    mProgressDialog.dismiss();
-
-                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
-                        ArrayList<String> plant = new ArrayList<String>();
-                        plant.add(childDataSnapshot.getKey()); //Plant key
-                        plant.add(childDataSnapshot.child("common_name").getValue().toString()); //Plant Common name
-                        plant.add(childDataSnapshot.child("scientific_name").getValue().toString()); //Plant Sci Name
-                        plant.add(childDataSnapshot.child("image_url").getValue().toString()); //Plant Image URL
-                        plants.add(plant);
-                    }
-
-                    for(ArrayList<String> childPosts : plants){
-                        if(!childPosts.isEmpty()){
-                            mComName.add(childPosts.get(1));
-                            mSciName.add(childPosts.get(2));
-                            mImages.add(childPosts.get(3));
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) { //check for scroll down
+                    if (loading) {
+                        if (!recyclerView.canScrollVertically(1)) {
+                            loading = false;
+                            Log.v("pagination", "Eto yon: " + oldestPostId);
+                            FetchFromDB();
                         }
                     }
-                    mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false));
-                    mRecyclerView.setHasFixedSize(true);
-                    mLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                    mRecyclerView.setAdapter(encycAdapter);
-                    /*
-                    mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                            if (dy > 0) { //check for scroll down
-                                visibleItemCount = mLayoutManager.getChildCount();
-                                totalItemCount = mLayoutManager.getItemCount();
-                                pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
-
-                                if (loading) {
-                                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                                        loading = false;
-                                        Log.v("...", "Last Item Wow !");
-                                    }
-                                }
-                            }
-                        }
-                    });
-                    */
-                } else {
-                    mProgressDialog.dismiss();
-                    Log.d("POSTS", "No posts found.");
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("POSTS", "Error found: " + error.toString());
-            }
-
         });
+        mRecyclerView.setAdapter(encycAdapter);
+
+        plants = new ArrayList<ArrayList<String>>();
+        FetchFromDB();
 
         EditText search_items = view.findViewById(R.id.enc_search_items);
         search_items.addTextChangedListener(new TextWatcher() {
@@ -196,6 +155,51 @@ public class encyclopedia extends Fragment {
         });
 
         return view;
+    }
+
+    private void FetchFromDB(){
+        loading = true;
+        plants.clear();
+        Query query;
+        if(oldestPostId == null){
+            query = reference.child("Plants").limitToFirst(10);
+        } else {
+            query = reference.child("Plants").orderByKey().startAfter(oldestPostId).limitToFirst(10);
+        }
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot != null){
+                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                        ArrayList<String> plant = new ArrayList<String>();
+                        plant.add(childDataSnapshot.getKey()); //Plant key
+                        plant.add(childDataSnapshot.child("common_name").getValue().toString()); //Plant Common name
+                        plant.add(childDataSnapshot.child("scientific_name").getValue().toString()); //Plant Sci Name
+                        plant.add(childDataSnapshot.child("image_url").getValue().toString()); //Plant Image URL
+                        oldestPostId = childDataSnapshot.getKey();
+                        plants.add(plant);
+                    }
+
+                    for(ArrayList<String> childPosts : plants){
+                        if(!childPosts.isEmpty()){
+                            mComName.add(childPosts.get(1));
+                            mSciName.add(childPosts.get(2));
+                            mImages.add(childPosts.get(3));
+                        }
+                    }
+                    encycAdapter.notifyDataSetChanged();
+                } else {
+                    //mProgressDialog.dismiss();
+                    Log.d("POSTS", "No posts found.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("POSTS", "Error found: " + error.toString());
+            }
+
+        });
     }
 
     private void setOnClickListener() {
