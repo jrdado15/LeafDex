@@ -240,7 +240,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     private void changeIcon() {
         mMessages1 = new ArrayList<>();
         mMessages2 = new ArrayList<>();
-        chatReference.orderByChild("sender").addListenerForSingleValueEvent(new ValueEventListener() {
+        chatReference.orderByChild("sender").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot datasnapshot : snapshot.getChildren()) {
@@ -268,10 +268,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 }
 
                 ImageView imageView3 = findViewById(R.id.imageView3);
-                if(count > 0)
+                if(count > 0) {
                     imageView3.setImageResource(R.drawable.ic_unseen_messages_foreground);
-                else
+                } else {
                     imageView3.setImageResource(R.drawable.ic_messages_foreground);
+                }
             }
 
             @Override

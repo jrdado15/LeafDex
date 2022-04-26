@@ -51,7 +51,7 @@ public class Chat_users extends AppCompatActivity {
     private TextView posterName_TV;
     private EditText textbox_ET;
     private ImageButton send, camgal;
-    private String message, userID, posterID, from, seen;
+    private String message, userID, posterID, from;
 
     private ChatAdapter chatAdapter;
     private List<Chat> mChat;
@@ -85,7 +85,7 @@ public class Chat_users extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                seenChats(userID, posterID); // seen chat
             }
         });
 
@@ -107,11 +107,8 @@ public class Chat_users extends AppCompatActivity {
         send = findViewById(R.id.send_btn);
         camgal = findViewById(R.id.camgal_btn);
 
-        seen = "no";
         posterName_TV.setText(posterName);
         readChats(userID, posterID); // display chat
-        seenChats(userID, posterID); // seen chat
-        Log.d("TAG", "onCreate: " + seen);
 
         from = "";
         if(!plantName.equals("messages")) {
@@ -191,9 +188,6 @@ public class Chat_users extends AppCompatActivity {
 
             }
         });
-        if(mChat.isEmpty()) {
-            seen = "yes";
-        }
     }
 
     private void seenChats(final String userID, final String posterID) {
@@ -209,12 +203,13 @@ public class Chat_users extends AppCompatActivity {
                         hashMap.put("seen", true);
                         reference.child("Chats").child(datasnapshot.getKey()).updateChildren(hashMap);
                     }
+                    finish();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                finish();
             }
         });
     }
@@ -223,6 +218,11 @@ public class Chat_users extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         reference.child("Chats").removeEventListener(seenListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        seenChats(userID, posterID); // seen chat
     }
 
     private void choosePicture() {
