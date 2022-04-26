@@ -55,7 +55,8 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         tools:layout_editor_absoluteX="181dp"
-        tools:layout_editor_absoluteY="341dp" />
+        tools:layout_editor_absoluteY="341dp"
+        tools:ignore="MissingConstraints" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline15"

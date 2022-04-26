@@ -140,62 +140,66 @@ public class camera extends Fragment {
                 .post(requestBody)
                 .build();
         OkHttpClient client = new OkHttpClient();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                backToHome1();
-            }
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()) {
-                    String json = response.body().string();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Moshi moshi = new Moshi.Builder().build();
-                            JsonAdapter<Root> jsonAdapter = moshi.adapter(Root.class);
-                            Root root;
-                            try {
-                                root = jsonAdapter.fromJson(json);
-                            } catch (IOException e) {
-                                backToHome2();
-                                return;
-                            }
-                            List<Result> result = root.getResults();
-                            if(result.get(0).getScore() < 0.1) {
-                                backToHome2();
-                                return;
-                            }
-                            DecimalFormat df = new DecimalFormat("0.00");
-                            Glide.with(getActivity()).load(result.get(0).getImages().get(0).url.getS()).into(uriExample);
-                            scoreTV.setText("Score: " + df.format(result.get(0).getScore() * 100) + "%");
-                            sciNameTV.setText("Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
-                            sciName = result.get(0).getSpecies().scientificNameWithoutAuthor;
-                            String comNames = "";
-                            for(int i = 0; i < result.get(0).getSpecies().commonNames.size(); i++) {
-                                if(i == 0) {
-                                    comNames += result.get(0).getSpecies().commonNames.get(0);
-                                    comName = result.get(0).getSpecies().commonNames.get(0);
-                                } else {
-                                    comNames += ", " + result.get(0).getSpecies().commonNames.get(i);
-                                }
-                            }
-                            if(comName.isEmpty()) {
-                                comName = sciName;
-                            }
-                            comNamesTV.setText("Common names: " + comNames);
-                            if (mProgressDialog != null) {
-                                mProgressDialog.dismiss();
-                            }
-                            postBtn.setVisibility(View.VISIBLE);
-                            encBtn.setVisibility(View.VISIBLE);
-                        }
-                    });
-                } else {
+        try {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     backToHome1();
                 }
-            }
-        });
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if(response.isSuccessful()) {
+                        String json = response.body().string();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Moshi moshi = new Moshi.Builder().build();
+                                JsonAdapter<Root> jsonAdapter = moshi.adapter(Root.class);
+                                Root root;
+                                try {
+                                    root = jsonAdapter.fromJson(json);
+                                } catch (IOException e) {
+                                    backToHome2();
+                                    return;
+                                }
+                                List<Result> result = root.getResults();
+                                if(result.get(0).getScore() < 0.1) {
+                                    backToHome2();
+                                    return;
+                                }
+                                DecimalFormat df = new DecimalFormat("0.00");
+                                Glide.with(getActivity()).load(result.get(0).getImages().get(0).url.getS()).into(uriExample);
+                                scoreTV.setText("Score: " + df.format(result.get(0).getScore() * 100) + "%");
+                                sciNameTV.setText("Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
+                                sciName = result.get(0).getSpecies().scientificNameWithoutAuthor;
+                                String comNames = "";
+                                for(int i = 0; i < result.get(0).getSpecies().commonNames.size(); i++) {
+                                    if(i == 0) {
+                                        comNames += result.get(0).getSpecies().commonNames.get(0);
+                                        comName = result.get(0).getSpecies().commonNames.get(0);
+                                    } else {
+                                        comNames += ", " + result.get(0).getSpecies().commonNames.get(i);
+                                    }
+                                }
+                                if(comName.isEmpty()) {
+                                    comName = sciName;
+                                }
+                                comNamesTV.setText("Common names: " + comNames);
+                                if (mProgressDialog != null) {
+                                    mProgressDialog.dismiss();
+                                }
+                                postBtn.setVisibility(View.VISIBLE);
+                                encBtn.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    } else {
+                        backToHome1();
+                    }
+                }
+            });
+        } catch(RuntimeException e) {
+            backToHome1();
+        }
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

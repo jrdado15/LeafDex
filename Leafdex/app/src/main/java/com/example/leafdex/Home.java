@@ -222,6 +222,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             if(extras.getString("signal").equals("back")) {
                 replaceFragment(new saved_posts());
                 currentFragment = "saved_posts";
+            } else if(extras.getString("signal").equals("refresh")) {
+                replaceFragment(new home());
+                currentFragment = "home";
             } else {
                 Toast.makeText(Home.this, "Plant not found. Please try again.", Toast.LENGTH_LONG).show();
             }
@@ -229,8 +232,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
+    protected void onResume() {
+        super.onResume();
         changeIcon();
     }
 
@@ -264,7 +267,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                     }
                 }
 
-                //Toast.makeText(Home.this, "You have " + count + " unread message(s).", Toast.LENGTH_SHORT).show();
                 ImageView imageView3 = findViewById(R.id.imageView3);
                 if(count > 0)
                     imageView3.setImageResource(R.drawable.ic_unseen_messages_foreground);

@@ -51,7 +51,7 @@ public class Chat_users extends AppCompatActivity {
     private TextView posterName_TV;
     private EditText textbox_ET;
     private ImageButton send, camgal;
-    private String message, userID, posterID, from;
+    private String message, userID, posterID, from, seen;
 
     private ChatAdapter chatAdapter;
     private List<Chat> mChat;
@@ -81,14 +81,6 @@ public class Chat_users extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        ImageButton back = findViewById(R.id.chatBackButton);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -107,9 +99,11 @@ public class Chat_users extends AppCompatActivity {
         send = findViewById(R.id.send_btn);
         camgal = findViewById(R.id.camgal_btn);
 
+        seen = "no";
         posterName_TV.setText(posterName);
         readChats(userID, posterID); // display chat
         seenChats(userID, posterID); // seen chat
+        Log.d("TAG", "onCreate: " + seen);
 
         from = "";
         if(!plantName.equals("messages")) {
@@ -189,6 +183,9 @@ public class Chat_users extends AppCompatActivity {
 
             }
         });
+        if(mChat.isEmpty()) {
+            seen = "yes";
+        }
     }
 
     private void seenChats(final String userID, final String posterID) {

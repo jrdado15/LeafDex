@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class Product_info extends AppCompatActivity {
     private ArrayList<String> productValues;
-    private String userID, firebasePostKey, signal, posterID, posterName, plantName, sciName;
+    private String userID, firebasePostKey, signal, posterID, posterName, plantName, sciName, filled;
 
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -84,6 +84,7 @@ public class Product_info extends AppCompatActivity {
             }
         });
 
+        filled = "no";
         if(firebasePostKey != null) {
             querySP.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -92,6 +93,8 @@ public class Product_info extends AppCompatActivity {
                         if(datasnapshot.getKey().equals(firebasePostKey)) {
                             bookmark_button.setVisibility(View.GONE);
                             bookmark_button_filled.setVisibility(View.VISIBLE);
+                            bookmark_button_filled.setVisibility(View.INVISIBLE);
+                            filled = "yes";
                         }
                     }
                 }
@@ -146,7 +149,11 @@ public class Product_info extends AppCompatActivity {
                         sciName = productValues.get(6);
 
                         if(!userID.equals(posterID)) {
-                            bookmark_button.setVisibility(View.VISIBLE);
+                            if(filled.equals("yes")) {
+                                bookmark_button_filled.setVisibility(View.VISIBLE);
+                            } else {
+                                bookmark_button.setVisibility(View.VISIBLE);
+                            }
                             message_button.setVisibility(View.VISIBLE);
                             learn_button.setVisibility(View.VISIBLE);
                         }

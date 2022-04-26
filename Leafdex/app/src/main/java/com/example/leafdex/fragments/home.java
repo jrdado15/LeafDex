@@ -14,7 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.leafdex.Home;
 import com.example.leafdex.Product;
 import com.example.leafdex.Product_info;
 import com.example.leafdex.R;
@@ -51,6 +53,7 @@ public class home extends Fragment {
 
     private DatabaseReference reference;
 
+    private SwipeRefreshLayout refresh;
     private RecyclerView mRecyclerView;
     private ArrayList<Product> productList, search_productList;
     private List<String> mImages, search_mImages;
@@ -100,6 +103,7 @@ public class home extends Fragment {
         productList = new ArrayList<>();
         mImages = new ArrayList<>();
         mPrices = new ArrayList<>();
+        refresh = view.findViewById(R.id.swipe_home);
         mRecyclerView = view.findViewById(R.id.rv_feeds);
         setOnClickListener();
         feedAdapter = new FeedAdapter(getActivity(), productList, mImages, mPrices, listener);
@@ -137,10 +141,6 @@ public class home extends Fragment {
                 }
             }
 
-            public void onSuccess(@NonNull Void T) {
-
-            }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("POSTS", "Error found: " + error.toString());
@@ -162,6 +162,16 @@ public class home extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
 
+            }
+        });
+
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Intent intent = new Intent(getActivity(), Home.class);
+                intent.putExtra("signal", "refresh");
+                startActivity(intent);
+                refresh.setRefreshing(false);
             }
         });
 
