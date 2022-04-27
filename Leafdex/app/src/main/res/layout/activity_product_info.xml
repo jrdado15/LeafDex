@@ -104,8 +104,6 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-
-
         app:layout_constraintBottom_toTopOf="@+id/guideline36"
         app:layout_constraintEnd_toStartOf="@+id/guideline30"
         app:layout_constraintStart_toStartOf="@+id/guideline28"
@@ -126,7 +124,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
 
     <TextView
@@ -207,6 +207,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/ic_baseline_bookmark_border_24"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/guideline35"
         app:layout_constraintEnd_toStartOf="@+id/guideline30"
         app:layout_constraintStart_toStartOf="@+id/guideline37"
@@ -217,7 +218,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/ic_baseline_bookmark_24"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/guideline35"
         app:layout_constraintEnd_toStartOf="@+id/guideline30"
         app:layout_constraintStart_toStartOf="@+id/guideline37"
@@ -232,6 +233,5 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline37"
         app:layout_constraintStart_toStartOf="@+id/guideline51"
         app:layout_constraintTop_toTopOf="@+id/guideline32" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

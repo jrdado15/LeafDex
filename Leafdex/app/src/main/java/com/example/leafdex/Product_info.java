@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class Product_info extends AppCompatActivity {
     private ArrayList<String> productValues;
-    private String userID, firebasePostKey, signal, posterID, posterName, plantName, sciName, filled;
+    private String userID, firebasePostKey, signal, posterID, posterName, plantName1, plantName2, sciName, filled;
 
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -67,7 +67,6 @@ public class Product_info extends AppCompatActivity {
         plant_desc.setVisibility(View.INVISIBLE);
         plant_price.setVisibility(View.INVISIBLE);
         plant_qty.setVisibility(View.INVISIBLE);
-        bookmark_button.setVisibility(View.INVISIBLE);
         message_button.setVisibility(View.INVISIBLE);
         learn_button.setVisibility(View.INVISIBLE);
 
@@ -92,8 +91,6 @@ public class Product_info extends AppCompatActivity {
                     for(DataSnapshot datasnapshot : snapshot.getChildren()) {
                         if(datasnapshot.getKey().equals(firebasePostKey)) {
                             bookmark_button.setVisibility(View.GONE);
-                            bookmark_button_filled.setVisibility(View.VISIBLE);
-                            bookmark_button_filled.setVisibility(View.INVISIBLE);
                             filled = "yes";
                         }
                     }
@@ -102,26 +99,6 @@ public class Product_info extends AppCompatActivity {
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
-
-            bookmark_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    reference.child("Saved").child(userID).child(firebasePostKey).setValue("");
-                    bookmark_button.setVisibility(View.GONE);
-                    bookmark_button_filled.setVisibility(View.VISIBLE);
-                    Toast.makeText(Product_info.this, "Added to saved posts.", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            bookmark_button_filled.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    reference.child("Saved").child(userID).child(firebasePostKey).removeValue();
-                    bookmark_button_filled.setVisibility(View.GONE);
-                    bookmark_button.setVisibility(View.VISIBLE);
-                    Toast.makeText(Product_info.this, "Removed from saved posts.", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -145,7 +122,8 @@ public class Product_info extends AppCompatActivity {
                         plant_price.setText("₱" + productValues.get(4));
                         plant_qty.setText("Qty: " + productValues.get(5));
                         posterID = productValues.get(3);
-                        plantName = productValues.get(0) + " " + productValues.get(7);
+                        plantName1 = productValues.get(0) + " " + productValues.get(7);
+                        plantName2 = productValues.get(0);
                         sciName = productValues.get(6);
 
                         if(!userID.equals(posterID)) {
@@ -192,7 +170,7 @@ public class Product_info extends AppCompatActivity {
                                 intent.putExtra("userID", userID);
                                 intent.putExtra("posterID", posterID);
                                 intent.putExtra("posterName", posterName);
-                                intent.putExtra("plantName", plantName);
+                                intent.putExtra("plantName", plantName1);
                                 startActivity(intent);
                             }
                         });
@@ -201,7 +179,7 @@ public class Product_info extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(Product_info.this, Encyclopedia.class);
-                                intent.putExtra("comName", plantName);
+                                intent.putExtra("comName", plantName2);
                                 intent.putExtra("sciName", sciName);
                                 startActivity(intent);
                             }
@@ -212,6 +190,26 @@ public class Product_info extends AppCompatActivity {
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
 
+                }
+            });
+
+            bookmark_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    reference.child("Saved").child(userID).child(firebasePostKey).setValue("");
+                    bookmark_button.setVisibility(View.GONE);
+                    bookmark_button_filled.setVisibility(View.VISIBLE);
+                    Toast.makeText(Product_info.this, "Added to saved posts.", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            bookmark_button_filled.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    reference.child("Saved").child(userID).child(firebasePostKey).removeValue();
+                    bookmark_button_filled.setVisibility(View.GONE);
+                    bookmark_button.setVisibility(View.VISIBLE);
+                    Toast.makeText(Product_info.this, "Removed from saved posts.", Toast.LENGTH_SHORT).show();
                 }
             });
         }

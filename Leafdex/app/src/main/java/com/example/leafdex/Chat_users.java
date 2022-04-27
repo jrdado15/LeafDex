@@ -85,7 +85,7 @@ public class Chat_users extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                seenChats(userID, posterID); // seen chat
+                finish();
             }
         });
 
@@ -109,6 +109,7 @@ public class Chat_users extends AppCompatActivity {
 
         posterName_TV.setText(posterName);
         readChats(userID, posterID); // display chat
+        seenChats(userID, posterID); // seen chat
 
         from = "";
         if(!plantName.equals("messages")) {
@@ -203,13 +204,12 @@ public class Chat_users extends AppCompatActivity {
                         hashMap.put("seen", true);
                         reference.child("Chats").child(datasnapshot.getKey()).updateChildren(hashMap);
                     }
-                    finish();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                finish();
+
             }
         });
     }
@@ -218,11 +218,6 @@ public class Chat_users extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         reference.child("Chats").removeEventListener(seenListener);
-    }
-
-    @Override
-    public void onBackPressed() {
-        seenChats(userID, posterID); // seen chat
     }
 
     private void choosePicture() {
