@@ -61,18 +61,20 @@ public class Chat_list extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         userID = bundle.getString("userID");
 
-        userList = new ArrayList<>();
         reference = FirebaseDatabase.getInstance().getReference("Chats");
+        userList = new ArrayList<>();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userList.clear();
                 for(DataSnapshot datasnapshot : snapshot.getChildren()) {
                     Chat chat = datasnapshot.getValue(Chat.class);
-                    if(chat.getSender().equals(userID) && !chat.getMessage().isEmpty()) {
-                        userList.add(chat.getReceiver());
-                    } else if(chat.getReceiver().equals(userID) && !chat.getMessage().isEmpty()) {
-                        userList.add(chat.getSender());
+                    if(!chat.getMessage().isEmpty()) {
+                        if(chat.getSender().equals(userID)) {
+                            userList.add(chat.getReceiver());
+                        } else if(chat.getReceiver().equals(userID)) {
+                            userList.add(chat.getSender());
+                        }
                     }
                 }
                 readChat();

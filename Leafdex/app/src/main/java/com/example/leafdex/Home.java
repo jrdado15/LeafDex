@@ -81,8 +81,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
             Manifest.permission.CAMERA,
     };
 
-    private ArrayList<ArrayList<String>> mMessages1;
-    private ArrayList<ArrayList<String>> mMessages2;
+    private ArrayList<ArrayList<String>> mChat1;
 
     public Uri getPlantPicUriFromGallery() { return plantPicUriFromGallery; }
 
@@ -233,35 +232,34 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onResume() {
-        super.onResume();
         changeIcon();
+        super.onResume();
     }
 
     private void changeIcon() {
-        mMessages1 = new ArrayList<>();
-        mMessages2 = new ArrayList<>();
+        mChat1 = new ArrayList<>();
         chatReference.orderByChild("sender").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot datasnapshot : snapshot.getChildren()) {
-                    ArrayList<String> msg = new ArrayList<String>();
+                for(DataSnapshot datasnapshot : snapshot.getChildren()) {
+                    ArrayList msg = new ArrayList<>();
                     msg.add(datasnapshot.getKey());
                     msg.add(datasnapshot.child("sender").getValue().toString());
                     msg.add(datasnapshot.child("receiver").getValue().toString());
                     msg.add(datasnapshot.child("message").getValue().toString());
                     msg.add(datasnapshot.child("seen").getValue().toString());
-                    mMessages1.add(msg);
+                    mChat1.add(msg);
                 }
-                Collections.reverse(mMessages1);
+                Collections.reverse(mChat1);
 
                 int count = 0;
                 String current = "id";
-                for(ArrayList<String> msg : mMessages1) {
+                for(ArrayList<String> msg : mChat1) {
                     if(!msg.isEmpty()) {
-                        if (msg.get(2).equals(userID) && !msg.get(1).equals(current)) {
-                            mMessages2.add(msg);
-                            if(msg.get(4).equals("false"))
+                        if(msg.get(2).equals(userID) && !msg.get(1).equals(current)) {
+                            if(msg.get(4).equals("false")) {
                                 count++;
+                            }
                         }
                         current = msg.get(1);
                     }

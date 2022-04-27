@@ -76,6 +76,9 @@ public class Chat_users extends AppCompatActivity {
     private StorageReference storageReference;
     private String downloadURL;
 
+    private ArrayList<ArrayList<String>> mMessages1;
+    private ArrayList<ArrayList<String>> mMessages2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,8 +111,8 @@ public class Chat_users extends AppCompatActivity {
         camgal = findViewById(R.id.camgal_btn);
 
         posterName_TV.setText(posterName);
-        readChats(userID, posterID); // display chat
-        seenChats(userID, posterID); // seen chat
+        readChats(userID, posterID);
+        seenChats(userID, posterID);
 
         from = "";
         if(!plantName.equals("messages")) {
@@ -128,7 +131,6 @@ public class Chat_users extends AppCompatActivity {
             }
         });
 
-        // if send button is clicked
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -192,17 +194,38 @@ public class Chat_users extends AppCompatActivity {
     }
 
     private void seenChats(final String userID, final String posterID) {
+        mMessages1 = new ArrayList<>();
+        mMessages2 = new ArrayList<>();
         seenListener = reference.child("Chats").orderByChild("sender").equalTo(posterID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int i = 0;
                 for(DataSnapshot datasnapshot : snapshot.getChildren()) {
+                    ArrayList msg = new ArrayList<>();
+                    msg.add(datasnapshot.getKey());
+                    msg.add(datasnapshot.child("sender").getValue().toString());
+                    msg.add(datasnapshot.child("receiver").getValue().toString());
+                    msg.add(datasnapshot.child("message").getValue().toString());
+                    msg.add(datasnapshot.child("seen").getValue().toString());
+                    mMessages1.add(msg);
+                }
+
+                for(ArrayList<String> msg : mMessages1) {
+                    if(!msg.isEmpty()) {
+                        if(msg.get(2).equals(userID)) {
+                            mMessages2.add(msg);
+                        }
+                    }
+                }
+
+                int i = 0;
+                for(ArrayList<String> msg : mMessages2) {
                     i++;
-                    Chat chat = datasnapshot.getValue(Chat.class);
-                    if(chat.getReceiver().equals(userID) && i == snapshot.getChildrenCount()) {
-                        HashMap hashMap = new HashMap();
-                        hashMap.put("seen", true);
-                        reference.child("Chats").child(datasnapshot.getKey()).updateChildren(hashMap);
+                    if(!msg.isEmpty()) {
+                        if(i == mMessages2.size()) {
+                            HashMap hashMap = new HashMap();
+                            hashMap.put("seen", true);
+                            reference.child("Chats").child(msg.get(0)).updateChildren(hashMap);
+                        }
                     }
                 }
             }
@@ -216,8 +239,8 @@ public class Chat_users extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        super.onPause();
         reference.child("Chats").removeEventListener(seenListener);
+        super.onPause();
     }
 
     private void choosePicture() {
