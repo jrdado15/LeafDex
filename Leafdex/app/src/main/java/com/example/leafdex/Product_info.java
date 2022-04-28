@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,6 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.leafdex.fragments.parsers.Post;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,6 +41,7 @@ public class Product_info extends AppCompatActivity {
         setContentView(R.layout.activity_product_info);
         TextView plant_owner = findViewById(R.id.tv_post_owner);
         ImageView plant_image = findViewById(R.id.item_post_image);
+        ProgressBar plant_progress = findViewById(R.id.item_progress);
         TextView plant_name = findViewById(R.id.tv_plant_info_name);
         TextView plant_desc = findViewById(R.id.tv_plant_post_description);
         TextView plant_price = findViewById(R.id.tv_plant_price);
@@ -62,7 +67,6 @@ public class Product_info extends AppCompatActivity {
         Query query = reference.child("Posts").child(firebasePostKey);
         Query querySP = reference.child("Saved").child(userID);
         plant_owner.setVisibility(View.INVISIBLE);
-        plant_image.setVisibility(View.INVISIBLE);
         plant_name.setVisibility(View.INVISIBLE);
         plant_desc.setVisibility(View.INVISIBLE);
         plant_price.setVisibility(View.INVISIBLE);
@@ -116,7 +120,22 @@ public class Product_info extends AppCompatActivity {
                         productValues.add(post.sciName); //post plant scientific name -- 6
                         productValues.add(snapshot.getKey());
 
-                        Glide.with(Product_info.this).load(productValues.get(2)).into(plant_image);
+                        Glide.with(Product_info.this)
+                                .load(productValues.get(2))
+                                .listener(new RequestListener<String, GlideDrawable>() {
+                                    @Override
+                                    public boolean onException(Exception e, String s, Target<GlideDrawable> target, boolean b) {
+                                        plant_progress.setVisibility(View.GONE);
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(GlideDrawable glideDrawable, String s, Target<GlideDrawable> target, boolean b, boolean b1) {
+                                        plant_progress.setVisibility(View.GONE);
+                                        return false;
+                                    }
+                                })
+                                .into(plant_image);
                         plant_name.setText(productValues.get(0));
                         plant_desc.setText(productValues.get(1));
                         plant_price.setText("₱" + productValues.get(4));

@@ -6,13 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,14 +48,10 @@ public class Encyclopedia extends AppCompatActivity {
         String sciName = intent.getStringExtra("sciName");
 
         ImageView enc_image = findViewById(R.id.enc_image);
+        ProgressBar enc_progress = findViewById(R.id.enc_progress);
         TextView enc_comName = findViewById(R.id.enc_comName);
         TextView enc_sciName = findViewById(R.id.enc_sciName);
         Button enc_back = findViewById(R.id.enc_back);
-
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage("Loading...");
-        mProgressDialog.show();
-        mProgressDialog.setCancelable(false);
 
         //from firebase
         reference = FirebaseDatabase.getInstance().getReference("Plants");
@@ -62,7 +63,24 @@ public class Encyclopedia extends AppCompatActivity {
                 for(DataSnapshot datasnapshot : snapshot.getChildren()) {
                     Details details = datasnapshot.getValue(Details.class);
                     if(details.scientific_name.toLowerCase().matches(sciName.toLowerCase()  + "(.*)")) {
-                        Glide.with(Encyclopedia.this).load(details.image_url).into(enc_image);
+                        Glide.with(Encyclopedia.this)
+                                .load(details.image_url)
+                                .listener(new RequestListener<String, GlideDrawable>() {
+                                    @Override
+                                    public boolean onException(Exception e, String s, Target<GlideDrawable> target, boolean b) {
+                                        enc_progress.setVisibility(View.GONE);
+                                        Log.d("TAG", "onException: ");
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(GlideDrawable glideDrawable, String s, Target<GlideDrawable> target, boolean b, boolean b1) {
+                                        enc_progress.setVisibility(View.GONE);
+                                        return false;
+                                    }
+                                })
+                                .into(enc_image);
+                        enc_progress.setVisibility(View.GONE);
                         enc_comName.setText("Common name: " + comName);
                         enc_sciName.setText("Scientific name: " + sciName);
 
@@ -70,13 +88,13 @@ public class Encyclopedia extends AppCompatActivity {
                         initializeData(details);
                         listAdapter = new ExpandableListAdapter(Encyclopedia.this, listDataHeader, listHashMap);
                         listView.setAdapter(listAdapter);
+                    } else {
+                        enc_progress.setVisibility(View.GONE);
                     }
                 }
-                enc_back.setVisibility(View.VISIBLE);
                 enc_image.setVisibility(View.VISIBLE);
                 enc_comName.setVisibility(View.VISIBLE);
                 enc_sciName.setVisibility(View.VISIBLE);
-                mProgressDialog.dismiss();
             }
 
             @Override
