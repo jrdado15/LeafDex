@@ -72,7 +72,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
     private TextView fullname;
     private TextView email;
     private String userID;
-    private String uimageURL, ufname, ulname, uemail;
+    private String uimageURL, ufname, ulname;
     private Boolean isFromGallery = false;
     private String[] PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -168,7 +168,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
         profilePic = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.sidebar_profilePic);
         fullname = (TextView) navigationView.getHeaderView(0).findViewById(R.id.sidebar_fullname);
-        email = (TextView) navigationView.getHeaderView(0).findViewById(R.id.sidebar_email);
 
         userReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -179,11 +178,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                     uimageURL = userProfile.imageURL;
                     ufname = userProfile.fname;
                     ulname = userProfile.lname;
-                    uemail = userProfile.email;
-
                     Glide.with(Home.this).load(uimageURL).into(profilePic);
                     fullname.setText(ufname + ' ' + ulname);
-                    email.setText(uemail);
                 }
             }
 

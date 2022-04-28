@@ -45,6 +45,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             View view = LayoutInflater.from(mContext).inflate(R.layout.chat_right, parent, false);
             return new ChatAdapter.ViewHolder(view);
         } else if(viewType == IMG_TYPE_RIGHT) {
+
             View view = LayoutInflater.from(mContext).inflate(R.layout.chat_right_image, parent, false);
             return new ChatAdapter.ViewHolder(view);
         } else if(viewType == MSG_TYPE_LEFT) {
@@ -60,6 +61,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder holder, int position) {
         Chat chat = mChat.get(position);
         if(checkURL(chat.getMessage())) {
+            holder.show_image.layout(0,0,0,0);
             Glide.with(mContext).load(chat.getMessage()).into(holder.show_image);
         } else if(checkFrom(chat.getMessage())) {
             user = FirebaseAuth.getInstance().getCurrentUser();
