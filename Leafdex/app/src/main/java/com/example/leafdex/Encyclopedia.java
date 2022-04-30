@@ -3,10 +3,8 @@ package com.example.leafdex;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -35,7 +33,6 @@ public class Encyclopedia extends AppCompatActivity {
     ExpandableListView listView;
     List<String> listDataHeader;
     HashMap<String,List<String>> listHashMap;
-    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +66,6 @@ public class Encyclopedia extends AppCompatActivity {
                                     @Override
                                     public boolean onException(Exception e, String s, Target<GlideDrawable> target, boolean b) {
                                         enc_progress.setVisibility(View.GONE);
-                                        Log.d("TAG", "onException: ");
                                         return false;
                                     }
 
@@ -90,6 +86,7 @@ public class Encyclopedia extends AppCompatActivity {
                         listView.setAdapter(listAdapter);
                     } else {
                         enc_progress.setVisibility(View.GONE);
+                        enc_image.setImageResource(R.drawable.ic_baseline_broken_image_24);
                     }
                 }
                 enc_image.setVisibility(View.VISIBLE);
