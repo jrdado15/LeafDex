@@ -10,9 +10,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,7 +18,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.leafdex.Chat_users;
 import com.example.leafdex.Encyclopedia;
 import com.example.leafdex.R;
 import com.google.firebase.database.DataSnapshot;
@@ -106,7 +103,6 @@ public class encyclopedia extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_encyclopedia, container, false);
         Bundle bundle = getArguments();
         mComName = new ArrayList<>();
@@ -153,7 +149,8 @@ public class encyclopedia extends Fragment {
                 return false;
             }
         });
-                /*.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+        /*.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
@@ -163,10 +160,7 @@ public class encyclopedia extends Fragment {
                 }
                 return handled;
             }
-        });
-
-                 */
-
+        });*/
 
         search_items.addTextChangedListener(new TextWatcher() {
             @Override
@@ -186,8 +180,6 @@ public class encyclopedia extends Fragment {
 
             }
         });
-
-
 
         return view;
     }
@@ -218,7 +210,7 @@ public class encyclopedia extends Fragment {
         Log.d("POSTS", "Lol: " + searchText + " nice " + oldestPostId);
 
         mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setMessage("Searching Database...");
+        mProgressDialog.setMessage("Searching database...");
         mProgressDialog.setCancelable(false);
 
         if(!searchText.equals("")){
@@ -274,7 +266,6 @@ public class encyclopedia extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("POSTS", "Error found: " + error.toString());
             }
-
         });
     }
 
@@ -318,9 +309,8 @@ public class encyclopedia extends Fragment {
                 search_position.add(i);
             }
         }
-         */
 
-        //encycAdapter = new EncycAdapter(getActivity(), search_mComName, search_mSciName, search_mImages, search_listener);
-        //mRecyclerView.setAdapter(encycAdapter);
+        encycAdapter = new EncycAdapter(getActivity(), search_mComName, search_mSciName, search_mImages, search_listener);
+        mRecyclerView.setAdapter(encycAdapter);*/
     }
 }

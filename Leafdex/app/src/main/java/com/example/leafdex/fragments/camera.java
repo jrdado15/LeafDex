@@ -150,49 +150,53 @@ public class camera extends Fragment {
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if(response.isSuccessful()) {
                         String json = response.body().string();
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Moshi moshi = new Moshi.Builder().build();
-                                JsonAdapter<Root> jsonAdapter = moshi.adapter(Root.class);
-                                Root root;
-                                try {
-                                    root = jsonAdapter.fromJson(json);
-                                } catch (IOException e) {
-                                    backToHome2();
-                                    return;
-                                }
-                                List<Result> result = root.getResults();
-                                if(result.get(0).getScore() < 0.1) {
-                                    backToHome2();
-                                    return;
-                                }
-                                DecimalFormat df = new DecimalFormat("0.00");
-                                Glide.with(getActivity()).load(result.get(0).getImages().get(0).url.getS()).into(uriExample);
-                                scoreTV.setText("Score: " + df.format(result.get(0).getScore() * 100) + "%");
-                                sciNameTV.setText("Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
-                                sciName = result.get(0).getSpecies().scientificNameWithoutAuthor;
-                                String comNames = "";
-                                if(result.get(0).getSpecies().commonNames.size() > 0) {
-                                    for(int i = 0; i < result.get(0).getSpecies().commonNames.size(); i++) {
-                                        if(i == 0) {
-                                            comNames += result.get(0).getSpecies().commonNames.get(0);
-                                            comName = result.get(0).getSpecies().commonNames.get(0);
-                                        } else {
-                                            comNames += ", " + result.get(0).getSpecies().commonNames.get(i);
-                                        }
+                        if(!json.isEmpty()) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Moshi moshi = new Moshi.Builder().build();
+                                    JsonAdapter<Root> jsonAdapter = moshi.adapter(Root.class);
+                                    Root root;
+                                    try {
+                                        root = jsonAdapter.fromJson(json);
+                                    } catch (IOException e) {
+                                        backToHome2();
+                                        return;
                                     }
-                                    comNamesTV.setText("Common names: " + comNames);
-                                } else {
-                                    comName = sciName;
+                                    List<Result> result = root.getResults();
+                                    if(result.get(0).getScore() < 0.1) {
+                                        backToHome2();
+                                        return;
+                                    }
+                                    DecimalFormat df = new DecimalFormat("0.00");
+                                    Glide.with(getActivity()).load(result.get(0).getImages().get(0).url.getS()).into(uriExample);
+                                    scoreTV.setText("Score: " + df.format(result.get(0).getScore() * 100) + "%");
+                                    sciNameTV.setText("Scientific name: " + result.get(0).getSpecies().scientificNameWithoutAuthor);
+                                    sciName = result.get(0).getSpecies().scientificNameWithoutAuthor;
+                                    String comNames = "";
+                                    if(result.get(0).getSpecies().commonNames.size() > 0) {
+                                        for(int i = 0; i < result.get(0).getSpecies().commonNames.size(); i++) {
+                                            if(i == 0) {
+                                                comNames += result.get(0).getSpecies().commonNames.get(0);
+                                                comName = result.get(0).getSpecies().commonNames.get(0);
+                                            } else {
+                                                comNames += ", " + result.get(0).getSpecies().commonNames.get(i);
+                                            }
+                                        }
+                                        comNamesTV.setText("Common names: " + comNames);
+                                    } else {
+                                        comName = sciName;
+                                    }
+                                    if (mProgressDialog != null) {
+                                        mProgressDialog.dismiss();
+                                    }
+                                    postBtn.setVisibility(View.VISIBLE);
+                                    encBtn.setVisibility(View.VISIBLE);
                                 }
-                                if (mProgressDialog != null) {
-                                    mProgressDialog.dismiss();
-                                }
-                                postBtn.setVisibility(View.VISIBLE);
-                                encBtn.setVisibility(View.VISIBLE);
-                            }
-                        });
+                            });
+                        } else {
+                            backToHome1();
+                        }
                     } else {
                         backToHome1();
                     }
