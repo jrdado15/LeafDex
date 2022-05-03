@@ -48,6 +48,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/textbox"
             android:background="@android:color/transparent"
+            android:textColor="@color/black"
             android:hint="Type a message..."
             android:layout_marginLeft="10dp"
             android:layout_toLeftOf="@id/camgal_btn"
