@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.leafdex.Chat_users;
 import com.example.leafdex.Encyclopedia;
 import com.example.leafdex.R;
 import com.google.firebase.database.DataSnapshot;
@@ -62,7 +66,7 @@ public class encyclopedia extends Fragment {
     private ProgressDialog mProgressDialog;
 
     private LinearLayoutManager mLayoutManager;
-    private boolean loading = true;
+    private boolean loading = true, fromSearch = false;
     private String oldestPostId;
     private int pastVisiblesItems, visibleItemCount, totalItemCount;
 
@@ -121,11 +125,11 @@ public class encyclopedia extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0) { //check for scroll down
-                    if (loading) {
+                    if (loading && !fromSearch) {
                         if (!recyclerView.canScrollVertically(1)) {
                             loading = false;
                             Log.v("pagination", "Eto yon: " + oldestPostId);
-                            FetchFromDB();
+                            FetchFromDB("");
                         }
                     }
                 }
@@ -134,9 +138,36 @@ public class encyclopedia extends Fragment {
         mRecyclerView.setAdapter(encycAdapter);
 
         plants = new ArrayList<ArrayList<String>>();
-        FetchFromDB();
+        FetchFromDB("");
 
         EditText search_items = view.findViewById(R.id.enc_search_items);
+        search_items.setOnKeyListener(new View.OnKeyListener() {
+
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP
+                        && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    String searchText = search_items.getText().toString();
+                    searchItems(searchText);
+                }
+                return false;
+            }
+        });
+                /*.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    String searchText = search_items.getText().toString();
+                    searchItems(searchText);
+                }
+                return handled;
+            }
+        });
+
+                 */
+
+
         search_items.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -145,7 +176,9 @@ public class encyclopedia extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchItems(charSequence.toString());
+                if(charSequence.toString().length() == 0){
+                    FetchFromDB("");
+                }
             }
 
             @Override
@@ -154,17 +187,42 @@ public class encyclopedia extends Fragment {
             }
         });
 
+
+
         return view;
     }
 
-    private void FetchFromDB(){
+    private void FetchFromDB(String searchText){
         loading = true;
         plants.clear();
         Query query;
-        if(oldestPostId == null){
-            query = reference.child("Plants").limitToFirst(10);
+
+        if(!searchText.equals("")){
+            query = reference.child("Plants");
         } else {
-            query = reference.child("Plants").orderByKey().startAfter(oldestPostId).limitToFirst(10);
+            if(oldestPostId == null){
+                query = reference.child("Plants").limitToFirst(10);
+                fromSearch = false;
+
+                mComName = new ArrayList<>();
+                mSciName = new ArrayList<>();
+                mImages = new ArrayList<>();
+
+                encycAdapter = new EncycAdapter(getActivity(), mComName, mSciName, mImages, listener);
+                mRecyclerView.setAdapter(encycAdapter);
+            } else {
+                query = reference.child("Plants").orderByKey().startAfter(oldestPostId).limitToFirst(10);
+            }
+        }
+
+        Log.d("POSTS", "Lol: " + searchText + " nice " + oldestPostId);
+
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setMessage("Searching Database...");
+        mProgressDialog.setCancelable(false);
+
+        if(!searchText.equals("")){
+            mProgressDialog.show();
         }
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -176,20 +234,38 @@ public class encyclopedia extends Fragment {
                         plant.add(childDataSnapshot.child("common_name").getValue().toString()); //Plant Common name
                         plant.add(childDataSnapshot.child("scientific_name").getValue().toString()); //Plant Sci Name
                         plant.add(childDataSnapshot.child("image_url").getValue().toString()); //Plant Image URL
-                        oldestPostId = childDataSnapshot.getKey();
+                        if(searchText.equals("")){
+                            oldestPostId = childDataSnapshot.getKey();
+                        }
                         plants.add(plant);
                     }
 
-                    for(ArrayList<String> childPosts : plants){
-                        if(!childPosts.isEmpty()){
-                            mComName.add(childPosts.get(1));
-                            mSciName.add(childPosts.get(2));
-                            mImages.add(childPosts.get(3));
+                    if(!searchText.equals("")){
+                        for(ArrayList<String> childPosts : plants){
+                            if(!childPosts.isEmpty()){
+                                if(childPosts.get(2).toLowerCase().matches(searchText.toLowerCase() + "(.*)")) {
+                                    search_mComName.add(childPosts.get(1));
+                                    search_mSciName.add(childPosts.get(2));
+                                    search_mImages.add(childPosts.get(3));
+                                    search_position.add(Integer.parseInt(childPosts.get(0)));
+                                }
+                            }
                         }
+                        encycAdapter = new EncycAdapter(getActivity(), search_mComName, search_mSciName, search_mImages, search_listener);
+                        mRecyclerView.setAdapter(encycAdapter);
+                        mProgressDialog.dismiss();
+                    } else {
+                        for(ArrayList<String> childPosts : plants){
+                            if(!childPosts.isEmpty()){
+                                mComName.add(childPosts.get(1));
+                                mSciName.add(childPosts.get(2));
+                                mImages.add(childPosts.get(3));
+                            }
+                        }
+                        encycAdapter.notifyDataSetChanged();
                     }
-                    encycAdapter.notifyDataSetChanged();
                 } else {
-                    //mProgressDialog.dismiss();
+                    mProgressDialog.dismiss();
                     Log.d("POSTS", "No posts found.");
                 }
             }
@@ -228,6 +304,12 @@ public class encyclopedia extends Fragment {
         search_mSciName = new ArrayList<>();
         search_mImages = new ArrayList<>();
         search_position = new ArrayList<>();
+        oldestPostId = null;
+
+        fromSearch = true;
+        FetchFromDB(s);
+
+        /*
         for(int i = 0; i < mComName.size(); i++) {
             if(mSciName.get(i).toLowerCase().matches(s.toLowerCase() + "(.*)")) {
                 search_mComName.add(mComName.get(i));
@@ -236,7 +318,9 @@ public class encyclopedia extends Fragment {
                 search_position.add(i);
             }
         }
-        encycAdapter = new EncycAdapter(getActivity(), search_mComName, search_mSciName, search_mImages, search_listener);
-        mRecyclerView.setAdapter(encycAdapter);
+         */
+
+        //encycAdapter = new EncycAdapter(getActivity(), search_mComName, search_mSciName, search_mImages, search_listener);
+        //mRecyclerView.setAdapter(encycAdapter);
     }
 }

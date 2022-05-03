@@ -3,67 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Joseph/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_fp.xml" value="0.14764492753623187" />
         <entry key="..\:/Users/Joseph/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_home.xml" value="0.22" />
         <entry key="..\:/Users/Joseph/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_register.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/Joseph/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_camera.xml" value="0.10104166666666667" />
-        <entry key="..\:/Users/Joseph/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_home.xml" value="0.16666666666666666" />
-        <entry key="..\:/Users/Joseph/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_home_post.xml" value="0.14764492753623187" />
-        <entry key="..\:/Users/Joseph/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_saved_posts.xml" value="0.1431159420289855" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2275" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/background_left.xml" value="0.2275" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/chat_right.xml" value="0.2275" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.2275" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_baseline_arrow_back_white_24.xml" value="0.2275" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_baseline_bookmark_24.xml" value="0.2275" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_baseline_exit_to_app_24.xml" value="0.2275" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_data_unavailable_background.xml" value="0.124" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_data_unavailable_foreground.xml" value="0.124" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_launcher_background.xml" value="0.124" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_messages_foreground.xml" value="0.2275" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_saved_posts.xml" value="0.2275" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_send_message_background.xml" value="0.2275" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_send_message_foreground.xml" value="0.2275" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_sign_out_green.xml" value="0.2275" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_unseen_messages_foreground.xml" value="0.2275" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_chat.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_chat_list.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_encyclopedia.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_fp.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_home.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_login.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_post.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_post_edit.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_product_info.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_register.xml" value="0.264" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/bar_layout.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/chat_left.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/chat_left_image.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/chat_right.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/chat_right_image.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_camera.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_change_password.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_edit_post.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_encyclopedia.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_home.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_home_post.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_profile.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_saved_posts.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_your_posts.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_your_posts_edit.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_your_posts_post.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/grid_item.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/grid_item_encyclopedia.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/grid_item_own_post.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/grid_item_saved_post.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/header.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/list_group.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/list_item.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/spinner_item.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/user_item.xml" value="0.4" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/menu/drawer_menu.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/carlj/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2275" />
+        <entry key="..\:/Users/josep/Documents/Github/LeafDex/Leafdex/app/src/main/res/layout/fragment_encyclopedia.xml" value="0.1453804347826087" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1925" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/drawable/box.xml" value="0.2703125" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/drawable/ic_baseline_add_a_photo_24.xml" value="0.176" />
@@ -71,14 +25,11 @@
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1925" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/drawable/rounded_button.xml" value="0.2703125" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/drawable/rounded_forms.xml" value="0.202734375" />
-        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/drawable/rounded_outline_forms.xml" value="0.536" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/drawable/side_nav_bar.xml" value="0.1925" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_fp.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_home.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_login.xml" value="0.4" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_main.xml" value="0.264" />
-        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_post_edit.xml" value="0.4" />
-        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_product_info.xml" value="0.2" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_register.xml" value="0.264" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/activity_test.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/content_test.xml" value="0.25416666666666665" />
@@ -86,14 +37,9 @@
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_change_password.xml" value="0.264" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_encyclopedia.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_gallery.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_home.xml" value="0.264" />
-        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_home_post.xml" value="0.264" />
-        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_product_info.xml" value="0.20863616930312098" />
+        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_home.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_saved_posts.xml" value="0.2542991141219385" />
-        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/fragment_your_posts.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/grid_item.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/grid_item_own_post.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/layout/header.xml" value="0.1" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/menu/drawer_menu.xml" value="0.25416666666666665" />
@@ -102,42 +48,6 @@
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/menu/text_drawer.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/menu/top_app_bar_menu.xml" value="0.8800000000000001" />
         <entry key="..\:/Users/verga/AndroidStudioProjects/Leafdex/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1265765765765766" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/box.xml" value="0.1925" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/ic_baseline_add_box_24.xml" value="0.1955" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/rounded_button.xml" value="0.1925" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/rounded_forms.xml" value="0.1925" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/rounded_image.xml" value="0.1925" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/rounded_outline_forms.xml" value="0.1925" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/drawable/side_nav_bar.xml" value="0.1925" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/font/kameron.xml" value="0.2334330910645575" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_chat.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_chat_list.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_encyclopedia.xml" value="0.2" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_home.xml" value="0.3913392141138733" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_login.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_post.xml" value="0.4" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_post_edit.xml" value="0.4" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_product_info.xml" value="0.264" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/activity_register.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/chat_left.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/chat_left_image.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/chat_right_image.xml" value="0.4" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_about.xml" value="0.264" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_camera.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_change_password.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_home.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_profile.xml" value="0.4" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/fragment_saved_posts.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/grid_item.xml" value="0.536" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/grid_item_encyclopedia.xml" value="0.4" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/grid_item_own_post.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/grid_item_saved_post.xml" value="0.1" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/header.xml" value="0.6" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/list_group.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/list_item.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/spinner_item.xml" value="0.20863616930312098" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/layout/user_item.xml" value="0.536" />
-        <entry key="..\:/Users/verga/OneDrive/Documents/GitHub/LeafDex/Leafdex/app/src/main/res/menu/drawer_menu.xml" value="0.20863616930312098" />
       </map>
     </option>
   </component>
