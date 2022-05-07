@@ -186,7 +186,9 @@ public class Encyclopedia extends AppCompatActivity {
             plant_care_info.add("Maintenance: " + details.maintenance);
         if(!details.moisture_use.isEmpty())
             plant_care_info.add("Moisture Use: " + details.moisture_use);
+        if(details.ph_maximum != null)
             plant_care_info.add("Soil pH maximum: " + details.ph_maximum);
+        if(details.ph_minimum != null)
             plant_care_info.add("Soil ph minimum: " + details.ph_minimum);
         if(details.propagated_by_bare_root.equals("Yes"))
             plant_care_info.add("Propagated by bare root: Yes");

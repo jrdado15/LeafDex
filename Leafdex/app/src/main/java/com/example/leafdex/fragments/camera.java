@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -383,13 +382,12 @@ public class camera extends Fragment {
     }
 
     public String getFilename() {
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
-                + "/Android/data/"
-                + getActivity().getApplicationContext().getPackageName()
+        File mediaStorageDir = new File(getActivity().getApplicationContext().getExternalFilesDir(null)
+                + "/" + getActivity().getApplicationContext().getPackageName()
                 + "/Files/Compressed");
 
         // Create the storage directory if it does not exist
-        if(! mediaStorageDir.exists()) {
+        if(!mediaStorageDir.exists()) {
             mediaStorageDir.mkdirs();
         }
 
